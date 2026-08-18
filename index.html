@@ -1,0 +1,823 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="CanonKit — a local-first trust layer for repository knowledge.">
+  <meta name="theme-color" content="#09111f">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22><rect width=%2232%22 height=%2232%22 rx=%228%22 fill=%22%2307101d%22/><path d=%22M8 10l8-4 8 4v9l-8 7-8-7z%22 fill=%22none%22 stroke=%22%2367e8f9%22 stroke-width=%222%22/></svg>">
+  <title>CanonKit — Make repository knowledge trustworthy</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --ink: #eef4ff;
+      --muted: #97a7bf;
+      --faint: #6f809b;
+      --bg: #07101d;
+      --panel: rgba(14, 27, 46, .76);
+      --panel-solid: #0e1b2e;
+      --line: rgba(170, 194, 226, .14);
+      --line-strong: rgba(170, 194, 226, .28);
+      --cyan: #67e8f9;
+      --mint: #6ee7b7;
+      --violet: #a78bfa;
+      --amber: #fbbf24;
+      --red: #fb7185;
+      --shadow: 0 28px 90px rgba(0, 0, 0, .34);
+      --radius: 24px;
+      --max: 1180px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      min-width: 320px;
+      background:
+        radial-gradient(circle at 15% -10%, rgba(103, 232, 249, .12), transparent 28rem),
+        radial-gradient(circle at 86% 14%, rgba(167, 139, 250, .12), transparent 27rem),
+        var(--bg);
+      color: var(--ink);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.55;
+      letter-spacing: -.01em;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: .23;
+      background-image:
+        linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px);
+      background-size: 64px 64px;
+      mask-image: linear-gradient(to bottom, black, transparent 88%);
+    }
+
+    a { color: inherit; text-decoration: none; }
+    button { font: inherit; }
+    code, pre { font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace; }
+    :focus-visible { outline: 3px solid var(--cyan); outline-offset: 3px; }
+
+    .skip {
+      position: fixed;
+      top: 10px;
+      left: 10px;
+      z-index: 100;
+      padding: .65rem .9rem;
+      border-radius: 10px;
+      background: var(--ink);
+      color: var(--bg);
+      transform: translateY(-150%);
+    }
+    .skip:focus { transform: none; }
+
+    .wrap { width: min(calc(100% - 40px), var(--max)); margin-inline: auto; }
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      border-bottom: 1px solid transparent;
+      background: rgba(7, 16, 29, .72);
+      backdrop-filter: blur(18px);
+      transition: border-color .2s ease;
+    }
+    .site-header.scrolled { border-color: var(--line); }
+    .nav {
+      min-height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1.25rem;
+    }
+    .brand { display: inline-flex; align-items: center; gap: .72rem; font-weight: 750; }
+    .brand-mark {
+      width: 34px;
+      aspect-ratio: 1;
+      display: grid;
+      place-items: center;
+      border: 1px solid rgba(103,232,249,.42);
+      border-radius: 10px;
+      background: linear-gradient(145deg, rgba(103,232,249,.13), rgba(167,139,250,.08));
+      box-shadow: inset 0 0 18px rgba(103,232,249,.08);
+    }
+    .brand-mark svg { width: 20px; }
+    .nav-links { display: flex; align-items: center; gap: 1.25rem; color: var(--muted); font-size: .9rem; }
+    .nav-links a:hover { color: var(--ink); }
+    .nav-cta, .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: .5rem;
+      min-height: 42px;
+      padding: .7rem 1rem;
+      border: 1px solid var(--line-strong);
+      border-radius: 999px;
+      background: rgba(255,255,255,.035);
+      color: var(--ink);
+      cursor: pointer;
+      transition: transform .2s ease, border-color .2s ease, background .2s ease;
+    }
+    .button:hover, .nav-cta:hover { transform: translateY(-2px); border-color: rgba(103,232,249,.55); }
+    .button.primary {
+      border-color: transparent;
+      background: var(--cyan);
+      color: #041017;
+      font-weight: 760;
+      box-shadow: 0 12px 36px rgba(103,232,249,.18);
+    }
+    .button.ghost { background: transparent; }
+
+    main { overflow: hidden; }
+    section { scroll-margin-top: 92px; }
+    .hero {
+      min-height: calc(100svh - 72px);
+      display: grid;
+      align-items: center;
+      padding: 5.5rem 0 4rem;
+      position: relative;
+    }
+    .hero-grid { display: grid; grid-template-columns: 1.06fr .94fr; align-items: center; gap: 5rem; }
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: .55rem;
+      margin-bottom: 1.2rem;
+      color: var(--cyan);
+      font-size: .75rem;
+      font-weight: 800;
+      letter-spacing: .13em;
+      text-transform: uppercase;
+    }
+    .eyebrow::before { content: ""; width: 24px; height: 1px; background: currentColor; }
+    h1, h2, h3, p { margin-top: 0; }
+    h1 {
+      max-width: 780px;
+      margin-bottom: 1.35rem;
+      font-size: clamp(3.45rem, 7.5vw, 6.8rem);
+      line-height: .92;
+      letter-spacing: -.072em;
+    }
+    .gradient-text {
+      background: linear-gradient(110deg, var(--cyan), #b6f7e2 48%, #c9b8ff);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .hero-copy > p {
+      max-width: 660px;
+      margin-bottom: 1.9rem;
+      color: var(--muted);
+      font-size: clamp(1.05rem, 1.7vw, 1.28rem);
+    }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: .8rem; }
+    .micro { margin-top: 1.35rem; color: var(--faint); font-size: .82rem; }
+
+    .terminal {
+      position: relative;
+      border: 1px solid var(--line-strong);
+      border-radius: 26px;
+      background: rgba(5, 12, 23, .87);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      transform: rotate(1.2deg);
+    }
+    .terminal::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: linear-gradient(120deg, transparent 35%, rgba(103,232,249,.06), transparent 62%);
+    }
+    .terminal-bar { display: flex; align-items: center; gap: .42rem; padding: 1rem 1.1rem; border-bottom: 1px solid var(--line); }
+    .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--faint); }
+    .dot:nth-child(1) { background: var(--red); }
+    .dot:nth-child(2) { background: var(--amber); }
+    .dot:nth-child(3) { background: var(--mint); }
+    .terminal-label { margin-left: auto; color: var(--faint); font: 600 .72rem/1 monospace; }
+    .terminal-body { padding: 1.35rem; font-size: clamp(.73rem, 1.25vw, .9rem); color: #c8d5e9; }
+    .terminal-body pre { margin: 0; white-space: pre-wrap; }
+    .t-muted { color: #61718a; }
+    .t-cyan { color: var(--cyan); }
+    .t-green { color: var(--mint); }
+    .t-amber { color: var(--amber); }
+    .t-violet { color: #c4b5fd; }
+
+    .trust-strip { padding: 1rem 0 5.4rem; }
+    .trust-grid { display: grid; grid-template-columns: repeat(4, 1fr); border-block: 1px solid var(--line); }
+    .trust-item { padding: 1.35rem 1.1rem; border-right: 1px solid var(--line); }
+    .trust-item:last-child { border-right: 0; }
+    .trust-item strong { display: block; margin-bottom: .25rem; font-size: 1rem; }
+    .trust-item span { color: var(--faint); font-size: .82rem; }
+
+    .section { padding: 7rem 0; }
+    .section-head { max-width: 760px; margin-bottom: 3rem; }
+    .section-head h2 { margin-bottom: 1rem; font-size: clamp(2.35rem, 5vw, 4.5rem); line-height: 1; letter-spacing: -.055em; }
+    .section-head p { color: var(--muted); font-size: 1.08rem; }
+    .kicker { color: var(--mint); font: 800 .72rem/1.2 monospace; letter-spacing: .13em; text-transform: uppercase; }
+
+    .problem-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; }
+    .card {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: linear-gradient(145deg, rgba(18,33,55,.78), rgba(10,22,39,.62));
+      box-shadow: inset 0 1px rgba(255,255,255,.03);
+    }
+    .card-pad { padding: clamp(1.35rem, 3vw, 2.2rem); }
+    .card h3 { margin-bottom: .65rem; font-size: 1.25rem; letter-spacing: -.025em; }
+    .card p { color: var(--muted); }
+    .chaos-list { display: grid; gap: .65rem; margin-top: 1.5rem; }
+    .file-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: center;
+      gap: 1rem;
+      padding: .78rem .9rem;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: rgba(0,0,0,.12);
+      color: #c9d5e6;
+      font: 600 .8rem/1.25 monospace;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      width: fit-content;
+      padding: .28rem .52rem;
+      border: 1px solid currentColor;
+      border-radius: 999px;
+      font: 800 .62rem/1 monospace;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+      opacity: .9;
+    }
+    .badge.red { color: var(--red); }
+    .badge.amber { color: var(--amber); }
+    .badge.green { color: var(--mint); }
+    .badge.cyan { color: var(--cyan); }
+    .answer-card { display: flex; flex-direction: column; justify-content: space-between; }
+    .answer-box { margin-top: 1.45rem; padding: 1.2rem; border: 1px solid rgba(110,231,183,.3); border-radius: 16px; background: rgba(110,231,183,.055); }
+    .answer-source { color: var(--mint); font: 700 .72rem/1.2 monospace; }
+    .answer-box p { margin: .8rem 0 0; color: var(--ink); }
+
+    .roles { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; }
+    .role { min-height: 245px; position: relative; overflow: hidden; }
+    .role::after { content: attr(data-num); position: absolute; right: 1rem; bottom: -1.1rem; color: rgba(255,255,255,.035); font-size: 6.5rem; font-weight: 900; }
+    .role-icon { width: 42px; height: 42px; display: grid; place-items: center; margin-bottom: 2rem; border-radius: 12px; background: rgba(103,232,249,.09); color: var(--cyan); }
+    .role-icon svg { width: 22px; }
+
+    .flow-shell { display: grid; grid-template-columns: 220px 1fr; gap: 1.2rem; }
+    .flow-tabs { display: grid; align-content: start; gap: .55rem; }
+    .flow-tab {
+      width: 100%;
+      padding: .9rem 1rem;
+      border: 1px solid transparent;
+      border-radius: 13px;
+      background: transparent;
+      color: var(--muted);
+      text-align: left;
+      cursor: pointer;
+    }
+    .flow-tab[aria-selected="true"] { border-color: rgba(103,232,249,.32); background: rgba(103,232,249,.07); color: var(--ink); }
+    .flow-panel { min-height: 360px; padding: clamp(1.5rem, 4vw, 2.6rem); }
+    .flow-panel[hidden] { display: none; }
+    .flow-label { color: var(--cyan); font: 800 .7rem/1 monospace; letter-spacing: .1em; text-transform: uppercase; }
+    .flow-panel h3 { margin: .8rem 0; font-size: clamp(1.6rem, 3vw, 2.4rem); }
+    .flow-panel > p { max-width: 700px; }
+    .mini-code { margin-top: 1.4rem; padding: 1rem 1.2rem; border-radius: 15px; background: #06101d; color: #cbd7e8; overflow-x: auto; font-size: .78rem; }
+    .command-row { display: flex; flex-wrap: wrap; gap: .55rem; margin-top: 1.4rem; }
+    .command { padding: .55rem .72rem; border: 1px solid var(--line); border-radius: 10px; color: #b8c6da; background: rgba(0,0,0,.16); font: 700 .72rem/1 monospace; }
+
+    .audit-summary { display: grid; grid-template-columns: .85fr 1.15fr; gap: 1.2rem; }
+    .verdict { padding: 2rem; border-color: rgba(110,231,183,.28); background: radial-gradient(circle at 90% 5%, rgba(110,231,183,.12), transparent 46%), var(--panel); }
+    .verdict-mark { width: 54px; height: 54px; display: grid; place-items: center; margin-bottom: 1.4rem; border-radius: 50%; background: var(--mint); color: #052117; font-size: 1.6rem; font-weight: 900; }
+    .verdict h3 { font-size: 2rem; }
+    .verdict p { color: #b8c8d8; }
+    .audit-list { display: grid; gap: .75rem; }
+    .audit-row { display: grid; grid-template-columns: 132px 1fr; gap: 1rem; padding: 1rem; border-bottom: 1px solid var(--line); }
+    .audit-row:last-child { border-bottom: 0; }
+    .audit-row strong { font-size: .82rem; }
+    .audit-row span { color: var(--muted); font-size: .9rem; }
+
+    .boundary { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1rem; }
+    .boundary-card { padding: 1.6rem; }
+    .boundary-card.keep { border-color: rgba(110,231,183,.23); }
+    .boundary-card.leave { border-color: rgba(251,113,133,.2); }
+    .check-list { list-style: none; padding: 0; margin: 1.2rem 0 0; display: grid; gap: .72rem; }
+    .check-list li { display: grid; grid-template-columns: 20px 1fr; gap: .6rem; color: var(--muted); font-size: .9rem; }
+    .check-list li::before { content: "✓"; color: var(--mint); font-weight: 900; }
+    .leave .check-list li::before { content: "×"; color: var(--red); }
+
+    .architecture { position: relative; padding: clamp(1.5rem, 4vw, 2.6rem); }
+    .arch-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: .75rem; align-items: stretch; }
+    .arch-node { min-height: 168px; padding: 1.1rem; border: 1px solid var(--line); border-radius: 16px; background: rgba(255,255,255,.026); }
+    .arch-node small { color: var(--cyan); font: 800 .62rem/1 monospace; text-transform: uppercase; }
+    .arch-node strong { display: block; margin: .8rem 0 .45rem; }
+    .arch-node p { color: var(--faint); font-size: .78rem; }
+    .arch-node.accent { border-color: rgba(103,232,249,.38); background: rgba(103,232,249,.055); }
+    .arch-footer { margin-top: .75rem; padding: 1rem; border: 1px dashed var(--line-strong); border-radius: 14px; color: var(--muted); text-align: center; font-size: .82rem; }
+
+    .security-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+    .security-card { padding: 1.55rem; }
+    .security-card .num { color: var(--faint); font: 700 .72rem/1 monospace; }
+    .security-card h3 { margin-top: 1.5rem; }
+    .risk-note { margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--line); color: var(--amber); font-size: .78rem; }
+
+    .scope-table { width: 100%; border-collapse: collapse; }
+    .scope-table th, .scope-table td { padding: 1rem; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
+    .scope-table th { color: var(--faint); font: 800 .68rem/1 monospace; letter-spacing: .08em; text-transform: uppercase; }
+    .scope-table td { color: var(--muted); font-size: .88rem; }
+    .scope-table td:first-child { color: var(--ink); font-weight: 700; }
+    .scope-table tr:last-child td { border-bottom: 0; }
+
+    .roadmap { display: grid; grid-template-columns: repeat(4, 1fr); gap: .8rem; }
+    .phase { padding: 1.4rem; position: relative; }
+    .phase::before { content: ""; position: absolute; left: 1.4rem; right: 1.4rem; top: 57px; height: 1px; background: var(--line-strong); }
+    .phase-num { display: grid; place-items: center; width: 30px; height: 30px; position: relative; z-index: 1; border: 1px solid var(--line-strong); border-radius: 50%; background: var(--panel-solid); color: var(--cyan); font: 800 .7rem/1 monospace; }
+    .phase h3 { margin-top: 2rem; }
+    .phase ul { padding-left: 1rem; color: var(--muted); font-size: .84rem; }
+    .phase .time { color: var(--faint); font: 700 .68rem/1 monospace; }
+
+    .maintenance { display: grid; grid-template-columns: 1.1fr .9fr; gap: 1rem; }
+    .maint-card { padding: 1.7rem; }
+    .maint-row { display: grid; grid-template-columns: 100px 1fr; gap: 1rem; padding: .9rem 0; border-bottom: 1px solid var(--line); }
+    .maint-row:last-child { border-bottom: 0; }
+    .maint-row strong { font-size: .78rem; color: var(--cyan); }
+    .maint-row span { color: var(--muted); font-size: .88rem; }
+    .owner-list { display: grid; gap: .75rem; margin-top: 1.3rem; }
+    .owner { padding: .85rem; border: 1px solid var(--line); border-radius: 13px; }
+    .owner strong { display: block; font-size: .84rem; }
+    .owner span { color: var(--faint); font-size: .78rem; }
+
+    .next { padding: 6rem 0 8rem; }
+    .next-card {
+      position: relative;
+      padding: clamp(2rem, 6vw, 4.8rem);
+      overflow: hidden;
+      border: 1px solid rgba(103,232,249,.24);
+      border-radius: 34px;
+      background:
+        radial-gradient(circle at 95% 10%, rgba(167,139,250,.2), transparent 36%),
+        radial-gradient(circle at 0 100%, rgba(103,232,249,.12), transparent 36%),
+        rgba(12,25,43,.82);
+      text-align: center;
+      box-shadow: var(--shadow);
+    }
+    .next-card h2 { max-width: 820px; margin: .8rem auto 1rem; font-size: clamp(2.6rem, 6vw, 5.3rem); line-height: .96; letter-spacing: -.06em; }
+    .next-card p { max-width: 650px; margin: 0 auto 1.8rem; color: var(--muted); }
+    .next-actions { display: flex; justify-content: center; flex-wrap: wrap; gap: .8rem; }
+
+    footer { padding: 2rem 0 3rem; border-top: 1px solid var(--line); color: var(--faint); font-size: .78rem; }
+    .footer-row { display: flex; justify-content: space-between; gap: 1rem; }
+
+    .reveal { opacity: 0; transform: translateY(22px); transition: opacity .7s ease, transform .7s ease; }
+    .reveal.visible { opacity: 1; transform: none; }
+
+    @media (max-width: 980px) {
+      .nav-links a:not(.nav-cta) { display: none; }
+      .hero { min-height: auto; }
+      .hero-grid, .audit-summary, .maintenance { grid-template-columns: 1fr; }
+      .hero-grid { gap: 3.2rem; }
+      .terminal { max-width: 700px; transform: none; }
+      .roles { grid-template-columns: 1fr 1fr; }
+      .arch-grid { grid-template-columns: repeat(2, 1fr); }
+      .arch-node:last-child { grid-column: 1 / -1; }
+      .security-grid { grid-template-columns: 1fr 1fr; }
+      .roadmap { grid-template-columns: 1fr 1fr; }
+    }
+
+    @media (max-width: 680px) {
+      .wrap { width: min(calc(100% - 28px), var(--max)); }
+      .nav { min-height: 64px; }
+      .nav-cta { display: none; }
+      .hero { padding-top: 4.2rem; }
+      h1 { font-size: clamp(3.2rem, 18vw, 5rem); }
+      .hero-actions .button { width: 100%; }
+      .trust-grid { grid-template-columns: 1fr 1fr; }
+      .trust-item:nth-child(2) { border-right: 0; }
+      .trust-item:nth-child(-n+2) { border-bottom: 1px solid var(--line); }
+      .section { padding: 5.2rem 0; }
+      .problem-grid, .roles, .boundary, .security-grid, .roadmap { grid-template-columns: 1fr; }
+      .flow-shell { grid-template-columns: 1fr; }
+      .flow-tabs { grid-template-columns: repeat(4, minmax(86px, 1fr)); overflow-x: auto; padding-bottom: .3rem; }
+      .flow-tab { white-space: nowrap; text-align: center; padding: .72rem .5rem; font-size: .78rem; }
+      .audit-row { grid-template-columns: 1fr; gap: .3rem; }
+      .arch-grid { grid-template-columns: 1fr; }
+      .arch-node:last-child { grid-column: auto; }
+      .scope-table { display: block; overflow-x: auto; white-space: nowrap; }
+      .footer-row { flex-direction: column; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+      .reveal { opacity: 1; transform: none; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+
+  <header class="site-header" id="header">
+    <div class="wrap nav">
+      <a class="brand" href="#top" aria-label="CanonKit home">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M5 6.5 12 3l7 3.5v8L12 21l-7-6.5v-8Z" stroke="currentColor" stroke-width="1.7"/><path d="m8 8 4-2 4 2-4 2-4-2Zm4 2v5" stroke="currentColor" stroke-width="1.7"/></svg>
+        </span>
+        CanonKit
+      </a>
+      <nav class="nav-links" aria-label="Primary navigation">
+        <a href="#how">How it works</a>
+        <a href="#audit">Audit</a>
+        <a href="#security">Security</a>
+        <a href="#roadmap">Roadmap</a>
+        <a class="nav-cta" href="#next">Build v0.1 <span aria-hidden="true">→</span></a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="hero" id="top">
+      <div class="wrap hero-grid">
+        <div class="hero-copy">
+          <div class="eyebrow">Open-source concept · extraction-ready</div>
+          <h1>Make repository knowledge <span class="gradient-text">trustworthy.</span></h1>
+          <p>CanonKit is a local-first trust layer for documentation. It tells people and AI agents what is current, authoritative, owned, superseded, and safe to use.</p>
+          <div class="hero-actions">
+            <a class="button primary" href="#how">See how it works <span aria-hidden="true">↓</span></a>
+            <a class="button ghost" href="#audit">View extraction audit</a>
+          </div>
+          <div class="micro">No cloud account · no model required · no document uploads</div>
+        </div>
+
+        <div class="terminal" aria-label="Illustration of a CanonKit validation result">
+          <div class="terminal-bar">
+            <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+            <span class="terminal-label">canonkit validate</span>
+          </div>
+          <div class="terminal-body">
+<pre><span class="t-muted">$</span> canonkit validate
+
+<span class="t-cyan">Scanning</span> 42 governed documents...
+
+<span class="t-green">✓</span> one active authority for authentication
+<span class="t-green">✓</span> ownership present on active records
+<span class="t-green">✓</span> supersession graph is complete
+<span class="t-green">✓</span> private sources excluded from agent pack
+<span class="t-amber">!</span> review due in 12 days
+
+<span class="t-violet">TRUST RESULT</span>
+Safe to consume · 96/100</pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="trust-strip">
+      <div class="wrap trust-grid">
+        <div class="trust-item"><strong>Local-first</strong><span>Runs inside the repository</span></div>
+        <div class="trust-item"><strong>Deterministic</strong><span>Rules before model judgement</span></div>
+        <div class="trust-item"><strong>Agent-ready</strong><span>Clean, bounded context packs</span></div>
+        <div class="trust-item"><strong>Human-owned</strong><span>No silent promotion to truth</span></div>
+      </div>
+    </div>
+
+    <section class="section" id="problem">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <span class="kicker">The problem</span>
+          <h2>Repositories contain facts. They rarely contain <span class="gradient-text">authority.</span></h2>
+          <p>An AI agent can find five answers and still choose the wrong one. CanonKit adds the missing governance signal without replacing Git or your documentation workflow.</p>
+        </div>
+        <div class="problem-grid reveal">
+          <article class="card card-pad">
+            <span class="badge red">Before</span>
+            <h3 style="margin-top:1rem">Search finds contradictions</h3>
+            <p>Names and timestamps look useful, but neither proves which document governs the decision.</p>
+            <div class="chaos-list">
+              <div class="file-row"><span>architecture-v1.md</span><span class="badge red">stale?</span></div>
+              <div class="file-row"><span>meeting-notes.md</span><span class="badge amber">unclear</span></div>
+              <div class="file-row"><span>generated-wiki.md</span><span class="badge amber">derived</span></div>
+              <div class="file-row"><span>architecture-v2.md</span><span class="badge amber">maybe</span></div>
+            </div>
+          </article>
+          <article class="card card-pad answer-card">
+            <div>
+              <span class="badge green">After</span>
+              <h3 style="margin-top:1rem">The trusted answer is explicit</h3>
+              <p>CanonKit resolves lifecycle, authority, ownership, lineage, visibility, and review state before returning context.</p>
+            </div>
+            <div class="answer-box">
+              <span class="answer-source">CANONICAL · ACTIVE · PUBLIC</span>
+              <p><strong>Authentication uses the approved v2 architecture.</strong><br><span style="color:var(--muted)">Owned by Platform · supersedes v1 · reviewed 14 days ago</span></p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="users">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <span class="kicker">Who uses it</span>
+          <h2>One trust model. Four practical users.</h2>
+          <p>CanonKit is infrastructure for teams who want their documentation to remain useful as repositories, contributors, and AI tooling grow.</p>
+        </div>
+        <div class="roles reveal">
+          <article class="card card-pad role" data-num="1">
+            <span class="role-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="m8 9-4 3 4 3m8-6 4 3-4 3m-2-9-4 12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
+            <h3>Developers</h3><p>See which spec is current before changing code.</p>
+          </article>
+          <article class="card card-pad role" data-num="2">
+            <span class="role-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M8 18h8m-7 3h6M7 10a5 5 0 1 1 10 0c0 2-1 3-2 4H9c-1-1-2-2-2-4Z" stroke="currentColor" stroke-width="1.8"/></svg></span>
+            <h3>AI agents</h3><p>Receive bounded context with authority and provenance attached.</p>
+          </article>
+          <article class="card card-pad role" data-num="3">
+            <span class="role-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M4 19V5m0 14h16M8 15l3-4 3 2 4-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
+            <h3>Tech leads</h3><p>Catch ownership gaps, expired reviews, and competing truths in CI.</p>
+          </article>
+          <article class="card card-pad role" data-num="4">
+            <span class="role-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M4 5h16v14H4zM8 9h8m-8 4h5" stroke="currentColor" stroke-width="1.8"/></svg></span>
+            <h3>Maintainers</h3><p>Govern documentation with a small schema and reviewable Git changes.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="how">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <span class="kicker">How it works</span>
+          <h2>Metadata in. Trust decisions out.</h2>
+          <p>CanonKit stays deliberately boring at its core: files, schema validation, a relationship graph, and predictable command-line output.</p>
+        </div>
+        <div class="flow-shell reveal">
+          <div class="flow-tabs" role="tablist" aria-label="CanonKit workflow">
+            <button class="flow-tab" role="tab" aria-selected="true" aria-controls="flow-mark" id="tab-mark">1 · Mark</button>
+            <button class="flow-tab" role="tab" aria-selected="false" aria-controls="flow-check" id="tab-check">2 · Check</button>
+            <button class="flow-tab" role="tab" aria-selected="false" aria-controls="flow-resolve" id="tab-resolve">3 · Resolve</button>
+            <button class="flow-tab" role="tab" aria-selected="false" aria-controls="flow-share" id="tab-share">4 · Share</button>
+          </div>
+          <div class="card">
+            <div class="flow-panel" id="flow-mark" role="tabpanel" aria-labelledby="tab-mark">
+              <span class="flow-label">Step 01 · Mark</span><h3>Add compact governance metadata</h3>
+              <p>Keep the document readable. Add only the facts needed to establish identity, authority, lifecycle, ownership, visibility, lineage, and review expectations.</p>
+<pre class="mini-code"><span class="t-cyan">---</span>
+id: auth-architecture
+title: Authentication Architecture
+status: active
+authority: canonical
+owner: platform
+version: 2.1
+visibility: public
+supersedes: [auth-architecture@1]
+review_after: 2026-11-01
+<span class="t-cyan">---</span></pre>
+            </div>
+            <div class="flow-panel" id="flow-check" role="tabpanel" aria-labelledby="tab-check" hidden>
+              <span class="flow-label">Step 02 · Check</span><h3>Validate structure and relationships</h3>
+              <p>The CLI checks required fields, allowed values, duplicate active authorities, broken references, supersession cycles, missing owners, overdue reviews, and unsafe visibility combinations.</p>
+              <div class="command-row"><span class="command">canonkit validate</span><span class="command">canonkit lint</span><span class="command">canonkit graph</span></div>
+            </div>
+            <div class="flow-panel" id="flow-resolve" role="tabpanel" aria-labelledby="tab-resolve" hidden>
+              <span class="flow-label">Step 03 · Resolve</span><h3>Ask for the governing source</h3>
+              <p>A deterministic resolver ranks eligible documents by scope, lifecycle, authority, specificity, and recency—while preserving provenance and explaining why a source won.</p>
+              <div class="command-row"><span class="command">canonkit resolve "authentication"</span><span class="command">--scope app</span><span class="command">--explain</span></div>
+            </div>
+            <div class="flow-panel" id="flow-share" role="tabpanel" aria-labelledby="tab-share" hidden>
+              <span class="flow-label">Step 04 · Share</span><h3>Generate bounded context for tools</h3>
+              <p>Export a safe agent pack containing only eligible sources and compact provenance. Private, archived, or unverified material stays excluded unless an authorised caller opts in.</p>
+              <div class="command-row"><span class="command">canonkit pack</span><span class="command">--audience agent</span><span class="command">--format json</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="audit">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <span class="kicker">Extraction audit · 18 Aug 2026</span>
+          <h2>Strong proof. Safe boundary. Clean-room build.</h2>
+          <p>A read-only audit of the private reference repository found a mature pattern worth productising—but not a self-contained package that should simply be published.</p>
+        </div>
+        <div class="audit-summary reveal">
+          <article class="card verdict">
+            <div class="verdict-mark" aria-hidden="true">✓</div>
+            <span class="badge green">Proceed</span>
+            <h3 style="margin-top:1rem">Extraction is viable</h3>
+            <p>Build CanonKit as a new, independent tool using generic semantics and black-box behavioural tests. Do not copy internal content or lift the existing application subsystem wholesale.</p>
+          </article>
+          <article class="card card-pad audit-list">
+            <div class="audit-row"><strong>Observed</strong><span>Typed lifecycle states, authority ranks, source quality, visibility, ownership, versioning, review dates, provenance, supersession, and current-version flags.</span></div>
+            <div class="audit-row"><strong>Proven</strong><span>Intake → review → active → superseded/archive workflows; authority-aware ranking; provenance formatting; deterministic proof before AI enrichment.</span></div>
+            <div class="audit-row"><strong>Coupled</strong><span>The main governance module is large and bound to private database tables, ingestion, application routes, project vocabularies, and runtime configuration.</span></div>
+            <div class="audit-row"><strong>Gap</strong><span>No small standalone CLI, neutral public schema, isolated package boundary, public fixtures, release automation, or public threat model exists yet.</span></div>
+            <div class="audit-row"><strong>Decision</strong><span>Reuse the lessons and behavioural contract; reimplement the core with neutral names, local files, zero hosted dependencies, and synthetic examples.</span></div>
+          </article>
+        </div>
+
+        <div class="boundary reveal">
+          <article class="card boundary-card keep">
+            <span class="badge green">Public foundation</span>
+            <h3 style="margin-top:1rem">Safe to reimplement</h3>
+            <ul class="check-list">
+              <li>Document identity and lifecycle schema</li>
+              <li>Authority, ownership, and review rules</li>
+              <li>Provenance and supersession graph</li>
+              <li>Deterministic validation and resolution</li>
+              <li>Local-first CLI and CI integration</li>
+              <li>Synthetic example repository</li>
+            </ul>
+          </article>
+          <article class="card boundary-card leave">
+            <span class="badge red">Private boundary</span>
+            <h3 style="margin-top:1rem">Must stay behind</h3>
+            <ul class="check-list">
+              <li>Private documents, canon, archives, and records</li>
+              <li>Brand, project, customer, and personal names</li>
+              <li>Database schema, credentials, and hosted state</li>
+              <li>Application routes and internal UI code</li>
+              <li>Domain-specific ranking terms and policies</li>
+              <li>Internal prompts, agents, and operating playbooks</li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="architecture">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <span class="kicker">Architecture</span>
+          <h2>Small core. Explicit edges.</h2>
+          <p>The v0.1 architecture is intentionally offline-capable and dependency-light. Git remains the audit trail; CanonKit supplies semantics and checks.</p>
+        </div>
+        <div class="card architecture reveal">
+          <div class="arch-grid" aria-label="CanonKit architecture flow">
+            <div class="arch-node"><small>Input</small><strong>Markdown + YAML</strong><p>Existing repository files with compact frontmatter.</p></div>
+            <div class="arch-node accent"><small>Core</small><strong>Parser + schema</strong><p>Normalises metadata and rejects invalid states.</p></div>
+            <div class="arch-node accent"><small>Core</small><strong>Policy engine</strong><p>Applies lifecycle, visibility, ownership, and review rules.</p></div>
+            <div class="arch-node accent"><small>Core</small><strong>Trust graph</strong><p>Resolves lineage, conflicts, and supersession.</p></div>
+            <div class="arch-node"><small>Output</small><strong>CLI + JSON</strong><p>Human reports, CI status, graphs, and agent packs.</p></div>
+          </div>
+          <div class="arch-footer">Local filesystem only by default · network disabled · no model dependency · adapters are optional and isolated</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="security">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <span class="kicker">Security model</span>
+          <h2>Trust metadata without creating a new trust problem.</h2>
+          <p>CanonKit handles sensitive repository knowledge, so v0.1 should minimise capability, fail closed, and make every inclusion explainable.</p>
+        </div>
+        <div class="security-grid reveal">
+          <article class="card security-card"><span class="num">01</span><h3>Offline by default</h3><p>No telemetry, uploads, remote calls, or model execution in the core.</p><div class="risk-note">Mitigates accidental disclosure.</div></article>
+          <article class="card security-card"><span class="num">02</span><h3>Read-only core</h3><p>Validation and resolution never rewrite documents unless a separate explicit fix command is used.</p><div class="risk-note">Mitigates silent mutation.</div></article>
+          <article class="card security-card"><span class="num">03</span><h3>Visibility gates</h3><p>Private and restricted sources are excluded from packs unless policy and caller scope both allow them.</p><div class="risk-note">Mitigates context leakage.</div></article>
+          <article class="card security-card"><span class="num">04</span><h3>Untrusted content</h3><p>Document bodies are data, never executable instructions. Paths stay repository-bounded.</p><div class="risk-note">Mitigates prompt and path injection.</div></article>
+          <article class="card security-card"><span class="num">05</span><h3>Explainable ranking</h3><p>Every selected source includes its governing rule and rejected alternatives.</p><div class="risk-note">Mitigates false authority.</div></article>
+          <article class="card security-card"><span class="num">06</span><h3>Human promotion</h3><p>CanonKit detects conflicts and proposes changes; it never promotes a document to canonical automatically.</p><div class="risk-note">Mitigates governance capture.</div></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="scope">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <span class="kicker">v0.1 scope</span>
+          <h2>Useful enough to adopt. Small enough to maintain.</h2>
+          <p>The first release should prove the trust loop end to end without a server, dashboard, database, or plugin ecosystem.</p>
+        </div>
+        <div class="card card-pad reveal">
+          <table class="scope-table">
+            <thead><tr><th>Capability</th><th>Included in v0.1</th><th>Not yet</th></tr></thead>
+            <tbody>
+              <tr><td>Schema</td><td>Neutral frontmatter contract; JSON Schema; strict validation</td><td>Custom organisation policy DSL</td></tr>
+              <tr><td>CLI</td><td><code>init</code>, <code>validate</code>, <code>list</code>, <code>resolve</code>, <code>graph</code>, <code>pack</code></td><td>Hosted control plane or web dashboard</td></tr>
+              <tr><td>Rules</td><td>Identity, active authority, owners, visibility, review dates, references, cycles</td><td>Model-based content quality scoring</td></tr>
+              <tr><td>Output</td><td>Readable terminal report, JSON, Markdown context pack, exit codes</td><td>IDE extension and MCP server</td></tr>
+              <tr><td>Delivery</td><td>npm package, GitHub Action example, docs, threat model, synthetic fixtures</td><td>Enterprise SSO, hosted analytics, paid tier</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="roadmap">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <span class="kicker">Roadmap</span>
+          <h2>Prove the primitive before building the platform.</h2>
+          <p>A disciplined roadmap keeps CanonKit credible as an open-source project and avoids recreating a private operating system in public.</p>
+        </div>
+        <div class="roadmap reveal">
+          <article class="card phase"><span class="phase-num">1</span><h3>Foundation</h3><span class="time">WEEKS 1–2</span><ul><li>Schema and fixtures</li><li>Parser and validator</li><li>Threat model</li><li>Public naming review</li></ul></article>
+          <article class="card phase"><span class="phase-num">2</span><h3>Useful CLI</h3><span class="time">WEEKS 3–4</span><ul><li>Resolve and explain</li><li>Supersession graph</li><li>Context pack export</li><li>CI example</li></ul></article>
+          <article class="card phase"><span class="phase-num">3</span><h3>Public beta</h3><span class="time">WEEKS 5–6</span><ul><li>Docs and examples</li><li>Contribution guide</li><li>Cross-platform QA</li><li>First external users</li></ul></article>
+          <article class="card phase"><span class="phase-num">4</span><h3>Ecosystem</h3><span class="time">AFTER PROOF</span><ul><li>MCP adapter</li><li>IDE diagnostics</li><li>Policy extensions</li><li>Optional visual graph</li></ul></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="maintenance">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <span class="kicker">Maintenance model</span>
+          <h2>Founder-light by design.</h2>
+          <p>The project should be maintainable without becoming a second full-time product. Most work can be delegated; governance stays human.</p>
+        </div>
+        <div class="maintenance reveal">
+          <article class="card maint-card">
+            <div class="maint-row"><strong>Weekly</strong><span>Triage issues and dependency alerts; merge safe automated updates.</span></div>
+            <div class="maint-row"><strong>Monthly</strong><span>Release small fixes, refresh examples, review compatibility on supported Node versions.</span></div>
+            <div class="maint-row"><strong>Quarterly</strong><span>Review schema changes, roadmap evidence, security posture, and deprecations.</span></div>
+            <div class="maint-row"><strong>Always</strong><span>Require tests for policy changes; keep migrations backwards-compatible; reject domain-specific creep.</span></div>
+          </article>
+          <article class="card maint-card">
+            <span class="badge cyan">Ownership</span>
+            <div class="owner-list">
+              <div class="owner"><strong>Founder / product owner</strong><span>Direction, public promises, releases, and community judgement.</span></div>
+              <div class="owner"><strong>Codex</strong><span>Implementation, tests, docs, issue fixes, compatibility checks, and release preparation.</span></div>
+              <div class="owner"><strong>Contributors</strong><span>Adapters, examples, bug reports, and proposals through review.</span></div>
+              <div class="owner"><strong>Automation</strong><span>CI, dependency alerts, security scans, and package publishing gates.</span></div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="next" id="next">
+      <div class="wrap">
+        <div class="next-card reveal">
+          <span class="kicker">Recommended next step</span>
+          <h2>Build the clean-room v0.1 in a new public repository.</h2>
+          <p>Start with the schema, synthetic fixtures, validator, and threat model. Test the complete trust loop before adding integrations or visual tooling.</p>
+          <div class="next-actions">
+            <a class="button primary" href="#scope">Review v0.1 scope</a>
+            <a class="button ghost" href="#audit">Revisit extraction boundary</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap footer-row">
+      <span>CanonKit concept · clean-room extraction audit</span>
+      <span>Local-first · deterministic · human-governed</span>
+    </div>
+  </footer>
+
+  <script>
+    const header = document.getElementById('header');
+    const updateHeader = () => header.classList.toggle('scrolled', window.scrollY > 8);
+    updateHeader();
+    addEventListener('scroll', updateHeader, { passive: true });
+
+    const tabs = [...document.querySelectorAll('[role="tab"]')];
+    const panels = [...document.querySelectorAll('[role="tabpanel"]')];
+    function activateTab(tab, focus = false) {
+      tabs.forEach((item) => {
+        const selected = item === tab;
+        item.setAttribute('aria-selected', String(selected));
+        item.tabIndex = selected ? 0 : -1;
+      });
+      panels.forEach((panel) => panel.hidden = panel.id !== tab.getAttribute('aria-controls'));
+      if (focus) tab.focus();
+    }
+    tabs.forEach((tab, index) => {
+      tab.addEventListener('click', () => activateTab(tab));
+      tab.addEventListener('keydown', (event) => {
+        if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return;
+        event.preventDefault();
+        let next = index;
+        if (event.key === 'ArrowRight') next = (index + 1) % tabs.length;
+        if (event.key === 'ArrowLeft') next = (index - 1 + tabs.length) % tabs.length;
+        if (event.key === 'Home') next = 0;
+        if (event.key === 'End') next = tabs.length - 1;
+        activateTab(tabs[next], true);
+      });
+    });
+
+    const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (!reduced && 'IntersectionObserver' in window) {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: .12 });
+      document.querySelectorAll('.reveal').forEach((el) => observer.observe(el));
+    } else {
+      document.querySelectorAll('.reveal').forEach((el) => el.classList.add('visible'));
+    }
+  </script>
+</body>
+</html>
