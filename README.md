@@ -22,7 +22,7 @@ This repository currently contains the public concept site and the clean-room bo
 - Human-readable, JSON, and Markdown context-pack outputs
 - CI example, threat model, and synthetic fixtures
 
-See the [concept site](./index.html) for the product explanation, extraction audit, architecture, security model, scope, and roadmap.
+See the [concept site](./public/index.html) for the product explanation, extraction audit, architecture, security model, scope, and roadmap.
 
 ## Project documentation
 
@@ -41,7 +41,7 @@ See [docs/EXTRACTION-BOUNDARY.md](./docs/EXTRACTION-BOUNDARY.md).
 
 ## Development
 
-The concept site has no build step. Open `index.html` directly or serve the repository with any static file server.
+The concept site has no build step. Open `public/index.html` directly or serve `public/` with any static file server.
 
 The Stage 1 TypeScript foundation requires Node.js 22 or newer:
 
