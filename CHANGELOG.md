@@ -24,6 +24,9 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 - Bounded Markdown frontmatter parser with strict YAML and public-schema validation.
 - Stable parser diagnostics with source paths and one-based Markdown locations.
 - Configurable UTF-8 byte limits and synthetic frontmatter fixtures.
+- Repository-bounded Markdown discovery with stable portable path ordering.
+- Default and configurable exclusions with fail-closed traversal and document-count limits.
+- Synthetic repository fixtures covering generated output, dependencies, symlinks, and nested repositories.
 
 ## [0.0.0] — 2026-08-18
 

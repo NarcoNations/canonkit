@@ -3,3 +3,9 @@
 coverage
 dist
 node_modules
+
+# Intentional synthetic discovery fixtures.
+!fixtures/repository/dist/
+!fixtures/repository/dist/**
+!fixtures/repository/node_modules/
+!fixtures/repository/node_modules/**

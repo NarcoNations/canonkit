@@ -2,6 +2,17 @@
 export const CANONKIT_PACKAGE_NAME = 'canonkit' as const;
 
 export {
+  DEFAULT_EXCLUDED_DIRECTORY_NAMES,
+  DEFAULT_MAX_DOCUMENTS,
+  discoverMarkdownFiles,
+  type DiscoveredMarkdownFile,
+  type DiscoveryDiagnostic,
+  type DiscoveryDiagnosticCode,
+  type DiscoveryOptions,
+  type DiscoveryResult,
+} from './discovery/repository.js';
+
+export {
   DEFAULT_MAX_FILE_BYTES,
   parseMarkdownFrontmatter,
   SUPPORTED_SCHEMA_VERSION,

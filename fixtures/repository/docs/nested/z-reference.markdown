@@ -1,0 +1,3 @@
+# Reference
+
+Synthetic nested fixture.

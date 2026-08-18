@@ -128,11 +128,11 @@ Modification time and filename alone never establish authority.
 
 ### Discovery
 
-- resolve a repository root explicitly
-- include configured Markdown paths
-- ignore `.git`, dependencies, generated output, and configured exclusions
-- reject paths that escape the repository root
-- return stable path ordering
+- resolve the nearest Git repository root from an explicit start path
+- include configured repository-relative Markdown paths
+- ignore `.git`, dependencies, generated output, nested repositories, symlinks, and configured exclusions
+- reject configured paths that escape the canonical repository root
+- return stable repository-relative path ordering
 
 ### Metadata
 
