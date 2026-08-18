@@ -1,8 +1,8 @@
 # CanonKit status
 
 - **Updated:** 2026-08-18
-- **Current stage:** Stage 0 — Public foundation
-- **Stage state:** Documentation checkpoint awaiting merge
+- **Current stage:** Stage 1 — Schema and repository scanner
+- **Stage state:** Stage 1.1 complete; Stage 1.2 is next
 - **Latest completed release:** None
 - **Production site:** <https://canonkit.vercel.app>
 - **Repository:** <https://github.com/NarcoNations/canonkit>
@@ -17,14 +17,17 @@
 - MIT licence, security policy, and contribution guidance added.
 - Staged roadmap, architecture decisions, and build sequence written.
 - Code of Conduct added.
+- Stage 0 documentation checkpoint merged to `main`.
+- Strict TypeScript ESM package foundation added with zero runtime dependencies.
+- Lint, typecheck, test, build, and package-content gates added.
+- GitHub CI added for Node.js 22 and 24 LTS.
 
-## In progress
+## Next checkpoint
 
-- Review and merge the Stage 0 documentation checkpoint.
+- Stage 1.2 — define and test the public metadata contract and synthetic fixtures.
 
 ## Not started
 
-- TypeScript package foundation
 - Public metadata schema
 - Repository scanner
 - Validation CLI
@@ -52,8 +55,8 @@
 
 ## Resume here
 
-1. Confirm the Stage 0 documentation checkpoint is merged and `main` is clean.
+1. Confirm the Stage 1.1 project-foundation checkpoint is merged and `main` is clean.
 2. Read `ARCHITECTURE.md`, `ROADMAP.md`, and `BUILD-PLAN.md`.
-3. Create a branch for **BUILD-PLAN task 1.1 — Project foundation**.
-4. Add the empty strict TypeScript package and CI only.
+3. Create a branch for **BUILD-PLAN task 1.2 — Metadata contract**.
+4. Add and test the public JSON Schema and synthetic metadata fixtures only.
 5. Validate locally and update this file before closing the task.

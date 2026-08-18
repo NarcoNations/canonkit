@@ -18,11 +18,13 @@ For every bounded change:
 
 ### 1.1 Project foundation
 
-- Add `package.json` with ESM output and supported Node engines.
-- Add strict TypeScript configuration.
-- Add focused test, typecheck, lint, and build scripts.
-- Add `src/`, `schema/`, `fixtures/`, and `test/` directories.
-- Add CI for supported Node LTS releases.
+**Status:** Complete
+
+- [x] Add `package.json` with ESM output and supported Node engines.
+- [x] Add strict TypeScript configuration.
+- [x] Add focused test, typecheck, lint, and build scripts.
+- [x] Add `src/`, `schema/`, `fixtures/`, and `test/` directories.
+- [x] Add CI for supported Node LTS releases.
 
 Acceptance:
 
@@ -30,6 +32,8 @@ Acceptance:
 - The package contains no runtime server or framework dependency.
 
 ### 1.2 Metadata contract
+
+**Status:** Next
 
 - Write `schema/canonkit-document.schema.json`.
 - Add valid minimal and complete metadata fixtures.
@@ -120,4 +124,4 @@ Stage 3 and beyond are intentionally kept at roadmap granularity until validatio
 
 ## Exact next task
 
-Start **1.1 Project foundation** on a dedicated branch. Stop after the empty strict TypeScript project and CI pass; do not begin schema design in the same change.
+After the Stage 1.1 checkpoint is merged, start **1.2 Metadata contract** on a dedicated branch. Define and test the public JSON Schema and synthetic metadata fixtures only; do not begin frontmatter parsing in the same change.

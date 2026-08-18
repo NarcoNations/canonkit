@@ -13,6 +13,11 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 - Ordered build plan with acceptance criteria and an exact next task.
 - Resumable project status document.
 - Project Code of Conduct.
+- Strict TypeScript ESM package foundation with zero runtime dependencies.
+- Lint, typecheck, unit-test, build, and package-content gates.
+- Declaration and source-map build output.
+- GitHub CI matrix for supported Node.js 22 and 24 LTS releases.
+- Placeholder directories for the next schema and fixture checkpoint.
 
 ## [0.0.0] — 2026-08-18
 

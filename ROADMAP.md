@@ -13,7 +13,7 @@ This roadmap keeps CanonKit small, useful, and resumable. Each stage ends with a
 
 ## Stage 0 — Public foundation
 
-**Status:** In progress
+**Status:** Complete
 
 **Outcome:** The public concept, boundaries, delivery plan, and contribution rules are durable.
 
@@ -27,7 +27,7 @@ Deliverables:
 - [x] Security and contribution policies
 - [x] Architecture, roadmap, build plan, status, and changelog
 - [x] Code of Conduct
-- [ ] Merge the Stage 0 documentation checkpoint
+- [x] Merge the Stage 0 documentation checkpoint
 
 Acceptance gate:
 
@@ -35,19 +35,19 @@ Acceptance gate:
 
 ## Stage 1 — Schema and repository scanner
 
-**Status:** Not started
+**Status:** In progress
 
 **Outcome:** CanonKit can find governed Markdown documents and validate their metadata shape.
 
 Deliverables:
 
-- TypeScript single-package project
-- Public JSON Schema for document metadata
-- Markdown frontmatter parser
-- Repository-bounded file discovery
-- Normalised in-memory document model
-- Synthetic valid and invalid fixture repositories
-- Unit tests and CI
+- [x] TypeScript single-package foundation
+- [x] Baseline unit test and Node LTS CI matrix
+- [ ] Public JSON Schema for document metadata
+- [ ] Markdown frontmatter parser
+- [ ] Repository-bounded file discovery
+- [ ] Normalised in-memory document model
+- [ ] Synthetic valid and invalid fixture repositories
 
 Acceptance gate:
 
