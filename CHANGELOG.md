@@ -18,6 +18,9 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 - Declaration and source-map build output.
 - GitHub CI matrix for supported Node.js 22 and 24 LTS releases.
 - Placeholder directories for the next schema and fixture checkpoint.
+- Versioned JSON Schema Draft 2020-12 contract for CanonKit document metadata.
+- Neutral minimal, complete, and intentionally invalid metadata fixtures.
+- Contract tests that prove valid fixtures pass and invalid fixtures fail for their intended reason.
 
 ## [0.0.0] — 2026-08-18
 

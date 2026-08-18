@@ -1,0 +1,14 @@
+{
+  "missing-schema-version.json": { "keyword": "required", "missingProperty": "schema_version" },
+  "missing-id.json": { "keyword": "required", "missingProperty": "id" },
+  "missing-title.json": { "keyword": "required", "missingProperty": "title" },
+  "missing-status.json": { "keyword": "required", "missingProperty": "status" },
+  "missing-authority.json": { "keyword": "required", "missingProperty": "authority" },
+  "missing-owner.json": { "keyword": "required", "missingProperty": "owner" },
+  "missing-version.json": { "keyword": "required", "missingProperty": "version" },
+  "missing-visibility.json": { "keyword": "required", "missingProperty": "visibility" },
+  "invalid-status.json": { "keyword": "enum", "instancePath": "/status" },
+  "invalid-authority.json": { "keyword": "enum", "instancePath": "/authority" },
+  "invalid-visibility.json": { "keyword": "enum", "instancePath": "/visibility" },
+  "unsupported-schema-version.json": { "keyword": "const", "instancePath": "/schema_version" }
+}

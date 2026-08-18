@@ -32,6 +32,7 @@ See the [concept site](./public/index.html) for the product explanation, extract
 - [Ordered build plan](./BUILD-PLAN.md)
 - [Changelog](./CHANGELOG.md)
 - [Code of Conduct](./CODE_OF_CONDUCT.md)
+- [Public metadata contract](./schema/README.md)
 
 ## Clean-room boundary
 
@@ -54,7 +55,7 @@ npm run check
 
 ## Status
 
-Stage 1 is in progress. The package foundation is implemented; the public metadata schema and CLI are not. See [STATUS.md](./STATUS.md) for the exact current state and next task.
+Stage 1 is in progress. The package foundation and public metadata contract are implemented; Markdown parsing and the CLI are not. See [STATUS.md](./STATUS.md) for the exact current state and next task.
 
 ## Licence
 

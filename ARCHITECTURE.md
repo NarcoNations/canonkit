@@ -88,7 +88,7 @@ Initial conceptual fields:
 | `review_after` | Optional review deadline |
 | `tags` | Optional discovery labels |
 
-Exact names and allowed values remain provisional until Stage 1 tests prove the contract.
+The exact names and allowed values are now defined by [`schema/canonkit-document.schema.json`](./schema/canonkit-document.schema.json). Policy semantics remain outside the schema and will be proven in later Stage 1 and Stage 2 tests.
 
 ### ADR-004 — Deterministic policy before optional AI
 
