@@ -2,7 +2,7 @@
 
 - **Updated:** 2026-08-18
 - **Current stage:** Stage 1 — Schema and repository scanner
-- **Stage state:** Stage 1.1 implemented; checkpoint awaiting merge
+- **Stage state:** Stage 1.1 complete; Stage 1.2 is next
 - **Latest completed release:** None
 - **Production site:** <https://canonkit.vercel.app>
 - **Repository:** <https://github.com/NarcoNations/canonkit>
@@ -22,9 +22,9 @@
 - Lint, typecheck, test, build, and package-content gates added.
 - GitHub CI added for Node.js 22 and 24 LTS.
 
-## In progress
+## Next checkpoint
 
-- Review and merge the Stage 1.1 project-foundation checkpoint.
+- Stage 1.2 — define and test the public metadata contract and synthetic fixtures.
 
 ## Not started
 
