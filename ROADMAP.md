@@ -43,11 +43,11 @@ Deliverables:
 
 - [x] TypeScript single-package foundation
 - [x] Baseline unit test and Node LTS CI matrix
-- [ ] Public JSON Schema for document metadata
+- [x] Public JSON Schema for document metadata
 - [ ] Markdown frontmatter parser
 - [ ] Repository-bounded file discovery
 - [ ] Normalised in-memory document model
-- [ ] Synthetic valid and invalid fixture repositories
+- [x] Synthetic valid and invalid metadata fixtures
 
 Acceptance gate:
 

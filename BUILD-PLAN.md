@@ -33,13 +33,13 @@ Acceptance:
 
 ### 1.2 Metadata contract
 
-**Status:** Next
+**Status:** Complete
 
-- Write `schema/canonkit-document.schema.json`.
-- Add valid minimal and complete metadata fixtures.
-- Add one invalid fixture for each required field and enum.
-- Add a schema version compatibility rule.
-- Document the contract with copy-paste examples.
+- [x] Write `schema/canonkit-document.schema.json`.
+- [x] Add valid minimal and complete metadata fixtures.
+- [x] Add one invalid fixture for each required field and enum.
+- [x] Add a schema version compatibility rule.
+- [x] Document the contract with copy-paste examples.
 
 Acceptance:
 
@@ -47,6 +47,8 @@ Acceptance:
 - No private or organisation-specific vocabulary appears in fixtures.
 
 ### 1.3 Frontmatter parser
+
+**Status:** Next
 
 - Parse Markdown frontmatter and body separately.
 - Preserve source path and diagnostic line information where practical.
@@ -124,4 +126,4 @@ Stage 3 and beyond are intentionally kept at roadmap granularity until validatio
 
 ## Exact next task
 
-After the Stage 1.1 checkpoint is merged, start **1.2 Metadata contract** on a dedicated branch. Define and test the public JSON Schema and synthetic metadata fixtures only; do not begin frontmatter parsing in the same change.
+After the Stage 1.2 checkpoint is merged, start **1.3 Frontmatter parser** on a dedicated branch. Parse and validate Markdown frontmatter against the public schema while preserving bounded, read-only behaviour; do not begin repository discovery in the same change.
