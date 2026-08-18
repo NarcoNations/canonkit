@@ -41,11 +41,20 @@ See [docs/EXTRACTION-BOUNDARY.md](./docs/EXTRACTION-BOUNDARY.md).
 
 ## Development
 
-The current site has no build step. Open `index.html` directly or serve the repository with any static file server.
+The concept site has no build step. Open `index.html` directly or serve the repository with any static file server.
+
+The Stage 1 TypeScript foundation requires Node.js 22 or newer:
+
+```sh
+npm ci
+npm run check
+```
+
+`npm run check` runs lint, strict typechecking, unit tests, and the declaration/source-map build.
 
 ## Status
 
-Stage 0 public foundation is in progress. The concept and extraction audit are complete; CLI implementation has not started. See [STATUS.md](./STATUS.md) for the exact current state and next task.
+Stage 1 is in progress. The package foundation is implemented; the public metadata schema and CLI are not. See [STATUS.md](./STATUS.md) for the exact current state and next task.
 
 ## Licence
 
