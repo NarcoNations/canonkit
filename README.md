@@ -24,6 +24,15 @@ This repository currently contains the public concept site and the clean-room bo
 
 See the [concept site](./index.html) for the product explanation, extraction audit, architecture, security model, scope, and roadmap.
 
+## Project documentation
+
+- [Current status and exact resume point](./STATUS.md)
+- [Staged roadmap and acceptance gates](./ROADMAP.md)
+- [Architecture and decisions](./ARCHITECTURE.md)
+- [Ordered build plan](./BUILD-PLAN.md)
+- [Changelog](./CHANGELOG.md)
+- [Code of Conduct](./CODE_OF_CONDUCT.md)
+
 ## Clean-room boundary
 
 CanonKit is an independent implementation of generic documentation-governance concepts. It does not contain private source documents, customer material, internal application code, database schemas, credentials, proprietary project rules, or private operating playbooks.
@@ -36,7 +45,7 @@ The current site has no build step. Open `index.html` directly or serve the repo
 
 ## Status
 
-Concept and extraction audit complete. CLI implementation has not started.
+Stage 0 public foundation is in progress. The concept and extraction audit are complete; CLI implementation has not started. See [STATUS.md](./STATUS.md) for the exact current state and next task.
 
 ## Licence
 

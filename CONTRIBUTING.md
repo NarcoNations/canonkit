@@ -2,6 +2,8 @@
 
 CanonKit is currently establishing its public contract and v0.1 foundation.
 
+All participation must follow the [Code of Conduct](./CODE_OF_CONDUCT.md).
+
 Before proposing a change:
 
 1. Keep the core local-first and dependency-light.
