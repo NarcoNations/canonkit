@@ -35,7 +35,7 @@ Acceptance gate:
 
 ## Stage 1 — Schema and repository scanner
 
-**Status:** In progress
+**Status:** Complete
 
 **Outcome:** CanonKit can find governed Markdown documents and validate their metadata shape.
 
@@ -46,7 +46,7 @@ Deliverables:
 - [x] Public JSON Schema for document metadata
 - [x] Markdown frontmatter parser
 - [x] Repository-bounded file discovery
-- [ ] Normalised in-memory document model
+- [x] Normalised in-memory document model
 - [x] Synthetic valid and invalid metadata fixtures
 
 Acceptance gate:

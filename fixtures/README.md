@@ -9,3 +9,5 @@ The JSON fixtures test the metadata contract independently from Markdown parsing
 `frontmatter/valid/` contains bounded Markdown examples for the minimal and complete contracts. `frontmatter/invalid/` covers missing, malformed, repeated, and unsupported-version envelopes. All document bodies are synthetic and are treated as untrusted content by parser tests.
 
 `repository/` contains an inert synthetic directory tree for discovery tests. Tests copy it into a temporary Git boundary and add runtime-only symlink and nested-repository cases. Dependency and generated-output folders verify the default exclusions.
+
+`collection/` combines valid and independently invalid Markdown neighbours. It proves that a scan returns every valid normalised document while preserving diagnostics for missing, malformed, and unsupported metadata.

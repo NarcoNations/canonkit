@@ -27,6 +27,9 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 - Repository-bounded Markdown discovery with stable portable path ordering.
 - Default and configurable exclusions with fail-closed traversal and document-count limits.
 - Synthetic repository fixtures covering generated output, dependencies, symlinks, and nested repositories.
+- Stable JSON-safe document collections that preserve valid documents and neighbouring diagnostics.
+- Explicit normalised governance fields with reporting-only raw metadata.
+- UTF-8 validation, source byte provenance, scan summaries, and synthetic mixed-validity fixtures.
 
 ## [0.0.0] — 2026-08-18
 

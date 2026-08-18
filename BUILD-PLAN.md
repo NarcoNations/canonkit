@@ -77,12 +77,12 @@ Acceptance:
 
 ### 1.5 Normalised model
 
-**Status:** Next
+**Status:** Complete
 
-- Define the internal document and diagnostic types.
-- Convert validated metadata into the normalised model.
-- Retain raw metadata only for reporting, not authority inference.
-- Return a collection plus diagnostics rather than throwing for ordinary invalid documents.
+- [x] Define the internal document and diagnostic types.
+- [x] Convert validated metadata into the normalised model.
+- [x] Retain raw metadata only for reporting, not authority inference.
+- [x] Return a collection plus diagnostics rather than throwing for ordinary invalid documents.
 
 Acceptance:
 
@@ -92,6 +92,8 @@ Acceptance:
 ## Stage 2 tasks — Validate command
 
 ### 2.1 CLI shell
+
+**Status:** Next
 
 - Add the `canonkit` executable.
 - Use native argument parsing unless a concrete limitation is proven.
@@ -130,4 +132,4 @@ Stage 3 and beyond are intentionally kept at roadmap granularity until validatio
 
 ## Exact next task
 
-After the Stage 1.4 checkpoint is merged, start **1.5 Normalised model** on a dedicated branch. Read and parse the discovered files into a stable serialisable collection plus diagnostics; do not begin CLI behaviour in the same change.
+After the Stage 1.5 checkpoint is merged, start **2.1 CLI shell** on a dedicated branch. Expose the existing collection through a minimal `canonkit` executable with help, version, format, path, and stable exit-code handling; do not begin document policy rules in the same change.

@@ -27,3 +27,13 @@ export {
   type ParserDiagnosticCode,
   type SourceLocation,
 } from './metadata/frontmatter.js';
+
+export {
+  COLLECTION_FORMAT_VERSION,
+  scanRepository,
+  type CollectionDiagnostic,
+  type CollectionDiagnosticCode,
+  type DocumentCollection,
+  type NormalizedDocument,
+  type ScanRepositoryOptions,
+} from './model/collection.js';
