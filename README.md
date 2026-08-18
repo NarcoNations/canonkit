@@ -35,6 +35,7 @@ See the [concept site](./public/index.html) for the product explanation, extract
 - [Public metadata contract](./schema/README.md)
 - [Frontmatter parser contract](./docs/PARSER-CONTRACT.md)
 - [Repository discovery contract](./docs/DISCOVERY-CONTRACT.md)
+- [Normalised collection contract](./docs/COLLECTION-CONTRACT.md)
 
 ## Clean-room boundary
 
@@ -77,9 +78,19 @@ const result = await discoverMarkdownFiles('./docs');
 
 See the [discovery contract](./docs/DISCOVERY-CONTRACT.md) for exclusions, limits, path rules, and diagnostics.
 
+Discovery and parsing can be composed into a stable collection:
+
+```ts
+import { scanRepository } from 'canonkit';
+
+const collection = await scanRepository('./docs');
+```
+
+See the [collection contract](./docs/COLLECTION-CONTRACT.md) for normalised documents, unified diagnostics, and summary counts.
+
 ## Status
 
-Stage 1 is in progress. The public metadata contract, bounded parser, and repository discovery are implemented; the normalised collection and CLI are not. See [STATUS.md](./STATUS.md) for the exact current state and next task.
+Stage 1 is complete. The schema, bounded parser, repository discovery, and normalised collection are implemented; the CLI and document policy rules are not. See [STATUS.md](./STATUS.md) for the exact current state and next task.
 
 ## Licence
 

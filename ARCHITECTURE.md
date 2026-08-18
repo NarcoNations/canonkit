@@ -141,6 +141,15 @@ Modification time and filename alone never establish authority.
 - normalise values without inventing missing authority
 - retain source file and diagnostic locations
 
+### Normalised collection
+
+- compose discovery and parsing without hiding neighbouring file failures
+- copy validated governance fields into a stable serialisable model
+- represent missing optional values explicitly with `null` or empty arrays
+- retain raw metadata under a reporting-only boundary
+- keep document bodies untrusted and separate from governance decisions
+- combine discovery, read, and parse failures into stable diagnostics
+
 ### Policy
 
 - evaluate lifecycle, authority, ownership, review, and visibility rules
