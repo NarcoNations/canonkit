@@ -2,7 +2,7 @@
 
 - **Updated:** 2026-08-18
 - **Current stage:** Stage 1 — Schema and repository scanner
-- **Stage state:** Stage 1.3 complete; Stage 1.4 is next
+- **Stage state:** Stage 1.4 complete; Stage 1.5 is next
 - **Latest completed release:** None
 - **Production site:** <https://canonkit.vercel.app>
 - **Repository:** <https://github.com/NarcoNations/canonkit>
@@ -27,14 +27,17 @@
 - Bounded Markdown frontmatter parser added with schema validation and stable diagnostics.
 - Parser fixtures cover minimal, complete, missing, malformed, repeated, and unsupported metadata.
 - UTF-8 byte limits, source locations, duplicate-key rejection, and alias rejection are tested.
+- Repository-bounded Markdown discovery added with deterministic path ordering.
+- Default and configured exclusions, nested repositories, symlinks, and traversal attempts are tested.
+- Configurable document-count limits fail without returning partial results.
 
 ## Next checkpoint
 
-- Stage 1.4 — discover Markdown within an explicit repository boundary.
+- Stage 1.5 — create the normalised document collection and diagnostic model.
 
 ## Not started
 
-- Repository scanner
+- Normalised document scanner
 - Validation CLI
 - Resolution and trust graph
 - Context-pack export
@@ -53,15 +56,15 @@
 
 ## Current risks
 
-- Repository path and symlink boundaries remain unproven until Stage 1.4 discovery tests pass.
+- Parser and discovery outputs are not yet combined into a serialisable collection.
 - The project has a concept and plan but no working CLI yet.
 - There is no external usage evidence yet.
 - The Vercel OSS application is not ready until the project demonstrates active development and a functioning tool.
 
 ## Resume here
 
-1. Confirm the Stage 1.3 frontmatter-parser checkpoint is merged and `main` is clean.
+1. Confirm the Stage 1.4 repository-discovery checkpoint is merged and `main` is clean.
 2. Read `ARCHITECTURE.md`, `ROADMAP.md`, and `BUILD-PLAN.md`.
-3. Create a branch for **BUILD-PLAN task 1.4 — Repository discovery**.
-4. Implement stable, bounded Markdown discovery without beginning the normalised model.
+3. Create a branch for **BUILD-PLAN task 1.5 — Normalised model**.
+4. Combine discovery and parsing into a stable collection plus diagnostics without beginning CLI work.
 5. Validate locally and update this file before closing the task.

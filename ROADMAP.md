@@ -45,7 +45,7 @@ Deliverables:
 - [x] Baseline unit test and Node LTS CI matrix
 - [x] Public JSON Schema for document metadata
 - [x] Markdown frontmatter parser
-- [ ] Repository-bounded file discovery
+- [x] Repository-bounded file discovery
 - [ ] Normalised in-memory document model
 - [x] Synthetic valid and invalid metadata fixtures
 

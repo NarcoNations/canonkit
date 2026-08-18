@@ -34,6 +34,7 @@ See the [concept site](./public/index.html) for the product explanation, extract
 - [Code of Conduct](./CODE_OF_CONDUCT.md)
 - [Public metadata contract](./schema/README.md)
 - [Frontmatter parser contract](./docs/PARSER-CONTRACT.md)
+- [Repository discovery contract](./docs/DISCOVERY-CONTRACT.md)
 
 ## Clean-room boundary
 
@@ -66,9 +67,19 @@ const result = parseMarkdownFrontmatter(markdown, {
 
 It returns either a parsed metadata/body document or stable diagnostics. See the [parser contract](./docs/PARSER-CONTRACT.md) for the full boundary.
 
+Bounded repository discovery is also available:
+
+```ts
+import { discoverMarkdownFiles } from 'canonkit';
+
+const result = await discoverMarkdownFiles('./docs');
+```
+
+See the [discovery contract](./docs/DISCOVERY-CONTRACT.md) for exclusions, limits, path rules, and diagnostics.
+
 ## Status
 
-Stage 1 is in progress. The package foundation, public metadata contract, and bounded frontmatter parser are implemented; repository discovery and the CLI are not. See [STATUS.md](./STATUS.md) for the exact current state and next task.
+Stage 1 is in progress. The public metadata contract, bounded parser, and repository discovery are implemented; the normalised collection and CLI are not. See [STATUS.md](./STATUS.md) for the exact current state and next task.
 
 ## Licence
 

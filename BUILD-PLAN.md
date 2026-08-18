@@ -62,13 +62,13 @@ Acceptance:
 
 ### 1.4 Repository discovery
 
-**Status:** Next
+**Status:** Complete
 
-- Resolve an explicit start path to a bounded repository root.
-- Discover Markdown files in stable order.
-- Add default exclusions and optional configuration.
-- Prevent path traversal and symlink escape.
-- Enforce configurable document-count limits.
+- [x] Resolve an explicit start path to a bounded repository root.
+- [x] Discover Markdown files in stable order.
+- [x] Add default exclusions and optional configuration.
+- [x] Prevent path traversal and symlink escape.
+- [x] Enforce configurable document-count limits.
 
 Acceptance:
 
@@ -76,6 +76,8 @@ Acceptance:
 - Excluded and escaped files never enter the document collection.
 
 ### 1.5 Normalised model
+
+**Status:** Next
 
 - Define the internal document and diagnostic types.
 - Convert validated metadata into the normalised model.
@@ -128,4 +130,4 @@ Stage 3 and beyond are intentionally kept at roadmap granularity until validatio
 
 ## Exact next task
 
-After the Stage 1.3 checkpoint is merged, start **1.4 Repository discovery** on a dedicated branch. Discover eligible Markdown in stable order inside an explicitly resolved repository boundary; do not begin the normalised document model in the same change.
+After the Stage 1.4 checkpoint is merged, start **1.5 Normalised model** on a dedicated branch. Read and parse the discovered files into a stable serialisable collection plus diagnostics; do not begin CLI behaviour in the same change.
