@@ -4,4 +4,6 @@ All fixtures are synthetic, neutral, and safe to publish. Private or organisatio
 
 `metadata/valid/` contains minimal and complete JSON examples that the public schema must accept. `metadata/invalid/` contains one isolated contract failure for every required field and enum, plus an unsupported schema version. `expectations.json` records the exact validation keyword and location each invalid fixture must trigger.
 
-The JSON fixtures test the metadata contract without introducing Markdown parsing. Repository and frontmatter fixtures will be added with their corresponding Stage 1 tasks.
+The JSON fixtures test the metadata contract independently from Markdown parsing. Repository fixtures will be added with the discovery task.
+
+`frontmatter/valid/` contains bounded Markdown examples for the minimal and complete contracts. `frontmatter/invalid/` covers missing, malformed, repeated, and unsupported-version envelopes. All document bodies are synthetic and are treated as untrusted content by parser tests.

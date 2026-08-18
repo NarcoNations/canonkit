@@ -21,6 +21,9 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 - Versioned JSON Schema Draft 2020-12 contract for CanonKit document metadata.
 - Neutral minimal, complete, and intentionally invalid metadata fixtures.
 - Contract tests that prove valid fixtures pass and invalid fixtures fail for their intended reason.
+- Bounded Markdown frontmatter parser with strict YAML and public-schema validation.
+- Stable parser diagnostics with source paths and one-based Markdown locations.
+- Configurable UTF-8 byte limits and synthetic frontmatter fixtures.
 
 ## [0.0.0] — 2026-08-18
 

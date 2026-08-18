@@ -48,12 +48,12 @@ Acceptance:
 
 ### 1.3 Frontmatter parser
 
-**Status:** Next
+**Status:** Complete
 
-- Parse Markdown frontmatter and body separately.
-- Preserve source path and diagnostic line information where practical.
-- Reject malformed YAML, multiple frontmatter blocks, and unsupported schema versions.
-- Enforce configurable file-size limits.
+- [x] Parse Markdown frontmatter and body separately.
+- [x] Preserve source path and diagnostic line information where practical.
+- [x] Reject malformed YAML, multiple frontmatter blocks, and unsupported schema versions.
+- [x] Enforce configurable file-size limits.
 
 Acceptance:
 
@@ -61,6 +61,8 @@ Acceptance:
 - Document bodies cannot alter parser or policy behaviour.
 
 ### 1.4 Repository discovery
+
+**Status:** Next
 
 - Resolve an explicit start path to a bounded repository root.
 - Discover Markdown files in stable order.
@@ -126,4 +128,4 @@ Stage 3 and beyond are intentionally kept at roadmap granularity until validatio
 
 ## Exact next task
 
-After the Stage 1.2 checkpoint is merged, start **1.3 Frontmatter parser** on a dedicated branch. Parse and validate Markdown frontmatter against the public schema while preserving bounded, read-only behaviour; do not begin repository discovery in the same change.
+After the Stage 1.3 checkpoint is merged, start **1.4 Repository discovery** on a dedicated branch. Discover eligible Markdown in stable order inside an explicitly resolved repository boundary; do not begin the normalised document model in the same change.
