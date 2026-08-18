@@ -33,6 +33,7 @@ See the [concept site](./public/index.html) for the product explanation, extract
 - [Changelog](./CHANGELOG.md)
 - [Code of Conduct](./CODE_OF_CONDUCT.md)
 - [Public metadata contract](./schema/README.md)
+- [Frontmatter parser contract](./docs/PARSER-CONTRACT.md)
 
 ## Clean-room boundary
 
@@ -53,9 +54,21 @@ npm run check
 
 `npm run check` runs lint, strict typechecking, unit tests, and the declaration/source-map build.
 
+The Stage 1.3 parser is available from the package root:
+
+```ts
+import { parseMarkdownFrontmatter } from 'canonkit';
+
+const result = parseMarkdownFrontmatter(markdown, {
+  path: 'docs/architecture.md',
+});
+```
+
+It returns either a parsed metadata/body document or stable diagnostics. See the [parser contract](./docs/PARSER-CONTRACT.md) for the full boundary.
+
 ## Status
 
-Stage 1 is in progress. The package foundation and public metadata contract are implemented; Markdown parsing and the CLI are not. See [STATUS.md](./STATUS.md) for the exact current state and next task.
+Stage 1 is in progress. The package foundation, public metadata contract, and bounded frontmatter parser are implemented; repository discovery and the CLI are not. See [STATUS.md](./STATUS.md) for the exact current state and next task.
 
 ## Licence
 
