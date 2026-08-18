@@ -67,7 +67,7 @@
 ## Resume here
 
 1. Confirm the Stage 1.5 normalised-model checkpoint is merged and `main` is clean.
-2. Read `ARCHITECTURE.md`, `ROADMAP.md`, and `BUILD-PLAN.md`.
+2. Read `docs/DEVELOPMENT-HANDOVER.md`, `ARCHITECTURE.md`, `ROADMAP.md`, and `BUILD-PLAN.md`.
 3. Create a branch for **BUILD-PLAN task 2.1 — CLI shell**.
 4. Add the minimal executable, formats, and exit codes without beginning document policy rules.
 5. Validate locally and update this file before closing the task.
