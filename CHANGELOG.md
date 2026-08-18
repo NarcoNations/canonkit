@@ -30,6 +30,7 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 - Stable JSON-safe document collections that preserve valid documents and neighbouring diagnostics.
 - Explicit normalised governance fields with reporting-only raw metadata.
 - UTF-8 validation, source byte provenance, scan summaries, and synthetic mixed-validity fixtures.
+- Durable Stage 1 development handover with the exact Stage 2.1 restart boundary.
 
 ## [0.0.0] — 2026-08-18
 

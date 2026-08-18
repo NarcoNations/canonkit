@@ -36,6 +36,7 @@ See the [concept site](./public/index.html) for the product explanation, extract
 - [Frontmatter parser contract](./docs/PARSER-CONTRACT.md)
 - [Repository discovery contract](./docs/DISCOVERY-CONTRACT.md)
 - [Normalised collection contract](./docs/COLLECTION-CONTRACT.md)
+- [Development handover and exact restart point](./docs/DEVELOPMENT-HANDOVER.md)
 
 ## Clean-room boundary
 
