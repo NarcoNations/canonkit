@@ -1,8 +1,8 @@
 # CanonKit status
 
 - **Updated:** 2026-08-21
-- **Current stage:** Stage 2 complete — Validate command
-- **Stage state:** Stage 2 acceptance gate complete; Stage 3.1 is next
+- **Current stage:** Stage 3 in progress — Resolution and trust graph
+- **Stage state:** Stage 3.1 graph index and eligibility complete; Stage 3.2 is next
 - **Latest completed release:** None
 - **Production site:** <https://canonkit.vercel.app>
 - **Repository:** <https://github.com/NarcoNations/canonkit>
@@ -50,14 +50,20 @@
 - Concise terminal and JSON formats project the same result without recomputing policy.
 - Quiet CI mode suppresses only completely clean output and preserves warnings and failures.
 - Stage 2 implementation and acceptance gate completed.
+- Deterministic graph indexes document identity, version, subjects, supersession, and explicit typed relations.
+- Repository-relative source paths provide unambiguous graph node IDs without composite-key inference.
+- Fail-closed eligibility excludes non-active, non-governing, non-public, or scope-mismatched nodes with stable explanations.
+- Internal and restricted visibility require explicit opt-in; excluded nodes remain visible for audit.
+- Neutral integration fixtures prove the graph consumes normalized metadata and never emits Markdown bodies.
 
 ## Next checkpoint
 
-- Stage 3.1 — build the deterministic graph index and fail-closed eligibility model.
+- Stage 3.2 — add bounded deterministic `list` and `graph` command projections.
 
 ## Not started
 
-- Resolution and trust graph
+- List and graph commands
+- Candidate ranking and resolution
 - Context-pack export
 - npm publication
 - OSS application
@@ -74,15 +80,15 @@
 
 ## Current risks
 
-- Resolution eligibility and ranking rules have not yet been proven against the validated model.
+- Candidate ranking and ambiguity handling have not yet been proven against the graph.
 - Schema `1.0` documents remain valid but cannot participate in subject-based canon checks until explicitly migrated to `1.1`.
 - There is no external usage evidence yet.
 - The Vercel OSS application is not ready until the project demonstrates active development and a functioning tool.
 
 ## Resume here
 
-1. Confirm the Stage 2.4 checkpoint is merged and `main` is clean apart from known unrelated duplicate files.
-2. Read `docs/DEVELOPMENT-HANDOVER.md`, `ARCHITECTURE.md`, `docs/CLI-CONTRACT.md`, `ROADMAP.md`, and `BUILD-PLAN.md`.
-3. Create a branch for **BUILD-PLAN task 3.1 — graph index and eligibility**.
-4. Build only on normalized documents and validated explicit relationships; do not reparse bodies or infer authority.
-5. Implement the in-memory graph and explainable eligibility only; leave commands and ranking for later Stage 3 checkpoints.
+1. Confirm the Stage 3.1 checkpoint is merged and `main` is clean apart from known unrelated duplicate files.
+2. Read `docs/DEVELOPMENT-HANDOVER.md`, `docs/GRAPH-CONTRACT.md`, `docs/CLI-CONTRACT.md`, `ROADMAP.md`, and `BUILD-PLAN.md`.
+3. Create a branch for **BUILD-PLAN task 3.2 — list and graph commands**.
+4. Project only the existing graph contract through deterministic terminal and JSON output.
+5. Implement command projection only; leave candidate ranking and resolution for Stage 3.3 and 3.4.

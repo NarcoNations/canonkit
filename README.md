@@ -38,6 +38,7 @@ See the [concept site](./public/index.html) for the product explanation, extract
 - [Normalised collection contract](./docs/COLLECTION-CONTRACT.md)
 - [Document policy contract](./docs/DOCUMENT-POLICY-CONTRACT.md)
 - [Relationship policy contract](./docs/RELATIONSHIP-POLICY-CONTRACT.md)
+- [Trust graph index contract](./docs/GRAPH-CONTRACT.md)
 - [Validate CLI contract](./docs/CLI-CONTRACT.md)
 - [Development handover and exact restart point](./docs/DEVELOPMENT-HANDOVER.md)
 
@@ -102,9 +103,19 @@ canonkit validate [path] --quiet
 
 The command reports schema, parsing, discovery, read, document-policy, and supersession-relationship failures through one normalized report. Quiet mode suppresses only completely clean runs. See the [document policy](./docs/DOCUMENT-POLICY-CONTRACT.md), [relationship policy](./docs/RELATIONSHIP-POLICY-CONTRACT.md), and [CLI](./docs/CLI-CONTRACT.md) contracts for rules, formats, and exit codes.
 
+Validated documents can be projected into a deterministic in-memory graph:
+
+```ts
+import { buildTrustGraphIndex } from 'canonkit';
+
+const graph = buildTrustGraphIndex(collection.documents);
+```
+
+The graph indexes identities, versions, subjects, supersession, and explicit relations while applying public-only fail-closed eligibility by default. See the [graph contract](./docs/GRAPH-CONTRACT.md).
+
 ## Status
 
-Stages 1 and 2 are complete. The versioned schema, bounded scanner, document and relationship policy, stable reports, and quiet CI mode are implemented; the Stage 3 graph index and eligibility model are next. See [STATUS.md](./STATUS.md) for the exact current state and next task.
+Stages 1 and 2 are complete, and Stage 3.1 now provides the graph index and eligibility model. Bounded `list` and `graph` command projections are next. See [STATUS.md](./STATUS.md) for the exact current state and next task.
 
 ## Licence
 

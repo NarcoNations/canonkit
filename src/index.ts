@@ -62,3 +62,18 @@ export {
   type RelationshipPolicyDiagnosticCode,
   type RelationshipPolicyResult,
 } from './policy/relationships.js';
+
+export {
+  buildTrustGraphIndex,
+  DEFAULT_GRAPH_VISIBILITIES,
+  GOVERNING_AUTHORITIES,
+  TRUST_GRAPH_FORMAT_VERSION,
+  TrustGraphInputError,
+  type EligibilityExclusion,
+  type EligibilityExclusionCode,
+  type ExplicitRelationEdge,
+  type GraphEligibilityOptions,
+  type SupersessionEdge,
+  type TrustGraphIndex,
+  type TrustGraphNode,
+} from './graph/index.js';
