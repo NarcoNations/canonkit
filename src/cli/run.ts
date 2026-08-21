@@ -1,4 +1,5 @@
 import { scanRepository, type DocumentCollection } from '../model/collection.js';
+import { validateDocumentPolicies } from '../policy/documents.js';
 import { CANONKIT_VERSION } from '../version.js';
 import { CliUsageError, parseCliArguments } from './arguments.js';
 import { renderJsonReport, renderTerminalReport } from './output.js';
@@ -57,12 +58,15 @@ export async function runCli(
     }
 
     const collection = await dependencies.scanRepository(command.path);
+    const policy = validateDocumentPolicies(collection.documents);
     io.stdout(
       command.format === 'json'
-        ? renderJsonReport(collection)
-        : renderTerminalReport(collection),
+        ? renderJsonReport(collection, policy)
+        : renderTerminalReport(collection, policy),
     );
-    return collection.ok ? CLI_EXIT_CODES.success : CLI_EXIT_CODES.documentFailure;
+    return collection.ok && policy.ok
+      ? CLI_EXIT_CODES.success
+      : CLI_EXIT_CODES.documentFailure;
   } catch (error) {
     if (error instanceof CliUsageError) {
       io.stderr(`CanonKit usage error: ${error.message}\nRun canonkit --help for usage.\n`);

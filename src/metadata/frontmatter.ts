@@ -4,6 +4,10 @@ import { Ajv2020, type AnySchema, type ErrorObject } from 'ajv/dist/2020.js';
 import { isNode, LineCounter, parseDocument } from 'yaml';
 
 export const DEFAULT_MAX_FILE_BYTES = 1024 * 1024;
+export const SUPPORTED_SCHEMA_VERSIONS = ['1.0', '1.1'] as const;
+export type SchemaVersion = (typeof SUPPORTED_SCHEMA_VERSIONS)[number];
+export const LATEST_SCHEMA_VERSION: SchemaVersion = '1.1';
+/** @deprecated Use LATEST_SCHEMA_VERSION or SUPPORTED_SCHEMA_VERSIONS. */
 export const SUPPORTED_SCHEMA_VERSION = '1.0' as const;
 
 export type DocumentStatus = 'draft' | 'review' | 'active' | 'superseded' | 'archived';
@@ -14,10 +18,24 @@ export type DocumentAuthority =
   | 'derived'
   | 'unverified';
 export type DocumentVisibility = 'public' | 'internal' | 'restricted';
+export type DocumentKind = 'canon' | 'decision' | 'policy' | 'reference';
+export type DocumentRelationType =
+  | 'part_of'
+  | 'governed_by'
+  | 'decided_by'
+  | 'evolved_from'
+  | 'replaces'
+  | 'related_to';
+
+export interface DocumentRelation {
+  target: string;
+  type: DocumentRelationType;
+}
 
 export interface CanonKitMetadata {
-  schema_version: typeof SUPPORTED_SCHEMA_VERSION;
+  schema_version: SchemaVersion;
   id: string;
+  kind?: DocumentKind;
   title: string;
   status: DocumentStatus;
   authority: DocumentAuthority;
@@ -25,6 +43,9 @@ export interface CanonKitMetadata {
   version: string;
   visibility: DocumentVisibility;
   scope?: string;
+  subjects?: string[];
+  aliases?: string[];
+  relations?: DocumentRelation[];
   supersedes?: string[];
   review_after?: string;
   tags?: string[];
@@ -71,12 +92,12 @@ export type ParseFrontmatterResult =
   | { document: ParsedMarkdownDocument; ok: true }
   | { diagnostics: ParserDiagnostic[]; ok: false };
 
-const schema = JSON.parse(
-  readFileSync(new URL('../../schema/canonkit-document.schema.json', import.meta.url), 'utf8'),
-) as AnySchema;
 const ajv = new Ajv2020({ allErrors: true, strict: true });
 ajv.addFormat('date', { type: 'string', validate: isIsoDate });
-const validateMetadata = ajv.compile<CanonKitMetadata>(schema);
+const validators = new Map<SchemaVersion, ReturnType<typeof ajv.compile<CanonKitMetadata>>>([
+  ['1.0', compileSchema('../../schema/canonkit-document.schema.json')],
+  ['1.1', compileSchema('../../schema/canonkit-document-v1.1.schema.json')],
+]);
 
 export function parseMarkdownFrontmatter(
   markdown: string,
@@ -156,18 +177,23 @@ export function parseMarkdownFrontmatter(
     );
   }
 
-  if (
-    Object.hasOwn(metadata, 'schema_version') &&
-    metadata['schema_version'] !== SUPPORTED_SCHEMA_VERSION
-  ) {
+  const schemaVersion = metadata['schema_version'];
+  if (typeof schemaVersion === 'string' && !isSchemaVersion(schemaVersion)) {
     return failure(
       'CKP007_SCHEMA_VERSION_UNSUPPORTED',
-      `Unsupported schema_version; expected ${SUPPORTED_SCHEMA_VERSION}.`,
+      `Unsupported schema_version; expected one of ${SUPPORTED_SCHEMA_VERSIONS.join(', ')}.`,
       path,
       locationForKey(yamlDocument, lineCounter, 'schema_version'),
     );
   }
 
+  const validateMetadata =
+    typeof schemaVersion === 'string' && isSchemaVersion(schemaVersion)
+      ? validators.get(schemaVersion)
+      : validators.get('1.0');
+  if (validateMetadata === undefined) {
+    throw new Error('CanonKit schema validator is unavailable.');
+  }
   if (!validateMetadata(metadata)) {
     return {
       ok: false,
@@ -189,6 +215,15 @@ export function parseMarkdownFrontmatter(
       path,
     },
   };
+}
+
+function compileSchema(path: string): ReturnType<typeof ajv.compile<CanonKitMetadata>> {
+  const schema = JSON.parse(readFileSync(new URL(path, import.meta.url), 'utf8')) as AnySchema;
+  return ajv.compile<CanonKitMetadata>(schema);
+}
+
+function isSchemaVersion(value: string): value is SchemaVersion {
+  return SUPPORTED_SCHEMA_VERSIONS.some((version) => version === value);
 }
 
 type Envelope =

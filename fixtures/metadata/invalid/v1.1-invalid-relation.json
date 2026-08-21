@@ -1,0 +1,13 @@
+{
+  "schema_version": "1.1",
+  "id": "canon/example",
+  "kind": "canon",
+  "title": "Invalid relation",
+  "status": "draft",
+  "authority": "unverified",
+  "owner": "documentation",
+  "version": "0.1",
+  "visibility": "internal",
+  "subjects": ["products/example"],
+  "relations": [{ "type": "renamed_by_magic", "target": "products/old-example" }]
+}

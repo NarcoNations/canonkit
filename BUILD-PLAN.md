@@ -102,18 +102,17 @@ Acceptance:
 
 ### 2.2 Document rules
 
-**Status:** Next
+**Status:** Complete
 
-- Run a bounded, generic model checkpoint before locking document policy:
-  - distinguish document identity from the governed subject where necessary
-  - test typed document kinds, aliases, decision references, and lineage relations
-  - publish any accepted metadata change as a versioned schema revision with migration fixtures
-- Required metadata and enum validation
-- Stable identity uniqueness
-- Owner requirement for active governing documents
-- Review deadline warnings
-- Visibility consistency
-- Competing active authority detection within scope
+- [x] Separate document identity from governed subjects in schema `1.1`.
+- [x] Add typed document kinds, aliases, subject identities, and lineage relations.
+- [x] Preserve schema `1.0` compatibility without inferred metadata.
+- [x] Validate required metadata and enums through the declared schema version.
+- [x] Detect duplicate stable document identity and version pairs.
+- [x] Require owner and scope for active governing documents.
+- [x] Warn when review deadlines are overdue.
+- [x] Detect visibility conflicts and competing active canon by subject.
+- [x] Emit deterministic diagnostics with remediation in terminal and JSON reports.
 
 ### 2.3 Relationship rules
 
@@ -138,4 +137,4 @@ Stage 3 and beyond are intentionally kept at roadmap granularity until validatio
 
 ## Exact next task
 
-After the Stage 2.1 checkpoint is merged, start **2.2 document model and policy rules** on a dedicated branch. Prove the smallest generic metadata refinement needed for subject, decision, alias, and lineage use cases with neutral fixtures, then implement document rules only. Do not begin relationship graph validation, resolution, context packs, adapters, or private content migration in the same change.
+After the Stage 2.2 checkpoint is merged, start **2.3 relationship rules** on a dedicated branch. Validate document supersession targets, self-references, cycles, lifecycle combinations, and multiple-current-version conflicts. Do not begin resolution, context packs, adapters, or private content migration in the same change.

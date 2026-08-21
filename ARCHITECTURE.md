@@ -88,7 +88,7 @@ Initial conceptual fields:
 | `review_after` | Optional review deadline |
 | `tags` | Optional discovery labels |
 
-The exact names and allowed values are now defined by [`schema/canonkit-document.schema.json`](./schema/canonkit-document.schema.json). Policy semantics remain outside the schema and will be proven in later Stage 1 and Stage 2 tests.
+The exact names and allowed values are defined by the versioned schemas in [`schema/`](./schema/). Policy semantics remain outside the schema and are proven through deterministic tests.
 
 ### ADR-004 — Deterministic policy before optional AI
 
@@ -123,6 +123,25 @@ Resolution output must identify:
 - the provenance used
 
 Modification time and filename alone never establish authority.
+
+### ADR-008 — Separate documents from governed subjects
+
+Schema `1.1` separates a Markdown document's stable `id` from the stable `subjects` it governs or affects.
+
+- `kind` identifies the document role: canon, decision, policy, or reference
+- `subjects` identify governed things independently of filenames and document versions
+- `aliases` preserve historical and alternative human-readable discovery names
+- typed `relations` express explicit subject or governance lineage
+- `supersedes` remains document-version replacement only
+
+Canon and decision documents require at least one explicit subject. CanonKit continues to accept schema `1.0` but does not infer any 1.1 fields for legacy documents.
+
+Why:
+
+- product or service evolution is not the same event as replacing a document
+- decisions can affect a subject without becoming its competing canon
+- aliases aid retrieval without becoming identities or authority signals
+- explicit typed relations create a bounded input for later graph validation
 
 ## Core modules
 

@@ -4,11 +4,11 @@ This is the durable restart guide for implementation work. It records the comple
 
 ## Snapshot
 
-- **Snapshot date:** 2026-08-18
-- **Baseline commit:** `d603b16` — Stage 1 normalised collection merged to `main`
+- **Snapshot date:** 2026-08-21
+- **Baseline commit:** `5ebe394` — Stage 2.1 CLI shell merged to `main`
 - **Completed:** Stage 0 public foundation and Stage 1 schema/repository scanner
-- **Completed after baseline:** Build-plan task 2.1 — minimal CLI shell
-- **Next:** Build-plan task 2.2 — document model checkpoint and policy rules
+- **Completed after baseline:** Build-plan task 2.2 — document model checkpoint and policy rules
+- **Next:** Build-plan task 2.3 — relationship rules
 - **Repository:** <https://github.com/NarcoNations/canonkit>
 - **Production concept site:** <https://canonkit.vercel.app>
 - **Latest release:** None; the package remains private until the public-alpha gate
@@ -39,7 +39,7 @@ Public package APIs:
 
 The package also exposes the read-only `canonkit validate [path]` executable. Its formats and stable exit behaviour are defined in [`CLI-CONTRACT.md`](./CLI-CONTRACT.md).
 
-The public metadata contract is [`schema/canonkit-document.schema.json`](../schema/canonkit-document.schema.json). Its supported `schema_version` is exactly `1.0`.
+The public metadata contracts are schema `1.0` and the current schema `1.1` in [`schema/`](../schema/). Version `1.1` separates document identity from explicit governed subjects, aliases, document kinds, and typed lineage. Version `1.0` remains supported without inference.
 
 ## Stage 1 guarantees
 
@@ -60,7 +60,7 @@ The public metadata contract is [`schema/canonkit-document.schema.json`](../sche
 The Stage 1 checkpoint passed:
 
 - lint and strict typechecking
-- 50 tests across five test files
+- 81 tests across eight test files at the Stage 2.2 implementation checkpoint
 - declaration and source-map build
 - Node.js 22 and 24 GitHub CI
 - Vercel deployment check
@@ -89,31 +89,33 @@ npm pack --dry-run
 | [#5](https://github.com/NarcoNations/canonkit/pull/5) | Bounded Markdown frontmatter parser |
 | [#6](https://github.com/NarcoNations/canonkit/pull/6) | Repository-bounded discovery |
 | [#7](https://github.com/NarcoNations/canonkit/pull/7) | Normalised collection and diagnostics |
+| [#8](https://github.com/NarcoNations/canonkit/pull/8) | Stage 1 documentation and restart checkpoint |
+| [#9](https://github.com/NarcoNations/canonkit/pull/9) | Stage 2.1 CLI shell |
 
-## Completed checkpoint — Stage 2.1
+## Completed checkpoint — Stage 2.2
 
-The dedicated `agent/stage-2-1-cli-shell` checkpoint adds the minimal executable boundary described in `BUILD-PLAN.md`:
+The dedicated `agent/stage-2-2-document-model` checkpoint adds the versioned model and document rules described in `BUILD-PLAN.md`:
 
-- add the `canonkit` executable and package `bin` entry
-- use Node's native argument parsing unless a tested limitation appears
-- support `--help`, `--version`, `--format`, and an optional path
-- expose the existing collection without duplicating discovery or parsing logic
-- define and test stable usage, document-failure, and unexpected-error exit behaviour
-- preserve terminal output and machine output as deterministic, separately tested paths
+- add schema `1.1` while retaining exact schema `1.0` compatibility
+- distinguish document identity and supersession from subject identity and lineage
+- normalise explicit kinds, subjects, aliases, and typed relations without inference
+- enforce duplicate-version, active-owner, active-scope, review-date, subject-authority, and visibility rules
+- add stable policy diagnostics and warning-aware terminal/JSON output
+- retain read-only, body-blind, network-disabled operation and neutral fixtures
 
-Do not add Stage 2.2 document-policy rules, relationship rules, resolution, context packs, a dashboard, hosted services, or AI inference in this checkpoint.
+Relationship target, self-reference, lifecycle, and cycle validation remain Stage 2.3. Resolution, context packs, dashboards, hosted services, and AI inference remain outside this checkpoint.
 
-Stage 2.1 closes only after:
+Stage 2.2 closes only after:
 
-1. Add CLI unit and process-level tests.
-2. Test help, version, valid path, invalid path, format selection, and bad arguments.
-3. Run the standard quality and package gates.
-4. Confirm the installed package exposes an executable.
-5. Update `STATUS.md`, `BUILD-PLAN.md`, and `CHANGELOG.md` to point to Stage 2.2.
+1. Schema and parser tests prove both supported versions and intended 1.1 failures.
+2. Policy tests prove each error, warning, deterministic order, and non-inference boundary.
+3. CLI process tests prove warning-only success and policy-error failure.
+4. Run the standard quality, audit, and package gates.
+5. Update durable contracts and handover documents to point to Stage 2.3.
 
-## Exact next checkpoint — Stage 2.2
+## Exact next checkpoint — Stage 2.3
 
-Run the generic document-model checkpoint before locking policy semantics. Use neutral fixtures to determine the smallest versioned representation needed for governed subjects, document kinds, aliases, decision references, and typed lineage. Then add document-level rules for identity uniqueness, active ownership, review deadlines, visibility consistency, and competing active authority. Keep relationship graph validation in Stage 2.3.
+Use explicit `supersedes` and typed `relations` to validate missing targets, self-supersession, cycles, invalid active/superseded combinations, and multiple current versions. Keep all graph behaviour deterministic and diagnostics explainable. Do not infer edges from aliases, filenames, Markdown bodies, or private project knowledge.
 
 ## Remaining route to the OSS application
 
@@ -131,6 +133,7 @@ Stage 3 is expected to be the most implementation-intensive remaining stage. Sta
 src/discovery/       repository boundary and Markdown discovery
 src/metadata/        frontmatter and public-schema validation
 src/model/           normalised collection and unified diagnostics
+src/policy/          deterministic document policy; relationship rules are next
 schema/              versioned public metadata contract
 fixtures/            synthetic contract, parser, discovery, and collection cases
 test/                unit and integration coverage

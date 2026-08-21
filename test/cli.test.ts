@@ -21,15 +21,20 @@ function collection(ok: boolean): DocumentCollection {
         ],
     documents: [
       {
+        aliases: [],
         authority: 'canonical',
         body: 'Private document body must not appear in CLI reports.',
         id: 'guides/example',
+        kind: null,
         owner: 'documentation',
+        relations: [],
         reporting: { rawMetadata: {} as never },
         reviewAfter: null,
+        schemaVersion: '1.0',
         scope: 'guides',
         source: { bytes: 100, path: 'docs/example.md' },
         status: 'active',
+        subjects: [],
         supersedes: [],
         tags: [],
         title: 'Example',
@@ -129,7 +134,8 @@ describe('runCli', () => {
     const report = JSON.parse(captured.output.stdout) as Record<string, unknown>;
 
     expect(exitCode).toBe(CLI_EXIT_CODES.success);
-    expect(report['cliReportFormatVersion']).toBe('1.0');
+    expect(report['cliReportFormatVersion']).toBe('1.1');
+    expect(report['policySummary']).toEqual({ errors: 0, warnings: 0 });
     expect(captured.output.stdout).not.toContain('Private document body');
     expect(captured.output.stdout).not.toContain('rawMetadata');
   });
