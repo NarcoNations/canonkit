@@ -151,6 +151,7 @@ Deliverables:
 - [ ] Tagged alpha release and changelog
 - [x] Feedback issue templates
 - [x] Support expectations, maintenance model, and publication runbook
+- [x] Launch-ready responsive landing page with current project evidence and honest npm status
 
 Acceptance gate:
 

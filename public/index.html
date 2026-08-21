@@ -3,10 +3,10 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="CanonKit — a local-first trust layer for repository knowledge.">
+  <meta name="description" content="CanonKit is an open-source, local-first canonical knowledge governance toolkit for people and AI agents.">
   <meta name="theme-color" content="#09111f">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22><rect width=%2232%22 height=%2232%22 rx=%228%22 fill=%22%2307101d%22/><path d=%22M8 10l8-4 8 4v9l-8 7-8-7z%22 fill=%22none%22 stroke=%22%2367e8f9%22 stroke-width=%222%22/></svg>">
-  <title>CanonKit — Make repository knowledge trustworthy</title>
+  <title>CanonKit — Govern what becomes authoritative</title>
   <style>
     :root {
       color-scheme: dark;
@@ -106,6 +106,24 @@
     .brand-mark svg { width: 20px; }
     .nav-links { display: flex; align-items: center; gap: 1.25rem; color: var(--muted); font-size: .9rem; }
     .nav-links a:hover { color: var(--ink); }
+    .nav-toggle {
+      display: none;
+      min-height: 40px;
+      padding: .6rem .82rem;
+      border: 1px solid var(--line-strong);
+      border-radius: 999px;
+      background: rgba(255,255,255,.035);
+      color: var(--ink);
+      cursor: pointer;
+    }
+    .mobile-nav {
+      display: none;
+      padding: 0 0 1rem;
+      border-top: 1px solid var(--line);
+    }
+    .mobile-nav[hidden] { display: none; }
+    .mobile-nav a { display: block; padding: .85rem 0; color: var(--muted); border-bottom: 1px solid var(--line); }
+    .mobile-nav a:last-child { color: var(--cyan); border-bottom: 0; }
     .nav-cta, .button {
       display: inline-flex;
       align-items: center;
@@ -174,6 +192,18 @@
     }
     .hero-actions { display: flex; flex-wrap: wrap; gap: .8rem; }
     .micro { margin-top: 1.35rem; color: var(--faint); font-size: .82rem; }
+    .hero-status {
+      display: inline-flex;
+      align-items: center;
+      gap: .55rem;
+      margin-top: 1.25rem;
+      padding: .45rem .7rem;
+      border: 1px solid rgba(251,191,36,.26);
+      border-radius: 999px;
+      background: rgba(251,191,36,.055);
+      color: #f7d77a;
+      font: 700 .72rem/1.2 monospace;
+    }
 
     .terminal {
       position: relative;
@@ -211,6 +241,7 @@
     .trust-item:last-child { border-right: 0; }
     .trust-item strong { display: block; margin-bottom: .25rem; font-size: 1rem; }
     .trust-item span { color: var(--faint); font-size: .82rem; }
+    .trust-item .metric { color: var(--cyan); font: 800 1.55rem/1 monospace; }
 
     .section { padding: 7rem 0; }
     .section-head { max-width: 760px; margin-bottom: 3rem; }
@@ -325,6 +356,13 @@
     .security-card h3 { margin-top: 1.5rem; }
     .risk-note { margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--line); color: var(--amber); font-size: .78rem; }
 
+    .proof-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+    .proof-card { padding: 1.55rem; }
+    .proof-card strong { display: block; margin: 1.35rem 0 .45rem; font-size: 1.35rem; }
+    .proof-card p { margin-bottom: 0; font-size: .88rem; }
+    .proof-card .proof-value { color: var(--cyan); font: 800 2.1rem/1 monospace; }
+    .proof-note { margin-top: 1rem; padding: 1rem 1.15rem; border: 1px dashed var(--line-strong); border-radius: 14px; color: var(--muted); font-size: .85rem; }
+
     .scope-table { width: 100%; border-collapse: collapse; }
     .scope-table th, .scope-table td { padding: 1rem; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
     .scope-table th { color: var(--faint); font: 800 .68rem/1 monospace; letter-spacing: .08em; text-transform: uppercase; }
@@ -339,6 +377,10 @@
     .phase h3 { margin-top: 2rem; }
     .phase ul { padding-left: 1rem; color: var(--muted); font-size: .84rem; }
     .phase .time { color: var(--faint); font: 700 .68rem/1 monospace; }
+    .phase.complete { border-color: rgba(110,231,183,.22); }
+    .phase.complete .phase-num { border-color: rgba(110,231,183,.5); color: var(--mint); }
+    .phase.current { border-color: rgba(251,191,36,.28); }
+    .phase.current .phase-num { border-color: rgba(251,191,36,.5); color: var(--amber); }
 
     .maintenance { display: grid; grid-template-columns: 1.1fr .9fr; gap: 1rem; }
     .maint-card { padding: 1.7rem; }
@@ -370,7 +412,9 @@
     .next-actions { display: flex; justify-content: center; flex-wrap: wrap; gap: .8rem; }
 
     footer { padding: 2rem 0 3rem; border-top: 1px solid var(--line); color: var(--faint); font-size: .78rem; }
-    .footer-row { display: flex; justify-content: space-between; gap: 1rem; }
+    .footer-row { display: flex; justify-content: space-between; align-items: center; gap: 1rem; }
+    .footer-links { display: flex; flex-wrap: wrap; gap: 1rem; }
+    .footer-links a:hover { color: var(--ink); }
 
     .reveal { opacity: 0; transform: translateY(22px); transition: opacity .7s ease, transform .7s ease; }
     .reveal.visible { opacity: 1; transform: none; }
@@ -384,14 +428,16 @@
       .roles { grid-template-columns: 1fr 1fr; }
       .arch-grid { grid-template-columns: repeat(2, 1fr); }
       .arch-node:last-child { grid-column: 1 / -1; }
-      .security-grid { grid-template-columns: 1fr 1fr; }
+      .security-grid, .proof-grid { grid-template-columns: 1fr 1fr; }
       .roadmap { grid-template-columns: 1fr 1fr; }
     }
 
     @media (max-width: 680px) {
       .wrap { width: min(calc(100% - 28px), var(--max)); }
       .nav { min-height: 64px; }
-      .nav-cta { display: none; }
+      .nav-links { display: none; }
+      .nav-toggle { display: inline-flex; align-items: center; justify-content: center; }
+      .mobile-nav:not([hidden]) { display: block; }
       .hero { padding-top: 4.2rem; }
       h1 { font-size: clamp(3.2rem, 18vw, 5rem); }
       .hero-actions .button { width: 100%; }
@@ -399,7 +445,7 @@
       .trust-item:nth-child(2) { border-right: 0; }
       .trust-item:nth-child(-n+2) { border-bottom: 1px solid var(--line); }
       .section { padding: 5.2rem 0; }
-      .problem-grid, .roles, .boundary, .security-grid, .roadmap { grid-template-columns: 1fr; }
+      .problem-grid, .roles, .boundary, .security-grid, .proof-grid, .roadmap { grid-template-columns: 1fr; }
       .flow-shell { grid-template-columns: 1fr; }
       .flow-tabs { grid-template-columns: repeat(4, minmax(86px, 1fr)); overflow-x: auto; padding-bottom: .3rem; }
       .flow-tab { white-space: nowrap; text-align: center; padding: .72rem .5rem; font-size: .78rem; }
@@ -430,46 +476,54 @@
       </a>
       <nav class="nav-links" aria-label="Primary navigation">
         <a href="#how">How it works</a>
-        <a href="#audit">Audit</a>
+        <a href="#proof">Proof</a>
         <a href="#security">Security</a>
-        <a href="#roadmap">Roadmap</a>
-        <a class="nav-cta" href="#next">Build v0.1 <span aria-hidden="true">→</span></a>
+        <a href="https://github.com/NarcoNations/canonkit/blob/main/docs/QUICKSTART.md">Docs</a>
+        <a class="nav-cta" href="https://github.com/NarcoNations/canonkit">View on GitHub <span aria-hidden="true">→</span></a>
       </nav>
+      <button class="nav-toggle" id="nav-toggle" type="button" aria-expanded="false" aria-controls="mobile-nav">Menu</button>
     </div>
+    <nav class="wrap mobile-nav" id="mobile-nav" aria-label="Mobile navigation" hidden>
+      <a href="#how">How it works</a>
+      <a href="#proof">Proof</a>
+      <a href="#security">Security</a>
+      <a href="https://github.com/NarcoNations/canonkit/blob/main/docs/QUICKSTART.md">Read the docs</a>
+      <a href="https://github.com/NarcoNations/canonkit">View on GitHub →</a>
+    </nav>
   </header>
 
   <main id="main">
     <section class="hero" id="top">
       <div class="wrap hero-grid">
         <div class="hero-copy">
-          <div class="eyebrow">Open-source concept · extraction-ready</div>
-          <h1>Make repository knowledge <span class="gradient-text">trustworthy.</span></h1>
-          <p>CanonKit is a local-first trust layer for documentation. It tells people and AI agents what is current, authoritative, owned, superseded, and safe to use.</p>
+          <div class="eyebrow">Open-source alpha candidate · from VibeLabz</div>
+          <h1>Govern what becomes <span class="gradient-text">authoritative.</span></h1>
+          <p>CanonKit is a local-first canonical knowledge governance toolkit. It helps people and AI agents identify what is current, authoritative, owned, superseded, and safe to use.</p>
           <div class="hero-actions">
-            <a class="button primary" href="#how">See how it works <span aria-hidden="true">↓</span></a>
-            <a class="button ghost" href="#audit">View extraction audit</a>
+            <a class="button primary" href="https://github.com/NarcoNations/canonkit">View on GitHub <span aria-hidden="true">→</span></a>
+            <a class="button ghost" href="https://github.com/NarcoNations/canonkit/blob/main/docs/QUICKSTART.md">Read the quick start</a>
           </div>
+          <div class="hero-status">Candidate proven · npm publication pending</div>
           <div class="micro">No cloud account · no model required · no document uploads</div>
         </div>
 
-        <div class="terminal" aria-label="Illustration of a CanonKit validation result">
+        <div class="terminal" aria-label="Real CanonKit validation and resolution output from the public synthetic example">
           <div class="terminal-bar">
             <span class="dot"></span><span class="dot"></span><span class="dot"></span>
             <span class="terminal-label">canonkit validate</span>
           </div>
           <div class="terminal-body">
-<pre><span class="t-muted">$</span> canonkit validate
+<pre><span class="t-muted">$</span> canonkit validate examples/basic
 
-<span class="t-cyan">Scanning</span> 42 governed documents...
+CanonKit validate — <span class="t-green">VALID</span>
+Documents: 1 valid, 0 invalid, 1 discovered
+Diagnostics: 0 errors, 0 warnings
 
-<span class="t-green">✓</span> one active authority for authentication
-<span class="t-green">✓</span> ownership present on active records
-<span class="t-green">✓</span> supersession graph is complete
-<span class="t-green">✓</span> private sources excluded from agent pack
-<span class="t-amber">!</span> review due in 12 days
+<span class="t-muted">$</span> canonkit resolve products/example-service
 
-<span class="t-violet">TRUST RESULT</span>
-Safe to consume · 96/100</pre>
+CanonKit resolve — <span class="t-green">RESOLVED</span>
+<span class="t-violet">Selected:</span> canon/example-service@1.0
+<span class="t-cyan">[canon, canonical, public]</span></pre>
           </div>
         </div>
       </div>
@@ -477,10 +531,10 @@ Safe to consume · 96/100</pre>
 
     <div class="trust-strip">
       <div class="wrap trust-grid">
-        <div class="trust-item"><strong>Local-first</strong><span>Runs inside the repository</span></div>
-        <div class="trust-item"><strong>Deterministic</strong><span>Rules before model judgement</span></div>
-        <div class="trust-item"><strong>Agent-ready</strong><span>Clean, bounded context packs</span></div>
-        <div class="trust-item"><strong>Human-owned</strong><span>No silent promotion to truth</span></div>
+        <div class="trust-item"><strong class="metric">195</strong><span>passing automated tests</span></div>
+        <div class="trust-item"><strong class="metric">4/4</strong><span>supported OS/runtime rehearsals</span></div>
+        <div class="trust-item"><strong class="metric">0</strong><span>reported dependency vulnerabilities</span></div>
+        <div class="trust-item"><strong class="metric">78</strong><span>locked distributable files</span></div>
       </div>
     </div>
 
@@ -579,12 +633,12 @@ review_after: 2026-11-01
             <div class="flow-panel" id="flow-check" role="tabpanel" aria-labelledby="tab-check" hidden>
               <span class="flow-label">Step 02 · Check</span><h3>Validate structure and relationships</h3>
               <p>The CLI checks required fields, allowed values, duplicate active authorities, broken references, supersession cycles, missing owners, overdue reviews, and unsafe visibility combinations.</p>
-              <div class="command-row"><span class="command">canonkit validate</span><span class="command">canonkit lint</span><span class="command">canonkit graph</span></div>
+              <div class="command-row"><span class="command">canonkit validate</span><span class="command">canonkit list</span><span class="command">canonkit graph</span></div>
             </div>
             <div class="flow-panel" id="flow-resolve" role="tabpanel" aria-labelledby="tab-resolve" hidden>
               <span class="flow-label">Step 03 · Resolve</span><h3>Ask for the governing source</h3>
-              <p>A deterministic resolver ranks eligible documents by scope, lifecycle, authority, specificity, and recency—while preserving provenance and explaining why a source won.</p>
-              <div class="command-row"><span class="command">canonkit resolve "authentication"</span><span class="command">--scope app</span><span class="command">--explain</span></div>
+              <p>A deterministic resolver matches explicit subjects, document identities, and aliases, then applies declared document-role and authority rules. Equal top-ranked candidates fail as ambiguous rather than being guessed.</p>
+              <div class="command-row"><span class="command">canonkit resolve "authentication"</span><span class="command">--scope products/example</span><span class="command">--format json</span></div>
             </div>
             <div class="flow-panel" id="flow-share" role="tabpanel" aria-labelledby="tab-share" hidden>
               <span class="flow-label">Step 04 · Share</span><h3>Generate bounded context for tools</h3>
@@ -596,55 +650,22 @@ review_after: 2026-11-01
       </div>
     </section>
 
-    <section class="section" id="audit">
+    <section class="section" id="proof">
       <div class="wrap">
         <div class="section-head reveal">
-          <span class="kicker">Extraction audit · 18 Aug 2026</span>
-          <h2>Strong proof. Safe boundary. Clean-room build.</h2>
-          <p>A read-only audit of the private reference repository found a mature pattern worth productising—but not a self-contained package that should simply be published.</p>
+          <span class="kicker">Verified project proof</span>
+          <h2>Built, tested, and rehearsed—not merely proposed.</h2>
+          <p>The complete local trust loop exists today. Public npm installation is the remaining distribution step, not a substitute for an unfinished tool.</p>
         </div>
-        <div class="audit-summary reveal">
-          <article class="card verdict">
-            <div class="verdict-mark" aria-hidden="true">✓</div>
-            <span class="badge green">Proceed</span>
-            <h3 style="margin-top:1rem">Extraction is viable</h3>
-            <p>Build CanonKit as a new, independent tool using generic semantics and black-box behavioural tests. Do not copy internal content or lift the existing application subsystem wholesale.</p>
-          </article>
-          <article class="card card-pad audit-list">
-            <div class="audit-row"><strong>Observed</strong><span>Typed lifecycle states, authority ranks, source quality, visibility, ownership, versioning, review dates, provenance, supersession, and current-version flags.</span></div>
-            <div class="audit-row"><strong>Proven</strong><span>Intake → review → active → superseded/archive workflows; authority-aware ranking; provenance formatting; deterministic proof before AI enrichment.</span></div>
-            <div class="audit-row"><strong>Coupled</strong><span>The main governance module is large and bound to private database tables, ingestion, application routes, project vocabularies, and runtime configuration.</span></div>
-            <div class="audit-row"><strong>Gap</strong><span>No small standalone CLI, neutral public schema, isolated package boundary, public fixtures, release automation, or public threat model exists yet.</span></div>
-            <div class="audit-row"><strong>Decision</strong><span>Reuse the lessons and behavioural contract; reimplement the core with neutral names, local files, zero hosted dependencies, and synthetic examples.</span></div>
-          </article>
+        <div class="proof-grid reveal">
+          <article class="card proof-card"><span class="proof-value">195</span><strong>Automated tests</strong><p>Schema, parsing, discovery, policy, graph, resolution, context-pack, CLI, packaging, and public-project boundaries.</p></article>
+          <article class="card proof-card"><span class="proof-value">22/24</span><strong>Supported Node releases</strong><p>Normal CI and exact-package rehearsals pass on the two declared runtime targets.</p></article>
+          <article class="card proof-card"><span class="proof-value">4/4</span><strong>Release environments</strong><p>Ubuntu and macOS on Node.js 22 and 24 reproduce and exercise the same locked package candidate.</p></article>
+          <article class="card proof-card"><span class="proof-value">78</span><strong>Locked package files</strong><p>Only the compiled runtime, public schemas, README, licence, and package metadata are permitted.</p></article>
+          <article class="card proof-card"><span class="proof-value">0</span><strong>Reported vulnerabilities</strong><p>The current production dependency audit reports no known vulnerabilities.</p></article>
+          <article class="card proof-card"><span class="proof-value">MIT</span><strong>Open-source licence</strong><p>Public contribution, security, support, maintenance, and release boundaries are documented.</p></article>
         </div>
-
-        <div class="boundary reveal">
-          <article class="card boundary-card keep">
-            <span class="badge green">Public foundation</span>
-            <h3 style="margin-top:1rem">Safe to reimplement</h3>
-            <ul class="check-list">
-              <li>Document identity and lifecycle schema</li>
-              <li>Authority, ownership, and review rules</li>
-              <li>Provenance and supersession graph</li>
-              <li>Deterministic validation and resolution</li>
-              <li>Local-first CLI and CI integration</li>
-              <li>Synthetic example repository</li>
-            </ul>
-          </article>
-          <article class="card boundary-card leave">
-            <span class="badge red">Private boundary</span>
-            <h3 style="margin-top:1rem">Must stay behind</h3>
-            <ul class="check-list">
-              <li>Private documents, canon, archives, and records</li>
-              <li>Brand, project, customer, and personal names</li>
-              <li>Database schema, credentials, and hosted state</li>
-              <li>Application routes and internal UI code</li>
-              <li>Domain-specific ranking terms and policies</li>
-              <li>Internal prompts, agents, and operating playbooks</li>
-            </ul>
-          </article>
-        </div>
+        <p class="proof-note reveal">Evidence snapshot: 21 August 2026. Re-check live CI, dependencies, registry state, and the exact candidate before any release decision.</p>
       </div>
     </section>
 
@@ -653,7 +674,7 @@ review_after: 2026-11-01
         <div class="section-head reveal">
           <span class="kicker">Architecture</span>
           <h2>Small core. Explicit edges.</h2>
-          <p>The v0.1 architecture is intentionally offline-capable and dependency-light. Git remains the audit trail; CanonKit supplies semantics and checks.</p>
+          <p>The alpha architecture is offline-capable and dependency-light. Git remains the audit trail; CanonKit supplies explicit semantics, validation, resolution, and bounded output.</p>
         </div>
         <div class="card architecture reveal">
           <div class="arch-grid" aria-label="CanonKit architecture flow">
@@ -673,12 +694,12 @@ review_after: 2026-11-01
         <div class="section-head reveal">
           <span class="kicker">Security model</span>
           <h2>Trust metadata without creating a new trust problem.</h2>
-          <p>CanonKit handles sensitive repository knowledge, so v0.1 should minimise capability, fail closed, and make every inclusion explainable.</p>
+          <p>CanonKit handles sensitive repository knowledge, so the core minimises capability, fails closed, and makes every inclusion explainable.</p>
         </div>
         <div class="security-grid reveal">
           <article class="card security-card"><span class="num">01</span><h3>Offline by default</h3><p>No telemetry, uploads, remote calls, or model execution in the core.</p><div class="risk-note">Mitigates accidental disclosure.</div></article>
-          <article class="card security-card"><span class="num">02</span><h3>Read-only core</h3><p>Validation and resolution never rewrite documents unless a separate explicit fix command is used.</p><div class="risk-note">Mitigates silent mutation.</div></article>
-          <article class="card security-card"><span class="num">03</span><h3>Visibility gates</h3><p>Private and restricted sources are excluded from packs unless policy and caller scope both allow them.</p><div class="risk-note">Mitigates context leakage.</div></article>
+          <article class="card security-card"><span class="num">02</span><h3>Read-only core</h3><p>Validation, graphing, resolution, and pack generation do not rewrite repository documents.</p><div class="risk-note">Mitigates silent mutation.</div></article>
+          <article class="card security-card"><span class="num">03</span><h3>Visibility gates</h3><p>Internal and restricted sources stay excluded unless the operator explicitly selects the wider audience.</p><div class="risk-note">Mitigates context leakage.</div></article>
           <article class="card security-card"><span class="num">04</span><h3>Untrusted content</h3><p>Document bodies are data, never executable instructions. Paths stay repository-bounded.</p><div class="risk-note">Mitigates prompt and path injection.</div></article>
           <article class="card security-card"><span class="num">05</span><h3>Explainable ranking</h3><p>Every selected source includes its governing rule and rejected alternatives.</p><div class="risk-note">Mitigates false authority.</div></article>
           <article class="card security-card"><span class="num">06</span><h3>Human promotion</h3><p>CanonKit detects conflicts and proposes changes; it never promotes a document to canonical automatically.</p><div class="risk-note">Mitigates governance capture.</div></article>
@@ -691,17 +712,17 @@ review_after: 2026-11-01
         <div class="section-head reveal">
           <span class="kicker">v0.1 scope</span>
           <h2>Useful enough to adopt. Small enough to maintain.</h2>
-          <p>The first release should prove the trust loop end to end without a server, dashboard, database, or plugin ecosystem.</p>
+          <p>The alpha candidate proves the trust loop end to end without a server, dashboard, database, model call, or plugin ecosystem.</p>
         </div>
         <div class="card card-pad reveal">
           <table class="scope-table">
             <thead><tr><th>Capability</th><th>Included in v0.1</th><th>Not yet</th></tr></thead>
             <tbody>
               <tr><td>Schema</td><td>Neutral frontmatter contract; JSON Schema; strict validation</td><td>Custom organisation policy DSL</td></tr>
-              <tr><td>CLI</td><td><code>init</code>, <code>validate</code>, <code>list</code>, <code>resolve</code>, <code>graph</code>, <code>pack</code></td><td>Hosted control plane or web dashboard</td></tr>
+              <tr><td>CLI</td><td><code>validate</code>, <code>list</code>, <code>graph</code>, <code>resolve</code>, <code>pack</code></td><td>Hosted control plane or web dashboard</td></tr>
               <tr><td>Rules</td><td>Identity, active authority, owners, visibility, review dates, references, cycles</td><td>Model-based content quality scoring</td></tr>
               <tr><td>Output</td><td>Readable terminal report, JSON, Markdown context pack, exit codes</td><td>IDE extension and MCP server</td></tr>
-              <tr><td>Delivery</td><td>npm package, GitHub Action example, docs, threat model, synthetic fixtures</td><td>Enterprise SSO, hosted analytics, paid tier</td></tr>
+              <tr><td>Delivery</td><td>Locked npm candidate, GitHub Action example, docs, threat model, synthetic fixtures</td><td>Public npm publication, hosted analytics, paid tier</td></tr>
             </tbody>
           </table>
         </div>
@@ -712,14 +733,14 @@ review_after: 2026-11-01
       <div class="wrap">
         <div class="section-head reveal">
           <span class="kicker">Roadmap</span>
-          <h2>Prove the primitive before building the platform.</h2>
-          <p>A disciplined roadmap keeps CanonKit credible as an open-source project and avoids recreating a private operating system in public.</p>
+          <h2>The primitive is proven. Distribution comes next.</h2>
+          <p>CanonKit remains intentionally small: finish the secure public release, learn from real use, then expand only where evidence supports it.</p>
         </div>
         <div class="roadmap reveal">
-          <article class="card phase"><span class="phase-num">1</span><h3>Foundation</h3><span class="time">WEEKS 1–2</span><ul><li>Schema and fixtures</li><li>Parser and validator</li><li>Threat model</li><li>Public naming review</li></ul></article>
-          <article class="card phase"><span class="phase-num">2</span><h3>Useful CLI</h3><span class="time">WEEKS 3–4</span><ul><li>Resolve and explain</li><li>Supersession graph</li><li>Context pack export</li><li>CI example</li></ul></article>
-          <article class="card phase"><span class="phase-num">3</span><h3>Public beta</h3><span class="time">WEEKS 5–6</span><ul><li>Docs and examples</li><li>Contribution guide</li><li>Cross-platform QA</li><li>First external users</li></ul></article>
-          <article class="card phase"><span class="phase-num">4</span><h3>Ecosystem</h3><span class="time">AFTER PROOF</span><ul><li>MCP adapter</li><li>IDE diagnostics</li><li>Policy extensions</li><li>Optional visual graph</li></ul></article>
+          <article class="card phase complete"><span class="phase-num">1</span><h3>Core trust loop</h3><span class="time">COMPLETE</span><ul><li>Schema and scanner</li><li>Policy and lineage</li><li>Resolution graph</li><li>Safe context packs</li></ul></article>
+          <article class="card phase complete"><span class="phase-num">2</span><h3>Alpha readiness</h3><span class="time">COMPLETE</span><ul><li>Threat model</li><li>Package boundary</li><li>Cross-platform rehearsal</li><li>Public-project operations</li></ul></article>
+          <article class="card phase current"><span class="phase-num">3</span><h3>Public release</h3><span class="time">OWNERSHIP GATE</span><ul><li>npm organisation</li><li>Protected publishing</li><li>Provenance</li><li>Explicit release approval</li></ul></article>
+          <article class="card phase"><span class="phase-num">4</span><h3>Evidence-led growth</h3><span class="time">AFTER RELEASE</span><ul><li>External feedback</li><li>Public usage examples</li><li>Maintenance evidence</li><li>OSS programme application</li></ul></article>
         </div>
       </div>
     </section>
@@ -728,23 +749,23 @@ review_after: 2026-11-01
       <div class="wrap">
         <div class="section-head reveal">
           <span class="kicker">Maintenance model</span>
-          <h2>Founder-light by design.</h2>
-          <p>The project should be maintainable without becoming a second full-time product. Most work can be delegated; governance stays human.</p>
+          <h2>Solo-maintainable by design.</h2>
+          <p>The project has an honest best-effort support boundary. Automation carries repeatable verification; direction, security judgement, and publication stay human-owned.</p>
         </div>
         <div class="maintenance reveal">
           <article class="card maint-card">
-            <div class="maint-row"><strong>Weekly</strong><span>Triage issues and dependency alerts; merge safe automated updates.</span></div>
-            <div class="maint-row"><strong>Monthly</strong><span>Release small fixes, refresh examples, review compatibility on supported Node versions.</span></div>
-            <div class="maint-row"><strong>Quarterly</strong><span>Review schema changes, roadmap evidence, security posture, and deprecations.</span></div>
-            <div class="maint-row"><strong>Always</strong><span>Require tests for policy changes; keep migrations backwards-compatible; reject domain-specific creep.</span></div>
+            <div class="maint-row"><strong>Priority</strong><span>Security, unintended disclosure, incorrect authority, integrity, and release-pipeline failures.</span></div>
+            <div class="maint-row"><strong>Releases</strong><span>Re-run the exact candidate rehearsal and record every public-contract change.</span></div>
+            <div class="maint-row"><strong>Support</strong><span>Best effort, public reproductions, no service-level agreement, and no private repository intake.</span></div>
+            <div class="maint-row"><strong>Growth</strong><span>Expand compatibility or capability only when real usage evidence justifies the maintenance cost.</span></div>
           </article>
           <article class="card maint-card">
             <span class="badge cyan">Ownership</span>
             <div class="owner-list">
-              <div class="owner"><strong>Founder / product owner</strong><span>Direction, public promises, releases, and community judgement.</span></div>
-              <div class="owner"><strong>Codex</strong><span>Implementation, tests, docs, issue fixes, compatibility checks, and release preparation.</span></div>
-              <div class="owner"><strong>Contributors</strong><span>Adapters, examples, bug reports, and proposals through review.</span></div>
-              <div class="owner"><strong>Automation</strong><span>CI, dependency alerts, security scans, and package publishing gates.</span></div>
+              <div class="owner"><strong>Maintainer</strong><span>Direction, contracts, security decisions, publication approval, and community judgement.</span></div>
+              <div class="owner"><strong>Contributors</strong><span>Focused fixes and proposals through synthetic examples, tests, and review.</span></div>
+              <div class="owner"><strong>Automation</strong><span>CI, package rehearsal, dependency auditing, and repeatable evidence—never publication authority.</span></div>
+              <div class="owner"><strong>Public policy</strong><span>Contribution, security, support, maintenance, and release boundaries live in the repository.</span></div>
             </div>
           </article>
         </div>
@@ -754,12 +775,12 @@ review_after: 2026-11-01
     <section class="next" id="next">
       <div class="wrap">
         <div class="next-card reveal">
-          <span class="kicker">Recommended next step</span>
-          <h2>Build the clean-room v0.1 in a new public repository.</h2>
-          <p>Start with the schema, synthetic fixtures, validator, and threat model. Test the complete trust loop before adding integrations or visual tooling.</p>
+          <span class="kicker">Explore the alpha candidate</span>
+          <h2>The trust layer is built. See how it works.</h2>
+          <p>Review the source, run the synthetic example locally, and inspect the documented security and governance boundaries. Public npm installation will follow only after the ownership and trusted-publishing gates close.</p>
           <div class="next-actions">
-            <a class="button primary" href="#scope">Review v0.1 scope</a>
-            <a class="button ghost" href="#audit">Revisit extraction boundary</a>
+            <a class="button primary" href="https://github.com/NarcoNations/canonkit">Explore the repository</a>
+            <a class="button ghost" href="https://github.com/NarcoNations/canonkit/tree/main/examples/basic">View the working example</a>
           </div>
         </div>
       </div>
@@ -768,8 +789,8 @@ review_after: 2026-11-01
 
   <footer>
     <div class="wrap footer-row">
-      <span>CanonKit concept · clean-room extraction audit</span>
-      <span>Local-first · deterministic · human-governed</span>
+      <span>CanonKit — from VibeLabz · MIT licensed</span>
+      <span class="footer-links"><a href="https://github.com/NarcoNations/canonkit">GitHub</a><a href="https://github.com/NarcoNations/canonkit/blob/main/docs/QUICKSTART.md">Docs</a><a href="https://github.com/NarcoNations/canonkit/security/policy">Security</a><a href="https://github.com/NarcoNations/canonkit/blob/main/SUPPORT.md">Support</a></span>
     </div>
   </footer>
 
@@ -778,6 +799,25 @@ review_after: 2026-11-01
     const updateHeader = () => header.classList.toggle('scrolled', window.scrollY > 8);
     updateHeader();
     addEventListener('scroll', updateHeader, { passive: true });
+
+    const navToggle = document.getElementById('nav-toggle');
+    const mobileNav = document.getElementById('mobile-nav');
+    const closeMobileNav = () => {
+      mobileNav.hidden = true;
+      navToggle.setAttribute('aria-expanded', 'false');
+    };
+    navToggle.addEventListener('click', () => {
+      const open = navToggle.getAttribute('aria-expanded') === 'true';
+      mobileNav.hidden = open;
+      navToggle.setAttribute('aria-expanded', String(!open));
+    });
+    mobileNav.querySelectorAll('a').forEach((link) => link.addEventListener('click', closeMobileNav));
+    addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && !mobileNav.hidden) {
+        closeMobileNav();
+        navToggle.focus();
+      }
+    });
 
     const tabs = [...document.querySelectorAll('[role="tab"]')];
     const panels = [...document.querySelectorAll('[role="tabpanel"]')];
@@ -803,6 +843,7 @@ review_after: 2026-11-01
         activateTab(tabs[next], true);
       });
     });
+    if (tabs.length) activateTab(tabs[0]);
 
     const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (!reduced && 'IntersectionObserver' in window) {

@@ -112,6 +112,7 @@
 - The support boundary and solo-maintainer model set honest expectations without promising an SLA or larger team.
 - The publication runbook records the ownership, immutable-candidate, first-package bootstrap, protected-publishing, and post-publication verification sequence while deliberately omitting an executable publish command.
 - The OSS application evidence register separates existing proof, missing public installation, and future external-adoption evidence.
+- The public site now presents the working alpha candidate with real CLI output, verified evidence, GitHub/docs routes, honest npm status, and keyboard-safe mobile navigation.
 
 ## Next checkpoint
 
