@@ -87,6 +87,9 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 - Locked 78-file private alpha-candidate manifest and dependency-free exact-tarball rehearsal script.
 - Manual read-only Ubuntu/macOS and Node.js 22/24 rehearsal workflow with no credentials, OIDC, publication, tag, release, or uploaded package artifact.
 - Draft `0.1.0-alpha.0` release notes and Stage 5.3 evidence contract.
+- Structured bug and feature intake with private security-report routing and a bounded pull-request checklist.
+- Public support boundary, solo-maintainer operating model, and gated publication runbook.
+- Truthful OSS application evidence register that separates delivered project proof from future adoption evidence.
 
 ## [0.0.0] — 2026-08-18
 

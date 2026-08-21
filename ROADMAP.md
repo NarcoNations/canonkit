@@ -134,7 +134,7 @@ Evidence: [`docs/STAGE-4-ACCEPTANCE.md`](./docs/STAGE-4-ACCEPTANCE.md)
 
 ## Stage 5 — Public alpha
 
-**Status:** In progress — package identity selected; non-publishing rehearsal implemented
+**Status:** In progress — package identity selected; non-publishing rehearsal and community preparation complete
 
 **Outcome:** CanonKit is installable, documented, and usable outside its own repository.
 
@@ -147,9 +147,10 @@ Deliverables:
 - [x] Public-alpha package and publishing boundary
 - [x] Public package identity review and single-package `@vibelabz/canonkit` candidate
 - [x] Locked private-candidate rehearsal with no publishing authority
-- [ ] Cross-platform and supported-Node test matrix
+- [x] Cross-platform and supported-Node test matrix
 - [ ] Tagged alpha release and changelog
-- [ ] Feedback issue templates
+- [x] Feedback issue templates
+- [x] Support expectations, maintenance model, and publication runbook
 
 Acceptance gate:
 
@@ -168,8 +169,8 @@ Deliverables:
 - Documented external feedback
 - Public usage examples
 - Prioritised post-alpha issues
-- Maintainer cadence and support expectations
-- Vercel OSS application evidence pack
+- [x] Maintainer cadence and support expectations prepared before publication
+- [x] Vercel OSS application evidence register prepared before publication
 
 Acceptance gate:
 

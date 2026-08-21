@@ -1,0 +1,57 @@
+name: Feature request
+description: Propose a bounded improvement to CanonKit.
+title: "proposal: "
+labels:
+  - enhancement
+body:
+  - type: markdown
+    attributes:
+      value: |
+        CanonKit favours local-first, deterministic, explainable governance. Proposals should describe the problem before prescribing an architecture and must use neutral examples.
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What user problem is not handled by the current contract?
+    validations:
+      required: true
+  - type: textarea
+    id: outcome
+    attributes:
+      label: Desired outcome
+      description: Describe observable behaviour rather than internal implementation.
+    validations:
+      required: true
+  - type: textarea
+    id: example
+    attributes:
+      label: Neutral example
+      description: Use synthetic or public data only.
+    validations:
+      required: true
+  - type: dropdown
+    id: boundary
+    attributes:
+      label: Expected capability boundary
+      options:
+        - Existing read-only local CLI or library
+        - Documentation or example only
+        - New local write capability
+        - Networked or hosted capability
+        - Unsure
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Include current workarounds if any.
+  - type: checkboxes
+    id: safety
+    attributes:
+      label: Submission check
+      options:
+        - label: This proposal contains no private, customer-specific, or proprietary material.
+          required: true
+        - label: I understand that a proposal does not change CanonKit's current public contract.
+          required: true

@@ -1,0 +1,70 @@
+name: Bug report
+description: Report reproducible incorrect CanonKit behaviour using synthetic or public material.
+title: "bug: "
+labels:
+  - bug
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for helping improve CanonKit. Do not paste private repository content, credentials, customer material, or security exploit details into a public issue. Report vulnerabilities privately through the Security tab.
+  - type: input
+    id: version
+    attributes:
+      label: CanonKit version or commit
+      description: Use the exact package version or Git commit if possible.
+      placeholder: 0.1.0-alpha.0 or commit SHA
+    validations:
+      required: true
+  - type: input
+    id: runtime
+    attributes:
+      label: Environment
+      description: Include operating system and Node.js version.
+      placeholder: macOS 15, Node.js 24.18.0
+    validations:
+      required: true
+  - type: dropdown
+    id: command
+    attributes:
+      label: Affected command or API
+      options:
+        - validate
+        - list
+        - graph
+        - resolve
+        - pack
+        - library API
+        - documentation or website
+        - other
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Minimal reproduction
+      description: Provide exact steps and a minimal synthetic or already-public repository where possible.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behaviour
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behaviour
+      description: Include bounded terminal output with sensitive paths or content removed.
+    validations:
+      required: true
+  - type: checkboxes
+    id: safety
+    attributes:
+      label: Public-content check
+      options:
+        - label: I have removed private content, credentials, customer information, and sensitive repository paths.
+          required: true
+        - label: This is not a security vulnerability report.
+          required: true
