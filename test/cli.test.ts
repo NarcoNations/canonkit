@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 
 import { parseCliArguments } from '../src/cli/arguments.js';
 import { CLI_EXIT_CODES, runCli } from '../src/cli/run.js';
-import type { DocumentCollection } from '../src/index.js';
+import type { DocumentCollection, PackBuildResult, PackPolicyOptions } from '../src/index.js';
 
 function collection(ok: boolean): DocumentCollection {
   return {
@@ -149,6 +149,40 @@ describe('CLI arguments', () => {
     });
   });
 
+  it('parses pack-safe defaults and explicit projection controls', () => {
+    expect(parseCliArguments(['pack'])).toEqual({
+      audience: 'public',
+      format: 'markdown',
+      includeNonActiveStatuses: [],
+      kind: 'pack',
+      maxContentBytes: 262_144,
+      maxDocuments: 25,
+      path: '.',
+    });
+    expect(
+      parseCliArguments([
+        'pack',
+        'docs',
+        '--format=json',
+        '--audience=internal',
+        '--include-status=superseded',
+        '--include-status=draft',
+        '--scope=products/example',
+        '--max-documents=12',
+        '--max-content-bytes=4096',
+      ]),
+    ).toEqual({
+      audience: 'internal',
+      format: 'json',
+      includeNonActiveStatuses: ['draft', 'superseded'],
+      kind: 'pack',
+      maxContentBytes: 4096,
+      maxDocuments: 12,
+      path: 'docs',
+      scope: 'products/example',
+    });
+  });
+
   it('recognises help and version without scanning', () => {
     expect(parseCliArguments(['--help'])).toEqual({ kind: 'help' });
     expect(parseCliArguments(['-v'])).toEqual({ kind: 'version' });
@@ -171,6 +205,15 @@ describe('CLI arguments', () => {
     ['resolve', '   '],
     ['resolve', 'x'.repeat(161)],
     ['resolve', 'query', '--quiet'],
+    ['pack', 'one', 'two'],
+    ['pack', '--format=terminal'],
+    ['pack', '--audience=agent'],
+    ['pack', '--include-status=active'],
+    ['pack', '--max-documents=0'],
+    ['pack', '--max-documents=101'],
+    ['pack', '--max-content-bytes=1048577'],
+    ['pack', '--allow-visibility=internal'],
+    ['validate', '--audience=public'],
   ];
 
   it.each(invalidArguments.map((args) => [args] as const))('rejects invalid usage: %j', (args) => {
@@ -202,6 +245,71 @@ describe('runCli', () => {
       await runCli(['validate'], invalid.io, { scanRepository: async () => collection(false) }),
     ).toBe(CLI_EXIT_CODES.documentFailure);
     expect(invalid.output.stdout).toContain('CKP002_FRONTMATTER_MISSING');
+  });
+
+  it('passes pack controls to the projection library and emits the selected format', async () => {
+    const captured = capture();
+    let received: PackPolicyOptions | undefined;
+    const result = successfulPack();
+
+    const exitCode = await runCli(
+      [
+        'pack',
+        '--format=json',
+        '--audience=internal',
+        '--include-status=superseded',
+        '--scope=products/example',
+        '--max-documents=8',
+        '--max-content-bytes=2048',
+      ],
+      captured.io,
+      {
+        buildContextPack: async (_collection, options) => {
+          received = options;
+          return result;
+        },
+        scanRepository: async () => collection(true),
+      },
+    );
+
+    expect(exitCode).toBe(CLI_EXIT_CODES.success);
+    expect(received).toEqual({
+      audience: 'internal',
+      includeNonActiveStatuses: ['superseded'],
+      maxContentBytes: 2048,
+      maxDocuments: 8,
+      scope: 'products/example',
+    });
+    expect(JSON.parse(captured.output.stdout)).toEqual(result.pack);
+  });
+
+  it('emits a versioned pack failure without partial content', async () => {
+    const captured = capture();
+    const failed: PackBuildResult = {
+      failure: {
+        code: 'CKX003_DOCUMENT_LIMIT_EXCEEDED',
+        message: 'Too many permitted documents.',
+        remediation: 'Narrow the exact scope.',
+      },
+      ok: false,
+      pack: null,
+      summary: { consideredContentBytes: 100, consideredDocuments: 2 },
+    };
+
+    const exitCode = await runCli(['pack', '--format=json'], captured.io, {
+      buildContextPack: async () => failed,
+      scanRepository: async () => collection(true),
+    });
+
+    expect(exitCode).toBe(CLI_EXIT_CODES.packFailure);
+    expect(JSON.parse(captured.output.stdout)).toEqual({
+      cliReportFormatVersion: '1.0',
+      command: 'pack',
+      error: failed.failure,
+      ok: false,
+      summary: failed.summary,
+    });
+    expect(captured.output.stdout).not.toContain('Private document body');
   });
 
   it('emits bounded JSON without document bodies or raw metadata', async () => {
@@ -406,3 +514,25 @@ describe('runCli', () => {
     expect(unexpected.output.stderr).toContain('unexpected error: boom');
   });
 });
+
+function successfulPack(): Extract<PackBuildResult, { ok: true }> {
+  return {
+    failure: null,
+    ok: true,
+    pack: {
+      generator: { name: 'canonkit', version: '0.0.0' },
+      items: [],
+      packFormatVersion: '1.0',
+      policy: {
+        allowedAuthorities: ['canonical', 'approved'],
+        allowedStatuses: ['active'],
+        allowedVisibilities: ['public'],
+        audience: 'public',
+        budget: { maxContentBytes: 262_144, maxDocuments: 25, overflow: 'error' },
+        policyFormatVersion: '1.0',
+        scope: null,
+      },
+      summary: { contentBytes: 0, documents: 0 },
+    },
+  };
+}

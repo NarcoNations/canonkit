@@ -126,7 +126,8 @@ export type PackFailureCode =
   | 'CKX002_EMPTY'
   | 'CKX003_DOCUMENT_LIMIT_EXCEEDED'
   | 'CKX004_CONTENT_BYTES_EXCEEDED'
-  | 'CKX005_SOURCE_INTEGRITY_ERROR';
+  | 'CKX005_SOURCE_INTEGRITY_ERROR'
+  | 'CKX006_OUTPUT_BYTES_EXCEEDED';
 
 export interface PackFailure {
   code: PackFailureCode;

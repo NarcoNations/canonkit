@@ -203,12 +203,17 @@ Stage 2 is complete only when `canonkit validate fixtures/relationships/valid` s
 
 ### 4.3 Pack command
 
-**Status:** Next
+**Status:** Complete
 
-- Add bounded `canonkit pack` terminal/Markdown/JSON process output.
-- Prove public-only defaults and explicit non-active opt-in.
+- [x] Add bounded `canonkit pack` Markdown and JSON process output.
+- [x] Add explicit audience, exact-scope, lifecycle, document, and byte options.
+- [x] Prove public-only defaults and explicit non-active opt-in.
+- [x] Preserve stable failure exits and atomic no-partial-output behavior.
+- [x] Enforce a fixed rendered-process-output ceiling.
 
 ### 4.4 Stage 4 acceptance
+
+**Status:** Next
 
 - Complete security, determinism, package, and resumability gates.
 
@@ -216,4 +221,4 @@ Do not begin adapters, a dashboard, hosted services, or private content migratio
 
 ## Exact next task
 
-After the Stage 4.2 checkpoint is merged, start **4.3 pack command** on a dedicated branch. Wire the tested projection library into bounded `canonkit pack` Markdown and JSON process output, preserving the locked policy options, failure codes, stable exits, and untrusted-body boundaries in [`docs/PACK-CONTRACT.md`](./docs/PACK-CONTRACT.md). Do not add adapters, hosted services, or private project content.
+After the Stage 4.3 checkpoint is merged, start **4.4 Stage 4 acceptance** on a dedicated branch. Run the complete security, determinism, package, clean-room, CLI, production-only install, documentation, and resumability gates; close Stage 4 only if every acceptance criterion in [`ROADMAP.md`](./ROADMAP.md) is evidenced. Do not add adapters, hosted services, or private project content.

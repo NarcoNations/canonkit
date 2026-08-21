@@ -95,6 +95,7 @@ Generation is a discriminated `PackBuildResult`. Failure always has `pack: null`
 | `CKX003_DOCUMENT_LIMIT_EXCEEDED` | Permitted document count exceeds the budget |
 | `CKX004_CONTENT_BYTES_EXCEEDED` | Permitted body bytes exceed the budget |
 | `CKX005_SOURCE_INTEGRITY_ERROR` | The source cannot be re-read or verified consistently |
+| `CKX006_OUTPUT_BYTES_EXCEEDED` | Rendered CLI output exceeds the fixed process ceiling |
 
 Validation failure remains generic and must not expose partial repository paths. A failure may report permitted candidate counts and bytes only after visibility and scope exclusions have been applied.
 
@@ -122,4 +123,4 @@ Validation failure remains generic and must not expose partial repository paths.
 
 JSON is the deterministic pretty-printed envelope plus one trailing newline. Markdown contains the same envelope metadata and uses a per-body backtick fence longer than any backtick run in that body. The body remains byte-counted as its original text; renderer separators are not part of `content.bytes`.
 
-Stage 4.3 owns CLI syntax, file/process output behavior, and renderer-specific process limits.
+Stage 4.3 exposes this contract through the command and fixed process limit in [`PACK-CLI-CONTRACT.md`](./PACK-CLI-CONTRACT.md).

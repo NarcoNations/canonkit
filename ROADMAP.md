@@ -107,7 +107,7 @@ Acceptance gate:
 
 ## Stage 4 — Safe context packs
 
-**Status:** In progress — pack contract and projection library complete
+**Status:** In progress — implementation complete; acceptance next
 
 **Outcome:** People and tools can consume a bounded, provenance-backed context pack.
 
@@ -120,15 +120,15 @@ Deliverables:
 - [x] Deterministic pack construction with source-integrity verification
 - [x] JSON and injection-safe Markdown library renderers
 - [x] Audience, visibility, lifecycle, authority, and exact-scope filtering implementation
-- [ ] `canonkit pack`
-- [ ] Pack CLI Markdown and JSON process output
+- [x] `canonkit pack`
+- [x] Pack CLI Markdown and JSON process output
 
 Acceptance gate:
 
-- Private or restricted content is excluded by default.
-- Every included item carries identity, authority, lifecycle, and provenance.
-- Pack limits are enforced deterministically.
-- Document bodies are treated as untrusted data.
+- [ ] Private or restricted content is excluded by default.
+- [ ] Every included item carries identity, authority, lifecycle, and provenance.
+- [ ] Pack limits are enforced deterministically.
+- [ ] Document bodies are treated as untrusted data.
 
 ## Stage 5 — Public alpha
 
