@@ -44,7 +44,7 @@ Open questions that may change future rankings:
 - **Repository discovery and parsing:** `src/discovery/repository.ts`, `src/model/collection.ts`, and `src/metadata/frontmatter.ts` discover bounded Markdown, read strict UTF-8, parse constrained YAML, and validate versioned JSON Schema metadata.
 - **Governance engine:** `src/policy/`, `src/graph/`, and `src/resolution/` evaluate explicit metadata and relationships without treating document bodies, filenames, or timestamps as authority.
 - **Pack projection:** `src/pack/contract.ts`, `src/pack/projection.ts`, and `src/cli/pack-output.ts` enforce disclosure and size policies, revalidate selected source bytes, attach provenance, and render JSON or fenced Markdown.
-- **Build and CI:** `package.json`, `package-lock.json`, and `.github/workflows/ci.yml` build and test the package on Node.js 22 and 24 with read-only repository permissions. No release workflow exists.
+- **Build and CI:** `package.json`, `package-lock.json`, and `.github/workflows/ci.yml` build and test the package on Node.js 22 and 24 with read-only repository permissions. `.github/workflows/release-rehearsal.yml` adds a manual, read-only Ubuntu/macOS candidate rehearsal without credentials, OIDC, package upload, or publication authority. No release workflow exists.
 - **Static site:** `public/index.html` is deployed on Vercel and contains fixed HTML, CSS, and a small local script. It has no application backend or user-data flow.
 
 ### Data flows and trust boundaries

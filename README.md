@@ -52,6 +52,7 @@ See the [concept site](./public/index.html) for the product explanation, extract
 - [Public-alpha release boundary](./docs/ALPHA-RELEASE-BOUNDARY.md)
 - [Public package identity review](./docs/PACKAGE-IDENTITY-REVIEW.md)
 - [Installation, CI, and trust-boundary quick start](./docs/QUICKSTART.md)
+- [Stage 5.3 non-publishing rehearsal evidence](./docs/STAGE-5-3-REHEARSAL.md)
 - [Development handover and exact restart point](./docs/DEVELOPMENT-HANDOVER.md)
 
 ## Clean-room boundary

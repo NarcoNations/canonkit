@@ -1,0 +1,51 @@
+name: Release Rehearsal (No Publish)
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-rehearsal-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  rehearse:
+    name: ${{ matrix.os }} / Node ${{ matrix.node }}
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - ubuntu-latest
+          - macos-latest
+        node:
+          - 22.x
+          - 24.x
+
+    steps:
+      - name: Check out the selected source commit
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+
+      - name: Set up Node.js
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: ${{ matrix.node }}
+          package-manager-cache: false
+
+      - name: Install locked dependencies without lifecycle scripts
+        env:
+          NPM_CONFIG_IGNORE_SCRIPTS: "true"
+        run: npm ci
+
+      - name: Run quality and dependency gates
+        run: |
+          npm run check
+          npm audit --audit-level=high
+
+      - name: Pack, inspect, install, and exercise the private candidate
+        run: npm run release:rehearse

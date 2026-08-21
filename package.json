@@ -41,6 +41,7 @@
     "check": "npm run lint && npm run typecheck && npm run test && npm run build",
     "clean": "node -e \"import('node:fs').then(({ rmSync }) => rmSync('dist', { force: true, recursive: true }))\"",
     "lint": "eslint .",
+    "release:rehearse": "node scripts/release-rehearsal.mjs",
     "test": "vitest run",
     "typecheck": "tsc --noEmit"
   },

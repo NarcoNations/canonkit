@@ -99,7 +99,7 @@ Sensitive packs may run only in a trusted, protected job where the repository, w
 | RB-003 | Bound aggregate repository input before retaining normalized documents | Default 32 MiB and hard 256 MiB aggregate contract, bounded-read implementation, atomic `CKS003_TOTAL_BYTES_EXCEEDED`, and tests | 5.2 installation and CI usage | Closed |
 | RB-004 | Define safe untrusted-PR and downstream-agent usage | Neutral example, public-only read-only PR workflow, and explicit Git-authority, sensitive-output, and AI-consumer boundaries | 5.2 installation and CI usage | Closed |
 | RB-005 | No protected trusted-publishing workflow or provenance gate exists | Least-privilege OIDC workflow, immutable action references, approval environment, exact-tarball verification | 5.3 release rehearsal | Open |
-| RB-006 | Cross-platform and exact-release-tarball evidence is incomplete | Supported Node/OS matrix, package audit, licence check, production-only install, provenance rehearsal | 5.3 release rehearsal | Open |
+| RB-006 | Cross-platform and exact-candidate-tarball evidence is incomplete | Locked unpacked-content manifest, supported Node/OS matrix, package audit, licence check, and clean production-only install; real provenance remains RB-005 | 5.3 non-publishing rehearsal | Open — workflow implemented, matrix pending |
 
 Any newly discovered Critical or High threat becomes an additional blocker unless it is resolved before publication.
 
