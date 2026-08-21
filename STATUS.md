@@ -1,8 +1,8 @@
 # CanonKit status
 
 - **Updated:** 2026-08-21
-- **Current stage:** Stage 5 next — Public alpha
-- **Stage state:** Stage 4 complete; Stage 5.1 threat model and release boundary is next
+- **Current stage:** Stage 5 in progress — Public alpha
+- **Stage state:** Stage 5.1 threat model and release boundary complete; Stage 5.2 is next
 - **Latest completed release:** None
 - **Production site:** <https://canonkit.vercel.app>
 - **Repository:** <https://github.com/NarcoNations/canonkit>
@@ -88,14 +88,19 @@
 - Stage 4 acceptance proves public-only defaults across public, internal, and restricted material.
 - Security, determinism, provenance, untrusted-body, package, documentation, clean-room, Node-support, and resumability gates are consolidated in `docs/STAGE-4-ACCEPTANCE.md`.
 - Stage 4 implementation and acceptance gate completed.
+- Repository-grounded threat model completed across runtime, filesystem, governance, disclosure, consumer, CI, package, registry, and static-site boundaries.
+- Public-alpha release boundary locks the proposed `@narconations/canonkit@0.1.0-alpha.0` identity without publishing or changing the current private package.
+- Six explicit release blockers preserve package ownership, aggregate input safety, safe CI usage, protected publishing, and cross-platform evidence.
+- Stage 5.1 implementation and acceptance gate completed.
 
 ## Next checkpoint
 
-- Stage 5.1 — write the repository-grounded threat model and lock the public-alpha release boundary.
+- Stage 5.2 — close release blockers RB-002, RB-003, and RB-004; then add installation guidance and a public-only CI example.
 
 ## Not started
 
-- Formal threat model and alpha release contract
+- Aggregate repository-byte limit and safe CI usage contract
+- Alpha package metadata and installation documentation
 - npm publication
 - OSS application
 
@@ -111,15 +116,18 @@
 
 ## Current risks
 
-- The formal Stage 5 threat model and cross-platform release rehearsal have not started.
+- Six alpha release blockers remain open; publication is explicitly prohibited until all close.
+- The unscoped `canonkit` npm name belongs to an unrelated project; all future installation guidance must use the proposed scoped identity.
+- The scanner needs an aggregate repository-byte budget before public alpha.
+- Npm scope ownership, protected trusted publishing, and cross-platform release rehearsal have not started.
 - Schema `1.0` documents remain valid but cannot participate in subject-based canon checks until explicitly migrated to `1.1`.
 - There is no external usage evidence yet.
 - The Vercel OSS application is not ready until the project demonstrates active development and a functioning tool.
 
 ## Resume here
 
-1. Confirm the Stage 4.4 checkpoint is merged and `main` is clean apart from known unrelated duplicate files.
-2. Read `docs/DEVELOPMENT-HANDOVER.md`, `docs/STAGE-4-ACCEPTANCE.md`, `SECURITY.md`, `ROADMAP.md`, and `BUILD-PLAN.md`.
-3. Create a branch for **BUILD-PLAN task 5.1 — threat model and release boundary**.
-4. Model the existing CLI and package boundary before proposing mitigations or release changes.
-5. Do not publish, tag, add hosted services, or introduce private content during 5.1.
+1. Confirm the Stage 5.1 checkpoint is merged and `main` is clean apart from known unrelated duplicate files.
+2. Read `canonkit-threat-model.md`, `docs/ALPHA-RELEASE-BOUNDARY.md`, `docs/DEVELOPMENT-HANDOVER.md`, `STATUS.md`, and `BUILD-PLAN.md`.
+3. Create a branch for **BUILD-PLAN task 5.2 — installation and CI usage**.
+4. Close RB-002, RB-003, and RB-004 before treating installation or CI guidance as alpha-ready.
+5. Keep `private: true`; do not authenticate npm, publish, tag, add hosted services, or introduce private content during 5.2.

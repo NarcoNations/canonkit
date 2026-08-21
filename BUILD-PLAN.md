@@ -228,12 +228,14 @@ Do not begin adapters, a dashboard, hosted services, or private content migratio
 
 ### 5.1 Threat model and release boundary
 
-**Status:** Next
+**Status:** Complete
 
-- Define protected assets, actors, attacker capabilities, and trust boundaries.
-- Enumerate filesystem, metadata, disclosure, output-consumer, package, and supply-chain threats.
-- Record existing controls, residual risks, and release-blocking mitigations.
-- Lock the intended public package name, versioning, contents, and publication authority.
+- [x] Define protected assets, actors, attacker capabilities, and trust boundaries.
+- [x] Enumerate filesystem, metadata, disclosure, output-consumer, package, and supply-chain threats.
+- [x] Record existing controls, residual risks, and release-blocking mitigations.
+- [x] Lock the intended public package name, versioning, contents, and publication authority.
+- [x] Record the repository-grounded model in [`canonkit-threat-model.md`](./canonkit-threat-model.md).
+- [x] Record the release contract and blockers in [`docs/ALPHA-RELEASE-BOUNDARY.md`](./docs/ALPHA-RELEASE-BOUNDARY.md).
 
 Acceptance:
 
@@ -243,11 +245,14 @@ Acceptance:
 
 ### 5.2 Installation and CI usage
 
-**Status:** Not started
+**Status:** Next
 
+- Add a default and hard aggregate repository-byte budget with stable diagnostics and adversarial tests.
+- Change package metadata atomically to `@narconations/canonkit@0.1.0-alpha.0` while retaining `private: true` until the release checkpoint.
 - Write installation and quick-start documentation.
 - Add a neutral end-to-end example repository.
-- Add a GitHub Actions validation example.
+- Add a public-only, read-only GitHub Actions validation example for untrusted pull requests.
+- Document sensitive-output handling, Git-as-authority assumptions, and untrusted AI-consumer boundaries.
 
 ### 5.3 Release rehearsal
 
@@ -267,4 +272,4 @@ Acceptance:
 
 ## Exact next task
 
-After the Stage 4.4 checkpoint is merged, start **5.1 Threat model and release boundary** on a dedicated branch. Model the repository-grounded threats and lock the alpha publication boundary before adding release documentation or publishing a package. Do not publish, tag, add hosted services, or introduce private project content during 5.1.
+After the Stage 5.1 checkpoint is merged, start **5.2 Installation and CI usage** on a dedicated branch. Close release blockers RB-002, RB-003, and RB-004 from [`docs/ALPHA-RELEASE-BOUNDARY.md`](./docs/ALPHA-RELEASE-BOUNDARY.md), then deliver the neutral quick start and safe public-only CI example. Keep `private: true`; do not authenticate npm, publish, tag, add hosted services, or introduce private project content during 5.2.

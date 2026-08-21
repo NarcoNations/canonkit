@@ -75,6 +75,8 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 - Fixed 8 MiB rendered-process-output ceiling covering metadata and serialization overhead.
 - Stage 4 acceptance evidence covering disclosure ceilings, provenance completeness, deterministic limits, untrusted-body containment, production packaging, security, clean-room, Node support, and resumability.
 - Explicit public, internal, and restricted audience regression coverage.
+- Repository-grounded threat model covering runtime, filesystem, governance, disclosure, AI-consumer, CI, package, registry, and static-site boundaries.
+- Public-alpha release contract for the scoped package identity, intended version, artifact allowlist, protected publishing authority, CI disclosure policy, and mandatory blockers.
 
 ## [0.0.0] — 2026-08-18
 

@@ -5,10 +5,10 @@ This is the durable restart guide for implementation work. It records the comple
 ## Snapshot
 
 - **Snapshot date:** 2026-08-21
-- **Baseline commit:** `495ba44` — Stage 4.3 pack command merged to `main`
-- **Completed:** Stages 0–4, including safe context-pack acceptance
-- **Completed after baseline:** Build-plan task 4.4 — Stage 4 acceptance
-- **Next:** Build-plan task 5.1 — threat model and public-alpha release boundary
+- **Baseline commit:** `23b83e0` — Stage 4.4 acceptance merged to `main`
+- **Completed:** Stages 0–4 plus Stage 5.1 threat model and release boundary
+- **Completed after baseline:** Build-plan task 5.1 — threat model and public-alpha release boundary
+- **Next:** Build-plan task 5.2 — installation and CI usage
 - **Repository:** <https://github.com/NarcoNations/canonkit>
 - **Production concept site:** <https://canonkit.vercel.app>
 - **Latest release:** None; the package remains private until the public-alpha gate
@@ -120,6 +120,7 @@ npm pack --dry-run
 | [#17](https://github.com/NarcoNations/canonkit/pull/17) | Stage 4.1 pack contract and budgets |
 | [#18](https://github.com/NarcoNations/canonkit/pull/18) | Stage 4.2 pack projection library |
 | [#19](https://github.com/NarcoNations/canonkit/pull/19) | Stage 4.3 pack command |
+| [#20](https://github.com/NarcoNations/canonkit/pull/20) | Stage 4.4 acceptance and Stage 4 completion |
 
 ## Completed checkpoint — Stage 3.4 and Stage 3 acceptance
 
@@ -158,9 +159,13 @@ The packaged command now maps explicit CLI controls into the existing projection
 
 The complete security, disclosure, identity, provenance, determinism, untrusted-body, package, Node-support, documentation, clean-room, and resumability evidence is recorded in [`STAGE-4-ACCEPTANCE.md`](./STAGE-4-ACCEPTANCE.md). Stage 4 is complete without adapters, hosted services, or private content.
 
-## Exact next checkpoint — Stage 5.1
+## Completed checkpoint — Stage 5.1
 
-Write the repository-grounded threat model and lock the public-alpha release boundary. Cover assets, actors, filesystem and disclosure trust boundaries, output consumers, supply-chain risks, residual risks, release-blocking controls, and publication authority. Do not publish or tag a package during 5.1.
+[`../canonkit-threat-model.md`](../canonkit-threat-model.md) maps assets, actors, trust boundaries, entry points, eight abuse paths, eight prioritised threats, existing controls, gaps, mitigations, detection ideas, residual risks, and security-review focus paths. [`ALPHA-RELEASE-BOUNDARY.md`](./ALPHA-RELEASE-BOUNDARY.md) locks the proposed scoped identity, intended alpha version, artifact allowlist, protected publishing authority, CI disclosure rules, and six blockers without publishing or changing the current private package.
+
+## Exact next checkpoint — Stage 5.2
+
+Close RB-002, RB-003, and RB-004: change package metadata atomically while keeping `private: true`, add an aggregate repository-byte budget with diagnostics and adversarial tests, and document safe installation, Git-as-authority, sensitive-output, AI-consumer, and public-only pull-request CI usage. Do not authenticate npm, publish, or tag.
 
 ## Remaining route to the OSS application
 
