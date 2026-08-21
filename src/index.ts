@@ -96,3 +96,27 @@ export {
   type ResolutionResult,
   type ResolutionStatus,
 } from './resolution/index.js';
+
+export {
+  DEFAULT_PACK_MAX_CONTENT_BYTES,
+  DEFAULT_PACK_MAX_DOCUMENTS,
+  HARD_PACK_MAX_CONTENT_BYTES,
+  HARD_PACK_MAX_DOCUMENTS,
+  normalizePackPolicy,
+  PACK_AUDIENCES,
+  PACK_FORMAT_VERSION,
+  PACK_GOVERNING_AUTHORITIES,
+  PACK_NON_ACTIVE_STATUSES,
+  PACK_POLICY_FORMAT_VERSION,
+  PackContractError,
+  type ContextPack,
+  type ContextPackDocument,
+  type ContextPackItem,
+  type PackAudience,
+  type PackBuildResult,
+  type PackFailure,
+  type PackFailureCode,
+  type PackNonActiveStatus,
+  type PackPolicy,
+  type PackPolicyOptions,
+} from './pack/contract.js';

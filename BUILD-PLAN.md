@@ -185,14 +185,16 @@ Stage 2 is complete only when `canonkit validate fixtures/relationships/valid` s
 
 ### 4.1 Pack contract and budgets
 
-**Status:** Next
+**Status:** Complete
 
-- Define the versioned pack envelope and provenance fields.
-- Define audience, visibility, lifecycle, document-count, and byte budgets.
-- Require explicit opt-in for non-active material.
-- Define fail-closed truncation and validation behaviour before implementation.
+- [x] Define the versioned pack envelope and provenance fields.
+- [x] Define audience, visibility, lifecycle, document-count, and byte budgets.
+- [x] Require explicit opt-in for non-active material.
+- [x] Define fail-closed truncation and validation behaviour before implementation.
 
 ### 4.2 Pack projection library
+
+**Status:** Next
 
 - Build deterministic Markdown and JSON pack projections over validated graph results.
 - Preserve provenance and exclusion explanations for every included document.
@@ -210,4 +212,4 @@ Do not begin adapters, a dashboard, hosted services, or private content migratio
 
 ## Exact next task
 
-After the Stage 3.4 checkpoint is merged, start **4.1 pack contract and budgets** on a dedicated branch. Lock the safe context-pack envelope, provenance, audience, visibility, lifecycle, document-count, byte-budget, and fail-closed truncation semantics before implementing pack generation. Do not add adapters, hosted services, or private project content.
+After the Stage 4.1 checkpoint is merged, start **4.2 pack projection library** on a dedicated branch. Implement deterministic pack construction over fully validated collections using the locked envelope, disclosure filters, provenance checks, exact UTF-8 content budgets, and whole-pack failures in [`docs/PACK-CONTRACT.md`](./docs/PACK-CONTRACT.md). Do not add CLI syntax, adapters, hosted services, or private project content.

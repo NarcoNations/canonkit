@@ -5,10 +5,10 @@ This is the durable restart guide for implementation work. It records the comple
 ## Snapshot
 
 - **Snapshot date:** 2026-08-21
-- **Baseline commit:** `35cf395` — Stage 3.3 deterministic resolution rules merged to `main`
-- **Completed:** Stages 0–2 plus Stage 3.1–3.3 graph, inspection, and resolution rules
-- **Completed after baseline:** Build-plan task 3.4 — resolve command and Stage 3 acceptance
-- **Next:** Build-plan task 4.1 — pack contract and budgets
+- **Baseline commit:** `177df83` — Stage 3.4 resolve command and Stage 3 acceptance merged to `main`
+- **Completed:** Stages 0–3 plus Stage 4.1 pack contract and budgets
+- **Completed after baseline:** Build-plan task 4.1 — pack contract and budgets
+- **Next:** Build-plan task 4.2 — pack projection library
 - **Repository:** <https://github.com/NarcoNations/canonkit>
 - **Production concept site:** <https://canonkit.vercel.app>
 - **Latest release:** None; the package remains private until the public-alpha gate
@@ -46,6 +46,7 @@ Public package APIs:
 | `validateRelationshipPolicies()` | Validate the explicit document supersession graph | [`RELATIONSHIP-POLICY-CONTRACT.md`](./RELATIONSHIP-POLICY-CONTRACT.md) |
 | `buildTrustGraphIndex()` | Index validated documents and apply fail-closed eligibility | [`GRAPH-CONTRACT.md`](./GRAPH-CONTRACT.md) |
 | `resolveTrustGraph()` | Select and explain a governing source without arbitrary tie-breakers | [`RESOLUTION-CONTRACT.md`](./RESOLUTION-CONTRACT.md) |
+| `normalizePackPolicy()` | Normalize frozen disclosure, lifecycle, scope, and hard-budget policy | [`PACK-CONTRACT.md`](./PACK-CONTRACT.md) |
 
 The package exposes read-only `canonkit validate`, `canonkit list`, `canonkit graph`, and `canonkit resolve` commands. Their formats and stable exit behaviour are defined in [`CLI-CONTRACT.md`](./CLI-CONTRACT.md), [`GRAPH-CLI-CONTRACT.md`](./GRAPH-CLI-CONTRACT.md), and [`RESOLVE-CLI-CONTRACT.md`](./RESOLVE-CLI-CONTRACT.md). Document and supersession rules are defined in [`DOCUMENT-POLICY-CONTRACT.md`](./DOCUMENT-POLICY-CONTRACT.md) and [`RELATIONSHIP-POLICY-CONTRACT.md`](./RELATIONSHIP-POLICY-CONTRACT.md).
 
@@ -67,15 +68,15 @@ The public metadata contracts are schema `1.0` and the current schema `1.1` in [
 
 ## Validation baseline
 
-The Stage 3.4 and Stage 3 acceptance checkpoint passed locally:
+The Stage 4.1 checkpoint passed locally while preserving the Stage 3 acceptance baseline:
 
 - lint and strict typechecking
-- 141 tests across twelve test files at the Stage 3.4 implementation checkpoint
+- 151 tests across thirteen test files at the Stage 4.1 implementation checkpoint
 - declaration and source-map build
 - Node.js 22 and 24 GitHub CI
 - Vercel deployment check
 - dependency audit with zero reported vulnerabilities
-- package preview with 66 intended distributable files
+- package preview with 70 intended distributable files
 - production-only packaged `canonkit resolve` run with development dependencies absent
 - JSON round-trip, documentation-link, and clean-room vocabulary checks
 
@@ -107,6 +108,7 @@ npm pack --dry-run
 | [#13](https://github.com/NarcoNations/canonkit/pull/13) | Stage 3.1 graph index and eligibility |
 | [#14](https://github.com/NarcoNations/canonkit/pull/14) | Stage 3.2 list and graph commands |
 | [#15](https://github.com/NarcoNations/canonkit/pull/15) | Stage 3.3 deterministic resolution rules |
+| [#16](https://github.com/NarcoNations/canonkit/pull/16) | Stage 3.4 resolve command and Stage 3 acceptance |
 
 ## Completed checkpoint — Stage 3.4 and Stage 3 acceptance
 
@@ -127,11 +129,15 @@ Stage 3.4 and Stage 3 close only after:
 2. Public defaults do not expose internal matches; explicit opt-in does.
 3. Repeated output is stable, bounded, and free of document bodies.
 4. Run the standard quality, audit, and package gates.
-5. Update durable contracts and handover documents to point to Stage 4.1.
+5. Update durable contracts and handover documents to point to Stage 4.2.
 
-## Exact next checkpoint — Stage 4.1
+## Completed checkpoint — Stage 4.1
 
-Define the versioned safe context-pack envelope and hard budgets before implementing generation. Lock provenance, audience, visibility, lifecycle, document-count, byte-budget, explicit non-active opt-in, and fail-closed truncation semantics. Do not add adapters, hosted services, or private project knowledge.
+The versioned safe context-pack envelope, item provenance, result failures, audience disclosure ceiling, visibility and lifecycle rules, exact scope, document budget, exact UTF-8 body-byte budget, explicit non-active opt-in, and atomic fail-closed overflow semantics are locked in [`PACK-CONTRACT.md`](./PACK-CONTRACT.md). Pack generation has deliberately not been added yet.
+
+## Exact next checkpoint — Stage 4.2
+
+Implement deterministic pack construction over fully validated collections. Apply visibility and exact scope before disclosure, verify exact source bytes and SHA-256 provenance, retain explicit untrusted-body boundaries, enforce both budgets across the complete permitted selection, and return no partial pack on failure. Do not add the CLI, adapters, hosted services, or private project knowledge.
 
 ## Remaining route to the OSS application
 
@@ -150,6 +156,7 @@ src/model/           normalised collection and unified diagnostics
 src/policy/          deterministic document and relationship policy
 src/graph/           deterministic graph index and fail-closed eligibility
 src/resolution/      deterministic candidate selection and explanations
+src/pack/            context-pack contract, policy, and projection
 schema/              versioned public metadata contract
 fixtures/            synthetic contract, parser, discovery, and collection cases
 test/                unit and integration coverage

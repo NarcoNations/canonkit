@@ -233,6 +233,22 @@ Why:
 - non-zero ambiguity and no-result exits make automation fail safely
 - one shared resolver prevents terminal and JSON policy drift
 
+### ADR-015 — Context packs are deterministic, provenance-backed, and atomic
+
+Stage 4.1 fixes a versioned pack envelope and normalized policy before generation. Packs default to public, active, canonical or approved documents. Audience acts as a cumulative disclosure ceiling, exact scope never implies hierarchy, and each non-active lifecycle requires explicit opt-in. Non-governing authorities cannot be opted into pack authority.
+
+Every item retains normalized governance metadata, a repository-relative source path, exact source-file byte count and SHA-256 digest, and an explicit untrusted-content marker. Absolute paths, timestamps, raw reporting metadata, and hidden document details are excluded.
+
+Document and exact UTF-8 Markdown-body budgets have conservative defaults and fixed hard maxima. Selection is completed before limits are applied. Overflow, invalid repositories, empty permitted selections, or source-integrity failures return no pack; bodies are never clipped and partial packs are never emitted.
+
+Why:
+
+- disclosure boundaries must apply before paths, counts, or explanations are exposed
+- exact source digests make provenance independently verifiable
+- atomic failure prevents a size limit from silently changing the apparent canon
+- conservative hard caps bound downstream tool context and memory use
+- stable, timestamp-free envelopes permit reproducible outputs
+
 ## Core modules
 
 ### Discovery

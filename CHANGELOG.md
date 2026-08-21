@@ -62,6 +62,9 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 - Visibility- and scope-safe query projection that does not reveal excluded matches.
 - Neutral packaged-process fixtures for ambiguity and lifecycle-ineligible resolution.
 - Completed Stage 3 resolution and trust-graph acceptance gate.
+- Versioned safe context-pack, provenance, result, and failure contracts.
+- Frozen pack-policy normalization with public and active defaults, cumulative audience disclosure, exact scope, and explicit non-active opt-in.
+- Default and hard document and UTF-8 content-byte budgets with atomic fail-closed overflow semantics.
 
 ## [0.0.0] — 2026-08-18
 
