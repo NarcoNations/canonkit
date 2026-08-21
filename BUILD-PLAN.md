@@ -152,13 +152,17 @@ Stage 2 is complete only when `canonkit validate fixtures/relationships/valid` s
 
 ### 3.2 List and graph commands
 
-**Status:** Next
+**Status:** Complete
 
-- Add deterministic `canonkit list` output.
-- Add bounded `canonkit graph` terminal and JSON output.
-- Preserve the read-only and visibility boundaries.
+- [x] Add deterministic eligible-only `canonkit list` output.
+- [x] Add bounded `canonkit graph` terminal and JSON output.
+- [x] Default to public-only output with explicit visibility and exact-scope filters.
+- [x] Fail closed on invalid collections without leaking partial graph paths.
+- [x] Preserve the read-only, body-free, and stable-order boundaries.
 
 ### 3.3 Resolution rules
+
+**Status:** Next
 
 - Define explicit candidate selection and ranking.
 - Reject ambiguous current authority rather than guessing.
@@ -174,4 +178,4 @@ Stage 4 and beyond remain at roadmap granularity until resolution proves the tru
 
 ## Exact next task
 
-After the Stage 3.1 checkpoint is merged, start **3.2 list and graph commands** on a dedicated branch. Project the existing graph through bounded deterministic terminal and JSON output without adding candidate ranking or resolution. Do not begin context packs, adapters, or private content migration in the same change.
+After the Stage 3.2 checkpoint is merged, start **3.3 resolution rules** on a dedicated branch. Define deterministic candidate selection, rejection, ambiguity, and explanation semantics over the existing graph without adding the `resolve` process command. Do not begin context packs, adapters, or private content migration in the same change.

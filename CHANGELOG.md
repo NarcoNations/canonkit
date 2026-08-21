@@ -49,6 +49,10 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 - Deterministic trust graph indexes for document identity, version, subjects, supersession, and explicit relations.
 - Fail-closed node eligibility with explainable lifecycle, authority, visibility, and scope exclusions.
 - Neutral graph fixtures and integration coverage proving bodies and inferred relationships remain outside graph output.
+- Bounded `canonkit list` and `canonkit graph` terminal and JSON projections.
+- Public-only defaults with repeatable explicit visibility opt-in, exact scope filtering, and deterministic node limits.
+- Generic fail-closed command reports that withhold partial graph paths when repository validation fails.
+- Versioned list/graph report contract with bounded indexes, edges, warnings, and truncation summaries.
 
 ## [0.0.0] — 2026-08-18
 

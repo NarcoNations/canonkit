@@ -2,7 +2,7 @@
 
 - **Updated:** 2026-08-21
 - **Current stage:** Stage 3 in progress — Resolution and trust graph
-- **Stage state:** Stage 3.1 graph index and eligibility complete; Stage 3.2 is next
+- **Stage state:** Stage 3.2 list and graph commands complete; Stage 3.3 is next
 - **Latest completed release:** None
 - **Production site:** <https://canonkit.vercel.app>
 - **Repository:** <https://github.com/NarcoNations/canonkit>
@@ -55,14 +55,18 @@
 - Fail-closed eligibility excludes non-active, non-governing, non-public, or scope-mismatched nodes with stable explanations.
 - Internal and restricted visibility require explicit opt-in; excluded nodes remain visible for audit.
 - Neutral integration fixtures prove the graph consumes normalized metadata and never emits Markdown bodies.
+- Read-only `canonkit list` returns only eligible documents in stable order.
+- Read-only `canonkit graph` exposes a bounded lifecycle audit projection without ranking candidates.
+- Both commands default to public-only metadata and require explicit visibility and exact-scope filters.
+- Invalid collections fail closed with a generic validation-required report and no partial paths.
+- Terminal and versioned JSON formats cap nodes at 1000 and graph edges at 1000.
 
 ## Next checkpoint
 
-- Stage 3.2 — add bounded deterministic `list` and `graph` command projections.
+- Stage 3.3 — define deterministic candidate selection, rejection, ambiguity, and explanation rules.
 
 ## Not started
 
-- List and graph commands
 - Candidate ranking and resolution
 - Context-pack export
 - npm publication
@@ -87,8 +91,8 @@
 
 ## Resume here
 
-1. Confirm the Stage 3.1 checkpoint is merged and `main` is clean apart from known unrelated duplicate files.
-2. Read `docs/DEVELOPMENT-HANDOVER.md`, `docs/GRAPH-CONTRACT.md`, `docs/CLI-CONTRACT.md`, `ROADMAP.md`, and `BUILD-PLAN.md`.
-3. Create a branch for **BUILD-PLAN task 3.2 — list and graph commands**.
-4. Project only the existing graph contract through deterministic terminal and JSON output.
-5. Implement command projection only; leave candidate ranking and resolution for Stage 3.3 and 3.4.
+1. Confirm the Stage 3.2 checkpoint is merged and `main` is clean apart from known unrelated duplicate files.
+2. Read `docs/DEVELOPMENT-HANDOVER.md`, `docs/GRAPH-CONTRACT.md`, `docs/GRAPH-CLI-CONTRACT.md`, `ROADMAP.md`, and `BUILD-PLAN.md`.
+3. Create a branch for **BUILD-PLAN task 3.3 — resolution rules**.
+4. Define candidate selection and rejection over the existing eligible graph with explicit ambiguity failures.
+5. Keep the process-level `resolve` command for Stage 3.4.

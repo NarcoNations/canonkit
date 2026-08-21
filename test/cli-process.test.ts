@@ -41,8 +41,99 @@ describe('packaged CLI process boundary', () => {
 
     expect(help.status).toBe(0);
     expect(help.stdout).toContain('canonkit validate [path]');
+    expect(help.stdout).toContain('canonkit list [path]');
+    expect(help.stdout).toContain('canonkit graph [path]');
     expect(version.status).toBe(0);
     expect(version.stdout).toBe('0.0.0\n');
+  });
+
+  it('lists only eligible public documents by default', () => {
+    const result = run(['list', 'fixtures/graph', '--format=json']);
+    const report = JSON.parse(result.stdout) as {
+      items: Array<{ id: string; nodeId: string; version: string }>;
+      summary: Record<string, unknown>;
+    };
+
+    expect(result.status).toBe(0);
+    expect(report.items).toEqual([
+      expect.objectContaining({
+        id: 'canon/example-service',
+        nodeId: 'fixtures/graph/canon-v2.md',
+        version: '2.0',
+      }),
+    ]);
+    expect(report.summary).toMatchObject({
+      returnedNodes: 1,
+      totalEligibleNodes: 1,
+      truncated: false,
+    });
+    expect(result.stdout).not.toContain('fixtures/graph/decision.md');
+    expect(result.stdout).not.toContain('# Example service');
+  });
+
+  it('returns a bounded public graph and requires explicit internal opt-in', () => {
+    const publicResult = run(['graph', 'fixtures/graph', '--format=json']);
+    const publicReport = JSON.parse(publicResult.stdout) as {
+      nodes: Array<{ nodeId: string }>;
+      supersessionEdges: unknown[];
+    };
+    const expandedResult = run([
+      'graph',
+      'fixtures/graph',
+      '--format=json',
+      '--allow-visibility=public',
+      '--allow-visibility=internal',
+    ]);
+    const expandedReport = JSON.parse(expandedResult.stdout) as {
+      nodes: Array<{ nodeId: string }>;
+    };
+
+    expect(publicResult.status).toBe(0);
+    expect(publicReport.nodes.map(({ nodeId }) => nodeId)).toEqual([
+      'fixtures/graph/canon-v1.md',
+      'fixtures/graph/canon-v2.md',
+    ]);
+    expect(publicReport.supersessionEdges).toHaveLength(1);
+    expect(publicResult.stdout).not.toContain('fixtures/graph/decision.md');
+    expect(expandedResult.status).toBe(0);
+    expect(expandedReport.nodes.map(({ nodeId }) => nodeId)).toContain(
+      'fixtures/graph/decision.md',
+    );
+  });
+
+  it('applies exact scope and deterministic node limits', () => {
+    const scoped = run([
+      'graph',
+      'fixtures/graph',
+      '--format=json',
+      '--scope=products/example',
+      '--limit=1',
+    ]);
+    const report = JSON.parse(scoped.stdout) as {
+      nodes: unknown[];
+      summary: Record<string, unknown>;
+    };
+
+    expect(scoped.status).toBe(0);
+    expect(report.nodes).toHaveLength(1);
+    expect(report.summary).toMatchObject({
+      returnedNodes: 1,
+      totalVisibleNodes: 2,
+      truncated: true,
+    });
+  });
+
+  it('fails closed without leaking document paths when validation is invalid', () => {
+    const result = run(['list', 'fixtures/collection', '--format=json']);
+    const report = JSON.parse(result.stdout) as Record<string, unknown>;
+
+    expect(result.status).toBe(1);
+    expect(report).toMatchObject({
+      command: 'list',
+      error: { code: 'CKC001_VALIDATION_REQUIRED' },
+      ok: false,
+    });
+    expect(result.stdout).not.toContain('.md');
   });
 
   it('returns success for valid documents and failure for invalid neighbours', () => {
