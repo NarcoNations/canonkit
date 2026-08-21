@@ -66,7 +66,7 @@ An excluded node remains in the graph for auditability; `eligible: false` preven
 
 The caller must run collection plus both Stage 2 policy layers before graph construction. `buildTrustGraphIndex` additionally rejects duplicate source paths, duplicate identity/version pairs, and unresolved supersession references with `TrustGraphInputError` so ambiguous input cannot silently enter the graph.
 
-The graph does not add candidate ranking. Stage 3.2 projects it through bounded list and graph commands without changing its semantics. Typed subject relations remain explicit records; an empty subject list remains empty and no source identity is invented.
+The graph itself does not rank candidates. Stage 3.2 projects it through bounded list and graph commands, and Stage 3.3 consumes its eligibility through the separate deterministic [`RESOLUTION-CONTRACT.md`](./RESOLUTION-CONTRACT.md). Typed subject relations remain explicit records; an empty subject list remains empty and no source identity is invented.
 
 ## Safety boundary
 

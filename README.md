@@ -41,6 +41,7 @@ See the [concept site](./public/index.html) for the product explanation, extract
 - [Trust graph index contract](./docs/GRAPH-CONTRACT.md)
 - [Validate CLI contract](./docs/CLI-CONTRACT.md)
 - [List and graph CLI contract](./docs/GRAPH-CLI-CONTRACT.md)
+- [Deterministic resolution contract](./docs/RESOLUTION-CONTRACT.md)
 - [Development handover and exact restart point](./docs/DEVELOPMENT-HANDOVER.md)
 
 ## Clean-room boundary
@@ -125,9 +126,19 @@ canonkit graph [path] --scope products/example --limit 50
 
 Both commands default to public-only metadata, exclude bodies, and refuse partial graph output when validation fails. See the [list and graph CLI contract](./docs/GRAPH-CLI-CONTRACT.md).
 
+Library callers can deterministically select and explain a governing source from that graph:
+
+```ts
+import { resolveTrustGraph } from 'canonkit';
+
+const resolution = resolveTrustGraph(graph, 'products/example');
+```
+
+Resolution considers explicit subjects, document identities, and aliases; ranks eligible candidates through declared policy; and returns no winner for an equal top-rank tie. See the [resolution contract](./docs/RESOLUTION-CONTRACT.md).
+
 ## Status
 
-Stages 1 and 2 are complete. Stage 3.2 now provides the graph index, eligibility model, and bounded `list` and `graph` projections; deterministic resolution rules are next. See [STATUS.md](./STATUS.md) for the exact current state and next task.
+Stages 1 and 2 are complete. Stage 3.3 now provides the graph, bounded inspection commands, and deterministic resolution rules; the process-level `resolve` command is next. See [STATUS.md](./STATUS.md) for the exact current state and next task.
 
 ## Licence
 

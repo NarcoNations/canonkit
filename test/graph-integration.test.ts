@@ -4,6 +4,7 @@ import { describe, expect, it } from 'vitest';
 
 import {
   buildTrustGraphIndex,
+  resolveTrustGraph,
   scanRepository,
   validateDocumentPolicies,
   validateRelationshipPolicies,
@@ -35,5 +36,33 @@ describe('trust graph integration', () => {
     ]);
     expect(graph.relations).toHaveLength(2);
     expect(JSON.stringify(graph)).not.toContain('# Example service');
+
+    const resolution = resolveTrustGraph(
+      buildTrustGraphIndex(collection.documents, {
+        allowedVisibilities: ['public', 'internal'],
+      }),
+      'products/example-service',
+    );
+    expect(resolution).toMatchObject({
+      selected: { nodeId: 'fixtures/graph/canon-v2.md' },
+      status: 'resolved',
+    });
+    expect(resolution.candidates).toEqual([
+      expect.objectContaining({
+        disposition: 'selected',
+        node: expect.objectContaining({ nodeId: 'fixtures/graph/canon-v2.md' }),
+      }),
+      expect.objectContaining({
+        disposition: 'rejected',
+        node: expect.objectContaining({ nodeId: 'fixtures/graph/canon-v1.md' }),
+        reasons: [expect.objectContaining({ code: 'CKG001_STATUS_NOT_ACTIVE' })],
+      }),
+      expect.objectContaining({
+        disposition: 'rejected',
+        node: expect.objectContaining({ nodeId: 'fixtures/graph/decision.md' }),
+        reasons: [expect.objectContaining({ code: 'CKS102_LOWER_KIND_PRIORITY' })],
+      }),
+    ]);
+    expect(JSON.stringify(resolution)).not.toContain('# Example service');
   });
 });
