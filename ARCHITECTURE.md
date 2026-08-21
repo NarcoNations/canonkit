@@ -281,6 +281,20 @@ Why:
 - stdout-only output preserves read-only operation and shell composability
 - versioned failures remain safe for both people and automation
 
+### ADR-018 — Public alpha uses a scoped package and protected publishing boundary
+
+The intended alpha package is `@narconations/canonkit`; the executable remains `canonkit`. The unrelated unscoped package must never appear in installation guidance. The first planned version is `0.1.0-alpha.0`. The normal release path is a protected GitHub Actions environment using npm trusted publishing with provenance; if npm requires an existing package first, the narrowly defined one-time bootstrap in the release boundary applies.
+
+Stage 5.1 defines the boundary but does not publish, tag, authenticate npm, or change the current private package metadata. Every blocker in [`docs/ALPHA-RELEASE-BOUNDARY.md`](./docs/ALPHA-RELEASE-BOUNDARY.md) must close before the first external release.
+
+Why:
+
+- a scoped name prevents confusion with the occupied unscoped package
+- trusted publishing avoids a routine long-lived npm token
+- one reviewed, verified tarball binds tests, provenance, and publication to the same artifact
+- protected environment approval preserves explicit human release authority
+- package preparation remains reversible until the maintainer approves publication
+
 ## Core modules
 
 ### Discovery
@@ -338,7 +352,7 @@ Why:
 - read-only default commands
 - synthetic tests only in the public repository
 
-`SECURITY.md` owns vulnerability reporting. A detailed threat model is a Stage 5 release requirement.
+`SECURITY.md` owns vulnerability reporting. The repository-grounded threat model is [`canonkit-threat-model.md`](./canonkit-threat-model.md).
 
 ## Explicit non-goals for v0.1
 

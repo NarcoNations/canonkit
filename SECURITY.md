@@ -14,4 +14,6 @@ Repository documents and context-pack bodies are untrusted data rather than exec
 
 The Stage 4 acceptance review found no Critical or High severity issue inside the safe context-pack boundary. The complete evidence, including disclosure, provenance, determinism, package, dependency, browser-surface, and residual-risk checks, is recorded in [`docs/STAGE-4-ACCEPTANCE.md`](./docs/STAGE-4-ACCEPTANCE.md).
 
-A formal repository-grounded threat model and deployment-header review remain Stage 5 release gates. The static site has no third-party scripts or untrusted browser input; runtime response headers must still be verified as part of release hardening rather than inferred from this repository.
+The repository-grounded model, attacker assumptions, abuse paths, risk ratings, and review focus are recorded in [`canonkit-threat-model.md`](./canonkit-threat-model.md). The proposed package identity, publishing authority, CI disclosure rules, and mandatory alpha blockers are recorded in [`docs/ALPHA-RELEASE-BOUNDARY.md`](./docs/ALPHA-RELEASE-BOUNDARY.md).
+
+The static site has no third-party scripts or untrusted browser input. Deployment hardening remains a release-rehearsal task: current production headers include HSTS but the repository does not yet configure CSP, framing, or explicit content-type protections.
