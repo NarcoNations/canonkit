@@ -217,6 +217,22 @@ Why:
 - excluding operational metadata prevents accidental authority inference
 - candidate-level explanations make selection auditable and testable
 
+### ADR-014 — Process resolution removes disclosure-excluded nodes before matching
+
+Stage 3.4 exposes resolution through `canonkit resolve <query> [path]`. The command validates the complete repository and constructs the requested eligibility graph, then removes visibility- and scope-excluded nodes before passing the graph to the Stage 3.3 resolver.
+
+Lifecycle- and authority-ineligible nodes remain available for safe explanations. Visibility- and scope-ineligible nodes do not participate in matching and cannot reveal their identity or existence through a default public or mismatched-scope query. A command succeeds only for one uniquely selected candidate; ambiguity, ineligible-only matches, no match, and invalid repositories fail closed.
+
+Candidate limits apply after complete permitted resolution. The selected node remains explicit, while summary counts and truncation state describe the complete permitted result.
+
+Why:
+
+- visibility and scope are disclosure boundaries, not rejection details
+- lifecycle history is useful audit evidence when the caller may see it
+- full evaluation before truncation keeps authority decisions stable
+- non-zero ambiguity and no-result exits make automation fail safely
+- one shared resolver prevents terminal and JSON policy drift
+
 ## Core modules
 
 ### Discovery

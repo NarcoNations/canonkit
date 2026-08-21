@@ -119,6 +119,36 @@ describe('CLI arguments', () => {
     });
   });
 
+  it('parses a resolve query, optional path, and projection controls', () => {
+    expect(parseCliArguments(['resolve', 'products/example'])).toEqual({
+      allowedVisibilities: ['public'],
+      format: 'terminal',
+      kind: 'resolve',
+      limit: 100,
+      path: '.',
+      query: 'products/example',
+    });
+    expect(
+      parseCliArguments([
+        'resolve',
+        'Example Product',
+        'docs',
+        '--format=json',
+        '--allow-visibility=internal',
+        '--scope=products/example',
+        '--limit=8',
+      ]),
+    ).toEqual({
+      allowedVisibilities: ['internal'],
+      format: 'json',
+      kind: 'resolve',
+      limit: 8,
+      path: 'docs',
+      query: 'Example Product',
+      scope: 'products/example',
+    });
+  });
+
   it('recognises help and version without scanning', () => {
     expect(parseCliArguments(['--help'])).toEqual({ kind: 'help' });
     expect(parseCliArguments(['-v'])).toEqual({ kind: 'version' });
@@ -136,6 +166,11 @@ describe('CLI arguments', () => {
     ['graph', '--limit', '1001'],
     ['graph', '--limit', 'many'],
     ['graph', '--scope', 'Products/Example'],
+    ['resolve'],
+    ['resolve', 'query', 'one', 'two'],
+    ['resolve', '   '],
+    ['resolve', 'x'.repeat(161)],
+    ['resolve', 'query', '--quiet'],
   ];
 
   it.each(invalidArguments.map((args) => [args] as const))('rejects invalid usage: %j', (args) => {
@@ -239,6 +274,46 @@ describe('runCli', () => {
     expect(explicit.output.stdout).not.toContain('rawMetadata');
   });
 
+  it('fails hidden resolution closed and resolves only after explicit visibility opt-in', async () => {
+    const hidden = capture();
+    const explicit = capture();
+
+    expect(
+      await runCli(['resolve', 'guides/example', '--format=json'], hidden.io, {
+        scanRepository: async () => collection(true),
+      }),
+    ).toBe(CLI_EXIT_CODES.resolutionFailure);
+    expect(JSON.parse(hidden.output.stdout)).toMatchObject({
+      command: 'resolve',
+      ok: false,
+      resolution: {
+        candidates: [],
+        selected: null,
+        status: 'not_found',
+      },
+    });
+    expect(hidden.output.stdout).not.toContain('docs/example.md');
+
+    expect(
+      await runCli(
+        ['resolve', 'guides/example', '--format=json', '--allow-visibility=internal'],
+        explicit.io,
+        { scanRepository: async () => collection(true) },
+      ),
+    ).toBe(CLI_EXIT_CODES.success);
+    expect(JSON.parse(explicit.output.stdout)).toMatchObject({
+      command: 'resolve',
+      ok: true,
+      resolution: {
+        candidates: [{ disposition: 'selected' }],
+        selected: { nodeId: 'docs/example.md' },
+        status: 'resolved',
+      },
+    });
+    expect(explicit.output.stdout).not.toContain('Private document body');
+    expect(explicit.output.stdout).not.toContain('rawMetadata');
+  });
+
   it('blocks graph output with a generic report when validation fails', async () => {
     const captured = capture();
     expect(
@@ -251,6 +326,22 @@ describe('runCli', () => {
       error: { code: 'CKC001_VALIDATION_REQUIRED' },
       ok: false,
       summary: { errors: 1, warnings: 0 },
+    });
+    expect(captured.output.stdout).not.toContain('docs/broken.md');
+    expect(captured.output.stdout).not.toContain('docs/example.md');
+  });
+
+  it('blocks resolution with a generic report when validation fails', async () => {
+    const captured = capture();
+    expect(
+      await runCli(['resolve', 'guides/example', '--format=json'], captured.io, {
+        scanRepository: async () => collection(false),
+      }),
+    ).toBe(CLI_EXIT_CODES.documentFailure);
+    expect(JSON.parse(captured.output.stdout)).toMatchObject({
+      command: 'resolve',
+      error: { code: 'CKC001_VALIDATION_REQUIRED' },
+      ok: false,
     });
     expect(captured.output.stdout).not.toContain('docs/broken.md');
     expect(captured.output.stdout).not.toContain('docs/example.md');

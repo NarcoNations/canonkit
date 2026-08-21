@@ -10,13 +10,14 @@
 canonkit validate [path] [--format terminal|json] [--quiet]
 canonkit list [path] [...]
 canonkit graph [path] [...]
+canonkit resolve <query> [path] [...]
 canonkit --help
 canonkit --version
 ```
 
 `path` defaults to the current directory. Discovery resolves and enforces the nearest Git repository boundary according to the discovery contract.
 
-The list and graph command options and output envelopes are defined separately in [`GRAPH-CLI-CONTRACT.md`](./GRAPH-CLI-CONTRACT.md).
+The list and graph command options and output envelopes are defined in [`GRAPH-CLI-CONTRACT.md`](./GRAPH-CLI-CONTRACT.md). Resolution is defined in [`RESOLVE-CLI-CONTRACT.md`](./RESOLVE-CLI-CONTRACT.md).
 
 ## Terminal format
 
@@ -68,6 +69,8 @@ Breaking changes to this envelope require a new `cliReportFormatVersion`. Additi
 | `1` | Validation found collection, document-policy, or relationship-policy errors |
 | `2` | Command usage error |
 | `3` | Unexpected internal error |
+
+For `resolve`, code `0` requires one uniquely selected source. Ambiguous, ineligible-only, not-found, and validation-blocked results use code `1`.
 
 Completed validation reports go to standard output. Usage and unexpected errors go to standard error.
 

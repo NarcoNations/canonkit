@@ -43,6 +43,7 @@ describe('packaged CLI process boundary', () => {
     expect(help.stdout).toContain('canonkit validate [path]');
     expect(help.stdout).toContain('canonkit list [path]');
     expect(help.stdout).toContain('canonkit graph [path]');
+    expect(help.stdout).toContain('canonkit resolve <query> [path]');
     expect(version.status).toBe(0);
     expect(version.stdout).toBe('0.0.0\n');
   });
@@ -134,6 +135,161 @@ describe('packaged CLI process boundary', () => {
       ok: false,
     });
     expect(result.stdout).not.toContain('.md');
+  });
+
+  it('resolves a governing source deterministically with bounded body-free output', () => {
+    const args = [
+      'resolve',
+      'products/example-service',
+      'fixtures/graph',
+      '--format=json',
+      '--limit=1',
+    ];
+    const first = run(args);
+    const second = run(args);
+    const report = JSON.parse(first.stdout) as {
+      resolution: {
+        candidates: Array<{ node: { nodeId: string } }>;
+        selected: { nodeId: string };
+        status: string;
+        summary: Record<string, unknown>;
+      };
+    };
+
+    expect(first.status).toBe(0);
+    expect(second.status).toBe(0);
+    expect(second.stdout).toBe(first.stdout);
+    expect(report.resolution).toMatchObject({
+      selected: { nodeId: 'fixtures/graph/canon-v2.md' },
+      status: 'resolved',
+      summary: {
+        matchedCandidates: 2,
+        returnedCandidates: 1,
+        truncated: true,
+      },
+    });
+    expect(report.resolution.candidates).toHaveLength(1);
+    expect(first.stdout).not.toContain('fixtures/graph/decision.md');
+    expect(first.stdout).not.toContain('# Example service');
+    expect(first.stdout).not.toContain('rawMetadata');
+  });
+
+  it('requires explicit visibility opt-in before revealing internal matches', () => {
+    const result = run([
+      'resolve',
+      'products/example-service',
+      'fixtures/graph',
+      '--format=json',
+      '--allow-visibility=public',
+      '--allow-visibility=internal',
+    ]);
+    const report = JSON.parse(result.stdout) as {
+      resolution: { candidates: Array<{ node: { nodeId: string } }> };
+    };
+
+    expect(result.status).toBe(0);
+    expect(report.resolution.candidates.map(({ node }) => node.nodeId)).toContain(
+      'fixtures/graph/decision.md',
+    );
+
+    const wrongScope = run([
+      'resolve',
+      'products/example-service',
+      'fixtures/graph',
+      '--format=json',
+      '--scope=products/other',
+    ]);
+    expect(wrongScope.status).toBe(1);
+    expect(JSON.parse(wrongScope.stdout)).toMatchObject({
+      resolution: { candidates: [], status: 'not_found' },
+    });
+    expect(wrongScope.stdout).not.toContain('fixtures/graph/canon-v2.md');
+  });
+
+  it('returns a failing ambiguity without choosing by path', () => {
+    const result = run([
+      'resolve',
+      'products/example',
+      'fixtures/resolution/ambiguous',
+      '--format=json',
+    ]);
+    const report = JSON.parse(result.stdout) as {
+      resolution: {
+        candidates: Array<{ disposition: string }>;
+        selected: unknown;
+        status: string;
+      };
+    };
+
+    expect(result.status).toBe(1);
+    expect(report.resolution).toMatchObject({ selected: null, status: 'ambiguous' });
+    expect(report.resolution.candidates.map(({ disposition }) => disposition)).toEqual([
+      'contender',
+      'contender',
+    ]);
+  });
+
+  it('returns an explained failure when every match is lifecycle-ineligible', () => {
+    const result = run([
+      'resolve',
+      'products/example',
+      'fixtures/resolution/ineligible',
+      '--format=json',
+    ]);
+    const report = JSON.parse(result.stdout) as {
+      resolution: {
+        candidates: Array<{ reasons: Array<{ code: string }> }>;
+        selected: unknown;
+        status: string;
+      };
+    };
+
+    expect(result.status).toBe(1);
+    expect(report.resolution).toMatchObject({ selected: null, status: 'unresolved' });
+    expect(report.resolution.candidates[0]?.reasons).toEqual([
+      expect.objectContaining({ code: 'CKG001_STATUS_NOT_ACTIVE' }),
+    ]);
+  });
+
+  it('returns failing not-found and generic validation-blocked outcomes', () => {
+    const missing = run([
+      'resolve',
+      'products/missing',
+      'fixtures/graph',
+      '--format=json',
+    ]);
+    const invalid = run([
+      'resolve',
+      'products/example',
+      'fixtures/collection',
+      '--format=json',
+    ]);
+
+    expect(missing.status).toBe(1);
+    expect(JSON.parse(missing.stdout)).toMatchObject({
+      ok: false,
+      resolution: { candidates: [], selected: null, status: 'not_found' },
+    });
+    expect(invalid.status).toBe(1);
+    expect(JSON.parse(invalid.stdout)).toMatchObject({
+      command: 'resolve',
+      error: { code: 'CKC001_VALIDATION_REQUIRED' },
+      ok: false,
+    });
+    expect(invalid.stdout).not.toContain('.md');
+  });
+
+  it('renders a concise terminal resolution', () => {
+    const result = run([
+      'resolve',
+      'products/example-service',
+      'fixtures/graph',
+    ]);
+
+    expect(result.status).toBe(0);
+    expect(result.stdout).toContain('CanonKit resolve — RESOLVED');
+    expect(result.stdout).toContain('Selected: canon/example-service@2.0');
+    expect(result.stdout).not.toContain('# Example service');
   });
 
   it('returns success for valid documents and failure for invalid neighbours', () => {

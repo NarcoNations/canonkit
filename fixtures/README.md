@@ -15,3 +15,5 @@ The JSON fixtures test the metadata contract independently from Markdown parsing
 `policy/` proves document-level ownership, review, authority, and visibility rules. `relationships/` contains one valid supersession chain and isolated failures for missing targets, self-supersession, cycles, invalid lifecycle state, and multiple active versions.
 
 `graph/` is a validated neutral repository used to prove deterministic document, version, subject, supersession, relation, and eligibility indexes without exposing Markdown bodies.
+
+`resolution/` contains validated neutral repositories for an equal approved-canon ambiguity and an all-ineligible lifecycle result. They prove the packaged resolve command fails closed without arbitrary selection.

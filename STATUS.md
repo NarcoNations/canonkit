@@ -1,8 +1,8 @@
 # CanonKit status
 
 - **Updated:** 2026-08-21
-- **Current stage:** Stage 3 in progress — Resolution and trust graph
-- **Stage state:** Stage 3.3 deterministic resolution rules complete; Stage 3.4 is next
+- **Current stage:** Stage 3 complete — Resolution and trust graph
+- **Stage state:** Stage 3 acceptance passed; Stage 4.1 pack contract and budgets is next
 - **Latest completed release:** None
 - **Production site:** <https://canonkit.vercel.app>
 - **Repository:** <https://github.com/NarcoNations/canonkit>
@@ -65,14 +65,19 @@
 - Canon, policy, decision, reference, and legacy roles have declared precedence before authority.
 - Equal top-rank candidates return an explicit ambiguity with no selected source.
 - Every match is explained as selected, tied, ineligible, or lower-ranked without body access.
+- Packaged `canonkit resolve <query> [path]` emits bounded terminal and JSON explanations.
+- Unique permitted authority exits successfully; ambiguity, ineligible-only, and no-match results fail closed.
+- Visibility- and scope-excluded nodes are removed before matching and cannot leak through resolution.
+- Candidate limits preserve complete permitted-result counts and explicit truncation state.
+- Neutral real-process fixtures prove deterministic repetition, ambiguity, lifecycle exclusion, and generic validation blocking.
+- Stage 3 implementation and acceptance gate completed.
 
 ## Next checkpoint
 
-- Stage 3.4 — expose bounded terminal and JSON `canonkit resolve <query>` output and complete Stage 3.
+- Stage 4.1 — define the safe context-pack contract, provenance fields, and hard budgets.
 
 ## Not started
 
-- Resolve CLI command and Stage 3 acceptance
 - Context-pack export
 - npm publication
 - OSS application
@@ -89,15 +94,15 @@
 
 ## Current risks
 
-- The resolution rules are proven at the library boundary but are not yet available through the packaged CLI.
+- Pack provenance, audience policy, and byte-budget semantics are not yet locked.
 - Schema `1.0` documents remain valid but cannot participate in subject-based canon checks until explicitly migrated to `1.1`.
 - There is no external usage evidence yet.
 - The Vercel OSS application is not ready until the project demonstrates active development and a functioning tool.
 
 ## Resume here
 
-1. Confirm the Stage 3.3 checkpoint is merged and `main` is clean apart from known unrelated duplicate files.
-2. Read `docs/DEVELOPMENT-HANDOVER.md`, `docs/GRAPH-CONTRACT.md`, `docs/RESOLUTION-CONTRACT.md`, `docs/CLI-CONTRACT.md`, `ROADMAP.md`, and `BUILD-PLAN.md`.
-3. Create a branch for **BUILD-PLAN task 3.4 — resolve command**.
-4. Project the existing result without recomputing or widening resolution policy.
-5. Complete the Stage 3 acceptance gate; leave context packs for Stage 4.
+1. Confirm the Stage 3.4 checkpoint is merged and `main` is clean apart from known unrelated duplicate files.
+2. Read `docs/DEVELOPMENT-HANDOVER.md`, `docs/RESOLVE-CLI-CONTRACT.md`, `ROADMAP.md`, and `BUILD-PLAN.md`.
+3. Create a branch for **BUILD-PLAN task 4.1 — pack contract and budgets**.
+4. Lock provenance, audience, visibility, lifecycle, document-count, byte-budget, and truncation semantics before implementation.
+5. Keep adapters, hosted services, and private content outside Stage 4.

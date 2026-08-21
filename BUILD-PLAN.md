@@ -172,14 +172,42 @@ Stage 2 is complete only when `canonkit validate fixtures/relationships/valid` s
 
 ### 3.4 Resolve command
 
+**Status:** Complete
+
+- [x] Add `canonkit resolve <query> [path]` terminal and JSON output.
+- [x] Preserve public-only defaults, exact scope, and explicit wider-visibility opt-in.
+- [x] Remove visibility- and scope-excluded nodes before query matching.
+- [x] Return failing ambiguity, ineligible-only, not-found, and validation-blocked outcomes.
+- [x] Prove stable repeated results, candidate limits, and body-free output.
+- [x] Complete the Stage 3 acceptance gate.
+
+## Stage 4 tasks — Safe context packs
+
+### 4.1 Pack contract and budgets
+
 **Status:** Next
 
-- Add `canonkit resolve <query>`.
-- Prove stable repeated results and bounded output.
-- Complete the Stage 3 acceptance gate.
+- Define the versioned pack envelope and provenance fields.
+- Define audience, visibility, lifecycle, document-count, and byte budgets.
+- Require explicit opt-in for non-active material.
+- Define fail-closed truncation and validation behaviour before implementation.
 
-Stage 4 and beyond remain at roadmap granularity until resolution proves the trust graph. Do not begin context packs, adapters, or a dashboard during Stage 3.
+### 4.2 Pack projection library
+
+- Build deterministic Markdown and JSON pack projections over validated graph results.
+- Preserve provenance and exclusion explanations for every included document.
+
+### 4.3 Pack command
+
+- Add bounded `canonkit pack` terminal/Markdown/JSON process output.
+- Prove public-only defaults and explicit non-active opt-in.
+
+### 4.4 Stage 4 acceptance
+
+- Complete security, determinism, package, and resumability gates.
+
+Do not begin adapters, a dashboard, hosted services, or private content migration during Stage 4.
 
 ## Exact next task
 
-After the Stage 3.3 checkpoint is merged, start **3.4 resolve command** on a dedicated branch. Project the existing resolution result through bounded terminal and JSON output, preserve generic fail-closed validation behaviour, and complete the Stage 3 acceptance gate. Do not begin context packs, adapters, or private content migration in the same change.
+After the Stage 3.4 checkpoint is merged, start **4.1 pack contract and budgets** on a dedicated branch. Lock the safe context-pack envelope, provenance, audience, visibility, lifecycle, document-count, byte-budget, and fail-closed truncation semantics before implementing pack generation. Do not add adapters, hosted services, or private project content.

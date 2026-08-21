@@ -83,7 +83,7 @@ Acceptance gate:
 
 ## Stage 3 — Resolution and trust graph
 
-**Status:** In progress — deterministic resolution rules complete
+**Status:** Complete
 
 **Outcome:** CanonKit can identify the governing source and explain the decision.
 
@@ -91,7 +91,7 @@ Deliverables:
 
 - [x] `canonkit list`
 - [x] `canonkit graph`
-- `canonkit resolve <query>`
+- [x] `canonkit resolve <query>`
 - [x] Deterministic fail-closed eligibility rules
 - [x] Supersession and explicit-relation graph index
 - [x] Candidate ranking rules
@@ -100,14 +100,14 @@ Deliverables:
 
 Acceptance gate:
 
-- Resolution is deterministic across repeated runs.
-- Ineligible visibility and lifecycle states fail closed.
-- The winning source and rejected alternatives are explainable.
-- Authority cannot be inferred from filenames or modification dates alone.
+- [x] Resolution is deterministic across repeated runs.
+- [x] Ineligible visibility and lifecycle states fail closed.
+- [x] The winning source and rejected alternatives are explainable.
+- [x] Authority cannot be inferred from filenames or modification dates alone.
 
 ## Stage 4 — Safe context packs
 
-**Status:** Not started
+**Status:** Next
 
 **Outcome:** People and tools can consume a bounded, provenance-backed context pack.
 
