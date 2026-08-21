@@ -51,8 +51,8 @@ export interface GraphCommandReport {
   versionIndex: TrustGraphIndex['versionIndex'];
 }
 
-export interface GraphCommandFailureReport {
-  command: 'graph' | 'list';
+export interface CommandFailureReport {
+  command: 'graph' | 'list' | 'resolve';
   commandReportFormatVersion: typeof GRAPH_COMMAND_REPORT_FORMAT_VERSION;
   error: {
     code: 'CKC001_VALIDATION_REQUIRED';
@@ -68,10 +68,10 @@ export function buildListCommandReport(
   graph: TrustGraphIndex,
   options: CommandProjectionOptions,
 ): ListCommandReport {
-  const visiblePaths = visibleScopePaths(graph);
+  const visiblePaths = projectionAllowedNodePaths(graph);
   const eligible = graph.nodes.filter(({ eligibility }) => eligibility.eligible);
   const items = eligible.slice(0, options.limit);
-  const diagnostics = filterWarnings(options.validationWarnings, visiblePaths);
+  const diagnostics = filterProjectionWarnings(options.validationWarnings, visiblePaths);
   return {
     command: 'list',
     commandReportFormatVersion: GRAPH_COMMAND_REPORT_FORMAT_VERSION,
@@ -94,7 +94,7 @@ export function buildGraphCommandReport(
   graph: TrustGraphIndex,
   options: CommandProjectionOptions,
 ): GraphCommandReport {
-  const visiblePaths = visibleScopePaths(graph);
+  const visiblePaths = projectionAllowedNodePaths(graph);
   const visibleNodes = graph.nodes.filter(({ nodeId }) => visiblePaths.has(nodeId));
   const nodes = visibleNodes.slice(0, options.limit);
   const returnedPaths = new Set(nodes.map(({ nodeId }) => nodeId));
@@ -111,7 +111,7 @@ export function buildGraphCommandReport(
   const relations = eligibleRelations.slice(0, remaining);
   const returnedEdges = supersessionEdges.length + relations.length;
   const totalEdges = allSupersessionEdges.length + allRelations.length;
-  const diagnostics = filterWarnings(options.validationWarnings, visiblePaths);
+  const diagnostics = filterProjectionWarnings(options.validationWarnings, visiblePaths);
 
   return {
     command: 'graph',
@@ -139,11 +139,11 @@ export function buildGraphCommandReport(
 }
 
 export function buildCommandFailureReport(
-  command: 'graph' | 'list',
+  command: CommandFailureReport['command'],
   repositoryRoot: string | null,
   errors: number,
   warnings: number,
-): GraphCommandFailureReport {
+): CommandFailureReport {
   return {
     command,
     commandReportFormatVersion: GRAPH_COMMAND_REPORT_FORMAT_VERSION,
@@ -202,17 +202,17 @@ export function renderGraphTerminal(report: GraphCommandReport): string {
   return `${lines.join('\n')}\n`;
 }
 
-export function renderCommandFailureTerminal(report: GraphCommandFailureReport): string {
+export function renderCommandFailureTerminal(report: CommandFailureReport): string {
   return `CanonKit ${report.command} — BLOCKED\n${report.error.message}\nFix: ${report.error.remediation}\n`;
 }
 
 export function renderCommandJson(
-  report: ListCommandReport | GraphCommandReport | GraphCommandFailureReport,
+  report: ListCommandReport | GraphCommandReport | CommandFailureReport,
 ): string {
   return `${JSON.stringify(report, null, 2)}\n`;
 }
 
-function visibleScopePaths(graph: TrustGraphIndex): Set<string> {
+export function projectionAllowedNodePaths(graph: TrustGraphIndex): Set<string> {
   return new Set(
     graph.nodes
       .filter(
@@ -226,7 +226,7 @@ function visibleScopePaths(graph: TrustGraphIndex): Set<string> {
   );
 }
 
-function filterWarnings(
+export function filterProjectionWarnings(
   warnings: readonly CliReportDiagnostic[],
   allowedPaths: ReadonlySet<string>,
 ): CliReportDiagnostic[] {

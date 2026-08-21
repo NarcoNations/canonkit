@@ -5,10 +5,10 @@ This is the durable restart guide for implementation work. It records the comple
 ## Snapshot
 
 - **Snapshot date:** 2026-08-21
-- **Baseline commit:** `e2d040a` — Stage 3.2 list and graph commands merged to `main`
-- **Completed:** Stages 0–2 plus Stage 3.1 graph indexing and Stage 3.2 inspection commands
-- **Completed after baseline:** Build-plan task 3.3 — deterministic resolution rules
-- **Next:** Build-plan task 3.4 — resolve command and Stage 3 acceptance
+- **Baseline commit:** `35cf395` — Stage 3.3 deterministic resolution rules merged to `main`
+- **Completed:** Stages 0–2 plus Stage 3.1–3.3 graph, inspection, and resolution rules
+- **Completed after baseline:** Build-plan task 3.4 — resolve command and Stage 3 acceptance
+- **Next:** Build-plan task 4.1 — pack contract and budgets
 - **Repository:** <https://github.com/NarcoNations/canonkit>
 - **Production concept site:** <https://canonkit.vercel.app>
 - **Latest release:** None; the package remains private until the public-alpha gate
@@ -17,7 +17,7 @@ This is the durable restart guide for implementation work. It records the comple
 
 ## What exists now
 
-The Stage 3.3 validation, graph, command, and resolution flow is implemented and tested:
+The complete Stage 3 validation, graph, command, and resolution flow is implemented and tested:
 
 ```text
 explicit path
@@ -32,6 +32,7 @@ explicit path
     -> deterministic graph index + explainable eligibility
     -> bounded list or graph projection
     -> deterministic candidate resolution + explanation
+    -> bounded terminal or JSON resolve report
 ```
 
 Public package APIs:
@@ -46,7 +47,7 @@ Public package APIs:
 | `buildTrustGraphIndex()` | Index validated documents and apply fail-closed eligibility | [`GRAPH-CONTRACT.md`](./GRAPH-CONTRACT.md) |
 | `resolveTrustGraph()` | Select and explain a governing source without arbitrary tie-breakers | [`RESOLUTION-CONTRACT.md`](./RESOLUTION-CONTRACT.md) |
 
-The package exposes read-only `canonkit validate`, `canonkit list`, and `canonkit graph` commands. Their formats and stable exit behaviour are defined in [`CLI-CONTRACT.md`](./CLI-CONTRACT.md) and [`GRAPH-CLI-CONTRACT.md`](./GRAPH-CLI-CONTRACT.md). Document and supersession rules are defined in [`DOCUMENT-POLICY-CONTRACT.md`](./DOCUMENT-POLICY-CONTRACT.md) and [`RELATIONSHIP-POLICY-CONTRACT.md`](./RELATIONSHIP-POLICY-CONTRACT.md).
+The package exposes read-only `canonkit validate`, `canonkit list`, `canonkit graph`, and `canonkit resolve` commands. Their formats and stable exit behaviour are defined in [`CLI-CONTRACT.md`](./CLI-CONTRACT.md), [`GRAPH-CLI-CONTRACT.md`](./GRAPH-CLI-CONTRACT.md), and [`RESOLVE-CLI-CONTRACT.md`](./RESOLVE-CLI-CONTRACT.md). Document and supersession rules are defined in [`DOCUMENT-POLICY-CONTRACT.md`](./DOCUMENT-POLICY-CONTRACT.md) and [`RELATIONSHIP-POLICY-CONTRACT.md`](./RELATIONSHIP-POLICY-CONTRACT.md).
 
 The public metadata contracts are schema `1.0` and the current schema `1.1` in [`schema/`](../schema/). Version `1.1` separates document identity from explicit governed subjects, aliases, document kinds, and typed lineage. Version `1.0` remains supported without inference.
 
@@ -66,16 +67,16 @@ The public metadata contracts are schema `1.0` and the current schema `1.1` in [
 
 ## Validation baseline
 
-The Stage 3.3 implementation checkpoint passed locally:
+The Stage 3.4 and Stage 3 acceptance checkpoint passed locally:
 
 - lint and strict typechecking
-- 127 tests across twelve test files at the Stage 3.3 implementation checkpoint
+- 141 tests across twelve test files at the Stage 3.4 implementation checkpoint
 - declaration and source-map build
 - Node.js 22 and 24 GitHub CI
 - Vercel deployment check
 - dependency audit with zero reported vulnerabilities
-- package preview with 62 intended distributable files
-- production-only collection scan with development dependencies removed
+- package preview with 66 intended distributable files
+- production-only packaged `canonkit resolve` run with development dependencies absent
 - JSON round-trip, documentation-link, and clean-room vocabulary checks
 
 Run the standard local gate with:
@@ -105,41 +106,40 @@ npm pack --dry-run
 | [#12](https://github.com/NarcoNations/canonkit/pull/12) | Stage 2.4 reports and Stage 2 acceptance |
 | [#13](https://github.com/NarcoNations/canonkit/pull/13) | Stage 3.1 graph index and eligibility |
 | [#14](https://github.com/NarcoNations/canonkit/pull/14) | Stage 3.2 list and graph commands |
+| [#15](https://github.com/NarcoNations/canonkit/pull/15) | Stage 3.3 deterministic resolution rules |
 
-## Completed checkpoint — Stage 3.3
+## Completed checkpoint — Stage 3.4 and Stage 3 acceptance
 
-The dedicated `agent/stage-3-3-resolution-rules` checkpoint adds deterministic authority selection:
+The dedicated `agent/stage-3-4-resolve-command` checkpoint exposes complete process resolution:
 
-- match only explicit subjects, document identities, and normalized exact aliases
-- rank by match strength, document role, and governing authority
-- preserve graph eligibility as the sole lifecycle, authority, visibility, and scope gate
-- return no winner for equal top-ranked candidates
-- explain selected, tied, ineligible, and lower-ranked matches
-- exclude paths, versions, timestamps, bodies, and input order as authority signals
+- require one explicit query and accept one optional repository path
+- validate the complete collection before graph construction and resolution
+- remove visibility- and scope-excluded nodes before matching
+- return bounded terminal and JSON selected/rejected explanations
+- fail ambiguity, lifecycle-ineligible, not-found, and validation-blocked outcomes
+- preserve deterministic repetition, body exclusion, and stable exit codes
 
-The process-level resolve command remains Stage 3.4. Context packs, dashboards, hosted services, and AI inference remain outside this checkpoint.
+Stage 3 is complete. Context packs remain Stage 4; adapters, dashboards, hosted services, and AI inference remain outside this checkpoint.
 
-Stage 3.3 closes only after:
+Stage 3.4 and Stage 3 close only after:
 
-1. Unit tests prove every match, rank, outcome, and rejection path.
-2. Equal top ranks remain ambiguous regardless of path or version text.
-3. A neutral validated repository resolves its governing canon without document bodies.
+1. Packaged-process tests prove unique, ambiguous, ineligible-only, not-found, and validation-blocked outcomes.
+2. Public defaults do not expose internal matches; explicit opt-in does.
+3. Repeated output is stable, bounded, and free of document bodies.
 4. Run the standard quality, audit, and package gates.
-5. Update durable contracts and handover documents to point to Stage 3.4.
+5. Update durable contracts and handover documents to point to Stage 4.1.
 
-## Exact next checkpoint — Stage 3.4
+## Exact next checkpoint — Stage 4.1
 
-Expose `canonkit resolve <query>` through bounded terminal and JSON projections of the existing resolution result. Preserve generic fail-closed repository validation, visibility options, exact scope, output limits, and body exclusion. Complete the Stage 3 acceptance gate without adding context packs, adapters, or private project knowledge.
+Define the versioned safe context-pack envelope and hard budgets before implementing generation. Lock provenance, audience, visibility, lifecycle, document-count, byte-budget, explicit non-active opt-in, and fail-closed truncation semantics. Do not add adapters, hosted services, or private project knowledge.
 
 ## Remaining route to the OSS application
 
-1. Stage 2 — working `canonkit validate` with document/relationship rules and reports.
-2. Stage 3 — deterministic authority resolution and trust graph.
-3. Stage 4 — fail-closed, provenance-backed context packs.
-4. Stage 5 — installable npm public alpha, threat model, CI example, and release evidence.
-5. Stage 6 — external feedback, usage evidence, maintenance cadence, and Vercel OSS application pack.
+1. Stage 4 — fail-closed, provenance-backed context packs.
+2. Stage 5 — installable npm public alpha, threat model, CI example, and release evidence.
+3. Stage 6 — external feedback, usage evidence, maintenance cadence, and Vercel OSS application pack.
 
-Stage 3 is expected to be the most implementation-intensive remaining stage. Stage 6 requires the most elapsed real-world time because credible adoption evidence cannot be manufactured by implementation alone.
+Stage 4 is expected to be the most implementation-intensive remaining stage. Stage 6 requires the most elapsed real-world time because credible adoption evidence cannot be manufactured by implementation alone.
 
 ## Source map
 

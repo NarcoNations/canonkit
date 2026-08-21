@@ -42,6 +42,7 @@ See the [concept site](./public/index.html) for the product explanation, extract
 - [Validate CLI contract](./docs/CLI-CONTRACT.md)
 - [List and graph CLI contract](./docs/GRAPH-CLI-CONTRACT.md)
 - [Deterministic resolution contract](./docs/RESOLUTION-CONTRACT.md)
+- [Resolve CLI contract](./docs/RESOLVE-CLI-CONTRACT.md)
 - [Development handover and exact restart point](./docs/DEVELOPMENT-HANDOVER.md)
 
 ## Clean-room boundary
@@ -136,9 +137,19 @@ const resolution = resolveTrustGraph(graph, 'products/example');
 
 Resolution considers explicit subjects, document identities, and aliases; ranks eligible candidates through declared policy; and returns no winner for an equal top-rank tie. See the [resolution contract](./docs/RESOLUTION-CONTRACT.md).
 
+The complete flow is available through the packaged CLI:
+
+```sh
+canonkit resolve products/example [path]
+canonkit resolve products/example [path] --format json --limit 50
+canonkit resolve products/example [path] --allow-visibility public --allow-visibility internal
+```
+
+Only a unique permitted result exits successfully. Ambiguity, ineligible-only matches, no match, and invalid repositories fail closed. See the [resolve CLI contract](./docs/RESOLVE-CLI-CONTRACT.md).
+
 ## Status
 
-Stages 1 and 2 are complete. Stage 3.3 now provides the graph, bounded inspection commands, and deterministic resolution rules; the process-level `resolve` command is next. See [STATUS.md](./STATUS.md) for the exact current state and next task.
+Stages 1–3 are complete: CanonKit can validate governed documents, inspect the trust graph, and deterministically resolve a governing source with explanations. Stage 4 safe context packs are next. See [STATUS.md](./STATUS.md) for the exact current state and next task.
 
 ## Licence
 

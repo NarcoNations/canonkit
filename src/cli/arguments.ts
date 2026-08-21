@@ -18,6 +18,15 @@ export type CliCommand =
       limit: number;
       path: string;
       scope?: string;
+    }
+  | {
+      allowedVisibilities: DocumentVisibility[];
+      format: CliFormat;
+      kind: 'resolve';
+      limit: number;
+      path: string;
+      query: string;
+      scope?: string;
     };
 
 export class CliUsageError extends Error {
@@ -50,13 +59,15 @@ export function parseCliArguments(args: readonly string[]): CliCommand {
   if (parsed.values['help'] === true) return { kind: 'help' };
   if (parsed.values['version'] === true) return { kind: 'version' };
 
-  const [command, path, ...extraPositionals] = parsed.positionals;
+  const [command, ...positionals] = parsed.positionals;
   if (command === undefined) throw new CliUsageError('A command is required.');
-  if (command !== 'validate' && command !== 'list' && command !== 'graph') {
+  if (
+    command !== 'validate' &&
+    command !== 'list' &&
+    command !== 'graph' &&
+    command !== 'resolve'
+  ) {
     throw new CliUsageError(`Unknown command: ${command}`);
-  }
-  if (extraPositionals.length > 0) {
-    throw new CliUsageError(`The ${command} command accepts at most one path.`);
   }
 
   const format = parsed.values['format'] ?? 'terminal';
@@ -65,13 +76,17 @@ export function parseCliArguments(args: readonly string[]): CliCommand {
   }
 
   if (command === 'validate') {
+    const [path, ...extraPositionals] = positionals;
+    if (extraPositionals.length > 0) {
+      throw new CliUsageError('The validate command accepts at most one path.');
+    }
     if (
       parsed.values['allow-visibility'] !== undefined ||
       parsed.values['limit'] !== undefined ||
       parsed.values['scope'] !== undefined
     ) {
       throw new CliUsageError(
-        'Visibility, scope, and limit options apply only to list and graph.',
+        'Visibility, scope, and limit options apply only to list, graph, and resolve.',
       );
     }
     return {
@@ -85,12 +100,33 @@ export function parseCliArguments(args: readonly string[]): CliCommand {
   if (parsed.values['quiet'] === true) {
     throw new CliUsageError('Quiet mode applies only to validate.');
   }
+  const [first, second, ...extraPositionals] = positionals;
+  if (command === 'resolve') {
+    if (first === undefined) throw new CliUsageError('The resolve command requires a query.');
+    if (extraPositionals.length > 0) {
+      throw new CliUsageError('The resolve command accepts one query and at most one path.');
+    }
+    return {
+      allowedVisibilities: parseVisibilities(parsed.values['allow-visibility']),
+      format,
+      kind: 'resolve',
+      limit: parseLimit(parsed.values['limit']),
+      path: second ?? '.',
+      query: parseQuery(first),
+      ...(parsed.values['scope'] === undefined
+        ? {}
+        : { scope: parseScope(parsed.values['scope']) }),
+    };
+  }
+  if (second !== undefined) {
+    throw new CliUsageError(`The ${command} command accepts at most one path.`);
+  }
   return {
     allowedVisibilities: parseVisibilities(parsed.values['allow-visibility']),
     format,
     kind: command,
     limit: parseLimit(parsed.values['limit']),
-    path: path ?? '.',
+    path: first ?? '.',
     ...(parsed.values['scope'] === undefined
       ? {}
       : { scope: parseScope(parsed.values['scope']) }),
@@ -128,6 +164,15 @@ function parseLimit(value: unknown): number {
 function parseScope(value: unknown): string {
   if (typeof value !== 'string' || !/^[a-z0-9]+(?:[._/-][a-z0-9]+)*$/.test(value)) {
     throw new CliUsageError('Scope must be a stable lower-case identity.');
+  }
+  return value;
+}
+
+function parseQuery(value: string): string {
+  const normalized = value.trim().replace(/\s+/g, ' ');
+  if (normalized.length === 0) throw new CliUsageError('Resolution query must not be empty.');
+  if (normalized.length > 160) {
+    throw new CliUsageError('Resolution query must not exceed 160 characters.');
   }
   return value;
 }

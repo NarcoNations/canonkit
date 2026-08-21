@@ -57,6 +57,11 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 - Explicit subject, document-identity, and normalized-alias match precedence.
 - Document-role and governing-authority ranking without filename, version, timestamp, or body tie-breakers.
 - Fail-closed ambiguity, no-eligible-candidate, and no-match outcomes with candidate-level explanations.
+- Packaged `canonkit resolve <query> [path]` terminal and JSON command.
+- Candidate output limits with complete-result counts and stable repeated process output.
+- Visibility- and scope-safe query projection that does not reveal excluded matches.
+- Neutral packaged-process fixtures for ambiguity and lifecycle-ineligible resolution.
+- Completed Stage 3 resolution and trust-graph acceptance gate.
 
 ## [0.0.0] — 2026-08-18
 

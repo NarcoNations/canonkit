@@ -14,10 +14,16 @@ import {
   renderGraphTerminal,
   renderListTerminal,
 } from './graph-output.js';
+import {
+  buildResolveCommandReport,
+  renderResolveJson,
+  renderResolveTerminal,
+} from './resolve-output.js';
 
 export const CLI_EXIT_CODES = Object.freeze({
   success: 0,
   documentFailure: 1,
+  resolutionFailure: 1,
   usageError: 2,
   unexpectedError: 3,
 });
@@ -28,6 +34,7 @@ Usage:
   canonkit validate [path] [--format terminal|json] [--quiet]
   canonkit list [path] [--format terminal|json] [--allow-visibility <value>] [--scope <scope>] [--limit <n>]
   canonkit graph [path] [--format terminal|json] [--allow-visibility <value>] [--scope <scope>] [--limit <n>]
+  canonkit resolve <query> [path] [--format terminal|json] [--allow-visibility <value>] [--scope <scope>] [--limit <n>]
   canonkit --help
   canonkit --version
 
@@ -35,14 +42,14 @@ Options:
       --allow-visibility  Include a visibility (repeatable; default: public)
   -f, --format <format>  Output format (terminal or json; default: terminal)
   -h, --help             Show this help
-  -l, --limit <n>        Maximum returned nodes (1–1000; default: 100)
+  -l, --limit <n>        Maximum returned nodes or candidates (1–1000; default: 100)
   -q, --quiet            Suppress completely clean validation output
   -s, --scope <scope>    Require an exact lower-case document scope
   -v, --version          Show the package version
 
 Exit codes:
   0  Command completed without errors
-  1  Repository validation blocked the command
+  1  Validation or resolution could not produce a unique result
   2  Command usage error
   3  Unexpected internal error
 `;
@@ -122,11 +129,17 @@ export async function runCli(
     if (command.kind === 'list') {
       const report = buildListCommandReport(graph, options);
       io.stdout(command.format === 'json' ? renderCommandJson(report) : renderListTerminal(report));
-    } else {
+      return CLI_EXIT_CODES.success;
+    }
+    if (command.kind === 'graph') {
       const report = buildGraphCommandReport(graph, options);
       io.stdout(command.format === 'json' ? renderCommandJson(report) : renderGraphTerminal(report));
+      return CLI_EXIT_CODES.success;
     }
-    return CLI_EXIT_CODES.success;
+    if (command.kind !== 'resolve') throw new Error('Unsupported parsed command.');
+    const report = buildResolveCommandReport(graph, command.query, options);
+    io.stdout(command.format === 'json' ? renderResolveJson(report) : renderResolveTerminal(report));
+    return report.ok ? CLI_EXIT_CODES.success : CLI_EXIT_CODES.resolutionFailure;
   } catch (error) {
     if (error instanceof CliUsageError) {
       io.stderr(`CanonKit usage error: ${error.message}\nRun canonkit --help for usage.\n`);
