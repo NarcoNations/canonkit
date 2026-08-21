@@ -1,11 +1,15 @@
-import { cp, mkdir, mkdtemp, rm, writeFile } from 'node:fs/promises';
+import { cp, mkdir, mkdtemp, realpath, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import { afterEach, describe, expect, it } from 'vitest';
 
-import { scanRepository } from '../src/index.js';
+import {
+  DEFAULT_MAX_TOTAL_BYTES,
+  HARD_MAX_TOTAL_BYTES,
+  scanRepository,
+} from '../src/index.js';
 
 const root = fileURLToPath(new URL('..', import.meta.url));
 const temporaryDirectories: string[] = [];
@@ -142,6 +146,49 @@ describe('scanRepository', () => {
     );
   });
 
+  it('fails atomically when repository Markdown exceeds the aggregate byte limit', async () => {
+    const parent = await mkdtemp(join(tmpdir(), 'canonkit-collection-total-'));
+    temporaryDirectories.push(parent);
+    const repository = join(parent, 'repository');
+    await mkdir(join(repository, '.git'), { recursive: true });
+    await mkdir(join(repository, 'docs'));
+    const first = validDocument('guides/first', '# First body\n');
+    await writeFile(join(repository, 'docs/01-first.md'), first, 'utf8');
+    await writeFile(
+      join(repository, 'docs/02-second.md'),
+      validDocument('guides/second', '# Second body\n'),
+      'utf8',
+    );
+
+    const collection = await scanRepository(repository, {
+      maxTotalBytes: Buffer.byteLength(first, 'utf8'),
+    });
+
+    expect(collection).toEqual({
+      collectionFormatVersion: '1.0',
+      diagnostics: [
+        {
+          code: 'CKS003_TOTAL_BYTES_EXCEEDED',
+          location: null,
+          message: `Repository Markdown exceeds the ${Buffer.byteLength(first, 'utf8')}-byte aggregate limit.`,
+          path: '.',
+          phase: 'read',
+          severity: 'error',
+        },
+      ],
+      documents: [],
+      ok: false,
+      repositoryRoot: await realpath(repository),
+      scanRoots: ['.'],
+      summary: {
+        discoveredFiles: 2,
+        errors: 1,
+        invalidDocuments: 2,
+        validDocuments: 0,
+      },
+    });
+  });
+
   it('normalises discovery failures into an empty diagnostic collection', async () => {
     const parent = await mkdtemp(join(tmpdir(), 'canonkit-collection-missing-'));
     temporaryDirectories.push(parent);
@@ -166,4 +213,57 @@ describe('scanRepository', () => {
   it('validates file limits before discovery', async () => {
     await expect(scanRepository('missing', { maxFileBytes: 0 })).rejects.toThrow(RangeError);
   });
+
+  it('validates aggregate limits before discovery', async () => {
+    expect(DEFAULT_MAX_TOTAL_BYTES).toBe(32 * 1024 * 1024);
+    expect(HARD_MAX_TOTAL_BYTES).toBe(256 * 1024 * 1024);
+    await expect(scanRepository('missing', { maxTotalBytes: 0 })).rejects.toThrow(RangeError);
+    await expect(
+      scanRepository('missing', { maxTotalBytes: HARD_MAX_TOTAL_BYTES + 1 }),
+    ).rejects.toThrow(RangeError);
+  });
+
+  it('charges bounded oversized reads against the aggregate budget', async () => {
+    const parent = await mkdtemp(join(tmpdir(), 'canonkit-collection-oversized-total-'));
+    temporaryDirectories.push(parent);
+    const repository = join(parent, 'repository');
+    await mkdir(join(repository, '.git'), { recursive: true });
+    await mkdir(join(repository, 'docs'));
+
+    for (const name of ['01-first.md', '02-second.md', '03-third.md']) {
+      await writeFile(join(repository, 'docs', name), 'x'.repeat(300), 'utf8');
+    }
+
+    const collection = await scanRepository(repository, {
+      maxFileBytes: 100,
+      maxTotalBytes: 202,
+    });
+
+    expect(collection).toMatchObject({
+      diagnostics: [{ code: 'CKS003_TOTAL_BYTES_EXCEEDED' }],
+      documents: [],
+      ok: false,
+      summary: {
+        discoveredFiles: 3,
+        errors: 1,
+        invalidDocuments: 3,
+        validDocuments: 0,
+      },
+    });
+  });
 });
+
+function validDocument(id: string, body: string): string {
+  return `---
+schema_version: "1.1"
+id: ${id}
+kind: reference
+title: Example document
+status: active
+authority: reference
+owner: docs
+version: "1.0"
+visibility: public
+---
+${body}`;
+}

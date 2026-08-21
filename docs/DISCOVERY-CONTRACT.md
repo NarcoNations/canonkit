@@ -3,7 +3,7 @@
 Stage 1.4 exposes `discoverMarkdownFiles(startPath, options)` from the package root. It discovers eligible Markdown paths only; reading and parsing those documents into a collection belongs to Stage 1.5.
 
 ```ts
-import { discoverMarkdownFiles } from 'canonkit';
+import { discoverMarkdownFiles } from '@narconations/canonkit';
 
 const result = await discoverMarkdownFiles('./docs', {
   includePaths: ['docs', 'decisions'],

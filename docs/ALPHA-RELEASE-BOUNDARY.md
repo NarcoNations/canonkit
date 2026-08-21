@@ -92,9 +92,9 @@ Sensitive packs may run only in a trusted, protected job where the repository, w
 | ID | Blocker | Required evidence | Target checkpoint | Status |
 | --- | --- | --- | --- | --- |
 | RB-001 | The proposed npm scope is not yet owned or authenticated | Maintainer-controlled npm scope, recovery method, MFA, verified access, and a current first-package bootstrap decision | 5.3 release rehearsal | Open |
-| RB-002 | Package metadata still uses occupied unscoped name, version `0.0.0`, and `private: true` | Atomic metadata change to scoped name, alpha version, public access, repository links, licence, and clean install | 5.2 installation and CI usage | Open |
-| RB-003 | Scanner has per-file and document limits but no aggregate repository-byte budget | Default and hard aggregate byte contract, implementation, diagnostics, and adversarial tests | 5.2 installation and CI usage | Open |
-| RB-004 | Safe untrusted-PR and downstream-agent rules are not yet in quick-start/CI docs | Neutral example, public-only PR workflow, explicit sensitive-output and prompt-boundary warnings | 5.2 installation and CI usage | Open |
+| RB-002 | Apply the intended scoped identity without accidentally publishing | Scoped alpha metadata, public-access intent, repository links, licence, package preview, and clean local tarball install; `private: true` remains the deliberate no-publish gate | 5.2 installation and CI usage | Closed |
+| RB-003 | Bound aggregate repository input before retaining normalized documents | Default 32 MiB and hard 256 MiB aggregate contract, bounded-read implementation, atomic `CKS003_TOTAL_BYTES_EXCEEDED`, and tests | 5.2 installation and CI usage | Closed |
+| RB-004 | Define safe untrusted-PR and downstream-agent usage | Neutral example, public-only read-only PR workflow, and explicit Git-authority, sensitive-output, and AI-consumer boundaries | 5.2 installation and CI usage | Closed |
 | RB-005 | No protected trusted-publishing workflow or provenance gate exists | Least-privilege OIDC workflow, immutable action references, approval environment, exact-tarball verification | 5.3 release rehearsal | Open |
 | RB-006 | Cross-platform and exact-release-tarball evidence is incomplete | Supported Node/OS matrix, package audit, licence check, production-only install, provenance rehearsal | 5.3 release rehearsal | Open |
 

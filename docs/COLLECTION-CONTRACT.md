@@ -3,12 +3,13 @@
 Stage 1.5 exposes `scanRepository(startPath, options)` from the package root. It composes bounded repository discovery, UTF-8 file reading, frontmatter parsing, schema validation, and normalisation into one deterministic result.
 
 ```ts
-import { scanRepository } from 'canonkit';
+import { scanRepository } from '@narconations/canonkit';
 
 const collection = await scanRepository('./docs', {
   excludePaths: ['docs/archive'],
   maxDocuments: 10_000,
   maxFileBytes: 1_048_576,
+  maxTotalBytes: 33_554_432,
 });
 
 console.log(collection.documents);
@@ -29,6 +30,8 @@ Every result contains:
 - counts for discovered, valid, invalid, and error results
 
 The complete result contains only JSON-safe values. Ordinary repository, file, YAML, and schema failures become diagnostics and do not prevent valid neighbouring documents from appearing. Invalid caller configuration still throws before scanning.
+
+Repository Markdown has a 32 MiB default aggregate byte budget and a fixed 256 MiB hard maximum. Files are read only up to the smaller remaining per-file or aggregate budget, so a single oversized file is not loaded without bound. Aggregate overflow returns `CKS003_TOTAL_BYTES_EXCEEDED` with no documents or partial diagnostics. Library callers may lower the budget or raise it only within the hard maximum.
 
 ## Normalised documents
 
@@ -58,5 +61,6 @@ Discovery and parser codes retain their existing meanings. The collection layer 
 | --- | --- |
 | `CKS001_FILE_READ_ERROR` | A discovered document could not be read |
 | `CKS002_INVALID_UTF8` | A document is not valid UTF-8 |
+| `CKS003_TOTAL_BYTES_EXCEEDED` | Repository Markdown exceeded the aggregate byte budget; the collection is empty |
 
 The collection layer performs no writes, network requests, authority ranking, relationship evaluation, or CLI behaviour.

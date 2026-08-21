@@ -50,7 +50,7 @@ describe('pack CLI output', () => {
 
 function minimalPack(text: string): ContextPack {
   return {
-    generator: { name: 'canonkit', version: '0.0.0' },
+    generator: { name: 'canonkit', version: '0.1.0-alpha.0' },
     items: [
       {
         content: {

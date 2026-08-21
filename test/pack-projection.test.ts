@@ -36,7 +36,7 @@ describe('context-pack projection', () => {
       failure: null,
       ok: true,
       pack: {
-        generator: { name: 'canonkit', version: '0.0.0' },
+        generator: { name: 'canonkit', version: '0.1.0-alpha.0' },
         packFormatVersion: '1.0',
         policy: {
           allowedAuthorities: ['canonical', 'approved'],

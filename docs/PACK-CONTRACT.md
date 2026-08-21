@@ -21,7 +21,7 @@ With no options, the normalized policy permits only:
 `reference`, `derived`, and `unverified` material cannot become pack authority through an option. Non-active material requires an explicit status-by-status opt-in.
 
 ```ts
-import { normalizePackPolicy } from 'canonkit';
+import { normalizePackPolicy } from '@narconations/canonkit';
 
 const policy = normalizePackPolicy({
   audience: 'internal',

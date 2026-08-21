@@ -5,10 +5,10 @@ This is the durable restart guide for implementation work. It records the comple
 ## Snapshot
 
 - **Snapshot date:** 2026-08-21
-- **Baseline commit:** `23b83e0` — Stage 4.4 acceptance merged to `main`
-- **Completed:** Stages 0–4 plus Stage 5.1 threat model and release boundary
-- **Completed after baseline:** Build-plan task 5.1 — threat model and public-alpha release boundary
-- **Next:** Build-plan task 5.2 — installation and CI usage
+- **Baseline commit:** `e06440b` — Stage 5.1 merged to `main`
+- **Completed:** Stages 0–4 plus Stage 5.1 threat model/release boundary and Stage 5.2 installation/CI usage
+- **Completed after baseline:** Build-plan task 5.2 — installation and CI usage
+- **Next:** Build-plan task 5.3 — release rehearsal
 - **Repository:** <https://github.com/NarcoNations/canonkit>
 - **Production concept site:** <https://canonkit.vercel.app>
 - **Latest release:** None; the package remains private until the public-alpha gate
@@ -64,7 +64,7 @@ The public metadata contracts are schema `1.0` and the current schema `1.1` in [
 - Read-only operation; discovery and scanning never edit repository content.
 - Only `.md` and `.markdown` files inside the resolved Git boundary are eligible.
 - Default dependency/generated directories, nested repositories, and traversal symlinks are excluded.
-- File and document-count limits fail closed.
+- Per-file, document-count, and default 32 MiB aggregate repository-byte limits fail closed; callers cannot exceed the 256 MiB hard aggregate ceiling.
 - YAML merge keys, duplicate keys, aliases, malformed metadata, and unsupported schema versions fail validation.
 - Markdown bodies remain untrusted content and cannot promote their own authority.
 - Raw metadata is retained under `reporting.rawMetadata` only; later policy must use explicit normalised fields.
@@ -76,12 +76,13 @@ The public metadata contracts are schema `1.0` and the current schema `1.1` in [
 The Stage 4.4 acceptance checkpoint passed locally while preserving every earlier acceptance baseline:
 
 - lint and strict typechecking
-- 179 tests across fifteen test files
+- 185 tests across sixteen test files
 - declaration and source-map build
 - Node.js 22 and 24 GitHub CI
 - Vercel deployment check
 - dependency audit with zero reported vulnerabilities
 - package preview with 78 intended distributable files
+- clean local installation and execution of `@narconations/canonkit@0.1.0-alpha.0` from that exact 78-file tarball
 - production-only packaged `canonkit resolve` run with development dependencies absent
 - production-only packaged pack-projection API import with development dependencies absent
 - production-only packaged `canonkit pack` Markdown and JSON runs with development dependencies absent
@@ -121,6 +122,7 @@ npm pack --dry-run
 | [#18](https://github.com/NarcoNations/canonkit/pull/18) | Stage 4.2 pack projection library |
 | [#19](https://github.com/NarcoNations/canonkit/pull/19) | Stage 4.3 pack command |
 | [#20](https://github.com/NarcoNations/canonkit/pull/20) | Stage 4.4 acceptance and Stage 4 completion |
+| [#21](https://github.com/NarcoNations/canonkit/pull/21) | Stage 5.1 threat model and public-alpha release boundary |
 
 ## Completed checkpoint — Stage 3.4 and Stage 3 acceptance
 
@@ -161,11 +163,15 @@ The complete security, disclosure, identity, provenance, determinism, untrusted-
 
 ## Completed checkpoint — Stage 5.1
 
-[`../canonkit-threat-model.md`](../canonkit-threat-model.md) maps assets, actors, trust boundaries, entry points, eight abuse paths, eight prioritised threats, existing controls, gaps, mitigations, detection ideas, residual risks, and security-review focus paths. [`ALPHA-RELEASE-BOUNDARY.md`](./ALPHA-RELEASE-BOUNDARY.md) locks the proposed scoped identity, intended alpha version, artifact allowlist, protected publishing authority, CI disclosure rules, and six blockers without publishing or changing the current private package.
+[`../canonkit-threat-model.md`](../canonkit-threat-model.md) maps assets, actors, trust boundaries, entry points, eight abuse paths, eight prioritised threats, existing controls, gaps, mitigations, detection ideas, residual risks, and security-review focus paths. [`ALPHA-RELEASE-BOUNDARY.md`](./ALPHA-RELEASE-BOUNDARY.md) locks the scoped identity, intended alpha version, artifact allowlist, protected publishing authority, CI disclosure rules, and remaining blockers without publishing the current private package.
 
-## Exact next checkpoint — Stage 5.2
+## Completed checkpoint — Stage 5.2
 
-Close RB-002, RB-003, and RB-004: change package metadata atomically while keeping `private: true`, add an aggregate repository-byte budget with diagnostics and adversarial tests, and document safe installation, Git-as-authority, sensitive-output, AI-consumer, and public-only pull-request CI usage. Do not authenticate npm, publish, or tag.
+RB-002, RB-003, and RB-004 are closed. The package now has its scoped alpha identity while retaining `private: true`; repository reads have an atomic aggregate byte ceiling; and the neutral example, local tarball route, public-only pull-request workflow, Git-authority model, sensitive-output rules, and AI-consumer boundary are documented and tested.
+
+## Exact next checkpoint — Stage 5.3
+
+Close RB-001, RB-005, and RB-006: verify npm scope ownership, recovery, and MFA; implement the protected least-privilege trusted-publishing and provenance workflow; and verify the exact release tarball across the supported Node and operating-system matrix. Publication and tagging remain separate actions requiring explicit maintainer approval.
 
 ## Remaining route to the OSS application
 

@@ -3,7 +3,7 @@
 Stage 1.3 exposes `parseMarkdownFrontmatter(markdown, options)` from the package root. It parses one in-memory Markdown string; filesystem discovery belongs to Stage 1.4.
 
 ```ts
-import { parseMarkdownFrontmatter } from 'canonkit';
+import { parseMarkdownFrontmatter } from '@narconations/canonkit';
 
 const result = parseMarkdownFrontmatter(markdown, {
   path: 'docs/architecture.md',

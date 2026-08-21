@@ -1,4 +1,4 @@
-import { readFile } from 'node:fs/promises';
+import { open } from 'node:fs/promises';
 
 import {
   discoverMarkdownFiles,
@@ -21,9 +21,12 @@ import {
 } from '../metadata/frontmatter.js';
 
 export const COLLECTION_FORMAT_VERSION = '1.0' as const;
+export const DEFAULT_MAX_TOTAL_BYTES = 32 * 1024 * 1024;
+export const HARD_MAX_TOTAL_BYTES = 256 * 1024 * 1024;
 
 export interface ScanRepositoryOptions extends DiscoveryOptions {
   maxFileBytes?: number;
+  maxTotalBytes?: number;
 }
 
 export interface NormalizedDocument {
@@ -57,7 +60,8 @@ export type CollectionDiagnosticCode =
   | DiscoveryDiagnosticCode
   | ParserDiagnosticCode
   | 'CKS001_FILE_READ_ERROR'
-  | 'CKS002_INVALID_UTF8';
+  | 'CKS002_INVALID_UTF8'
+  | 'CKS003_TOTAL_BYTES_EXCEEDED';
 
 export interface CollectionDiagnostic {
   code: CollectionDiagnosticCode;
@@ -87,8 +91,13 @@ export async function scanRepository(
   startPath: string,
   options: ScanRepositoryOptions = {},
 ): Promise<DocumentCollection> {
-  const { maxFileBytes = DEFAULT_MAX_FILE_BYTES, ...discoveryOptions } = options;
+  const {
+    maxFileBytes = DEFAULT_MAX_FILE_BYTES,
+    maxTotalBytes = DEFAULT_MAX_TOTAL_BYTES,
+    ...discoveryOptions
+  } = options;
   validateMaxFileBytes(maxFileBytes);
+  validateMaxTotalBytes(maxTotalBytes);
 
   const discovery = await discoverMarkdownFiles(startPath, discoveryOptions);
   if (!discovery.ok) {
@@ -98,11 +107,14 @@ export async function scanRepository(
 
   const diagnostics: CollectionDiagnostic[] = [];
   const documents: NormalizedDocument[] = [];
+  let totalBytes = 0;
 
   for (const file of discovery.files) {
-    let bytes: Buffer;
+    const remainingTotalBytes = maxTotalBytes - totalBytes;
+    const readLimit = Math.min(maxFileBytes, remainingTotalBytes);
+    let readResult: BoundedReadResult;
     try {
-      bytes = await readFile(file.absolutePath);
+      readResult = await readBoundedFile(file.absolutePath, readLimit);
     } catch (error) {
       diagnostics.push({
         code: 'CKS001_FILE_READ_ERROR',
@@ -115,7 +127,27 @@ export async function scanRepository(
       continue;
     }
 
-    if (bytes.byteLength > maxFileBytes) {
+    if (readResult.exceeded && remainingTotalBytes <= maxFileBytes) {
+      return createCollection({
+        diagnostics: [
+          {
+            code: 'CKS003_TOTAL_BYTES_EXCEEDED',
+            location: null,
+            message: `Repository Markdown exceeds the ${maxTotalBytes}-byte aggregate limit.`,
+            path: '.',
+            phase: 'read',
+            severity: 'error',
+          },
+        ],
+        discoveredFiles: discovery.files.length,
+        documents: [],
+        repositoryRoot: discovery.repositoryRoot,
+        scanRoots: discovery.scanRoots,
+      });
+    }
+
+    if (readResult.exceeded) {
+      totalBytes += readResult.bytesRead;
       diagnostics.push({
         code: 'CKP001_FILE_TOO_LARGE',
         location: { line: 1, column: 1 },
@@ -126,6 +158,8 @@ export async function scanRepository(
       });
       continue;
     }
+    const bytes = readResult.bytes;
+    totalBytes += bytes.byteLength;
 
     let markdown: string;
     try {
@@ -251,6 +285,45 @@ function validateMaxFileBytes(maxFileBytes: number): void {
   if (!Number.isSafeInteger(maxFileBytes) || maxFileBytes <= 0) {
     throw new RangeError('maxFileBytes must be a positive safe integer');
   }
+}
+
+function validateMaxTotalBytes(maxTotalBytes: number): void {
+  if (
+    !Number.isSafeInteger(maxTotalBytes) ||
+    maxTotalBytes <= 0 ||
+    maxTotalBytes > HARD_MAX_TOTAL_BYTES
+  ) {
+    throw new RangeError(
+      `maxTotalBytes must be a positive safe integer no greater than ${HARD_MAX_TOTAL_BYTES}`,
+    );
+  }
+}
+
+type BoundedReadResult =
+  | { bytes: Buffer; bytesRead: number; exceeded: false }
+  | { bytes: null; bytesRead: number; exceeded: true };
+
+async function readBoundedFile(path: string, maxBytes: number): Promise<BoundedReadResult> {
+  const handle = await open(path, 'r');
+  const chunks: Buffer[] = [];
+  let totalBytes = 0;
+  const targetBytes = maxBytes + 1;
+
+  try {
+    while (totalBytes < targetBytes) {
+      const buffer = Buffer.allocUnsafe(Math.min(64 * 1024, targetBytes - totalBytes));
+      const { bytesRead } = await handle.read(buffer, 0, buffer.byteLength, null);
+      if (bytesRead === 0) break;
+      chunks.push(buffer.subarray(0, bytesRead));
+      totalBytes += bytesRead;
+    }
+  } finally {
+    await handle.close();
+  }
+
+  return totalBytes > maxBytes
+    ? { bytes: null, bytesRead: totalBytes, exceeded: true }
+    : { bytes: Buffer.concat(chunks, totalBytes), bytesRead: totalBytes, exceeded: false };
 }
 
 function compareDiagnostics(left: CollectionDiagnostic, right: CollectionDiagnostic): number {
