@@ -43,6 +43,9 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 - Deterministic supersession graph validation for missing targets, self-reference, cycles, lifecycle consistency, and multiple active versions.
 - Stable relationship-policy diagnostics and neutral valid/broken repository fixtures.
 - Explicit boundary keeping typed subject relations separate from document supersession.
+- Versioned CLI JSON report `2.0` with one aggregate summary and normalized diagnostics.
+- Concise terminal reporting projected from the same validation result.
+- Quiet CI mode that suppresses completely clean runs while retaining warnings and failures.
 
 ## [0.0.0] — 2026-08-18
 

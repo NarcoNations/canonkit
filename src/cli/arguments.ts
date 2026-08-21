@@ -6,7 +6,7 @@ export type CliFormat = (typeof CLI_FORMATS)[number];
 export type CliCommand =
   | { kind: 'help' }
   | { kind: 'version' }
-  | { format: CliFormat; kind: 'validate'; path: string };
+  | { format: CliFormat; kind: 'validate'; path: string; quiet: boolean };
 
 export class CliUsageError extends Error {
   override readonly name = 'CliUsageError';
@@ -15,6 +15,7 @@ export class CliUsageError extends Error {
 const cliOptions = {
   format: { short: 'f', type: 'string' },
   help: { short: 'h', type: 'boolean' },
+  quiet: { short: 'q', type: 'boolean' },
   version: { short: 'v', type: 'boolean' },
 } as const;
 
@@ -50,7 +51,12 @@ export function parseCliArguments(args: readonly string[]): CliCommand {
     throw new CliUsageError(`Unsupported format: ${format}. Use terminal or json.`);
   }
 
-  return { format, kind: 'validate', path: path ?? '.' };
+  return {
+    format,
+    kind: 'validate',
+    path: path ?? '.',
+    quiet: parsed.values['quiet'] === true,
+  };
 }
 
 function isCliFormat(value: string): value is CliFormat {

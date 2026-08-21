@@ -158,6 +158,19 @@ Why:
 - lifecycle consistency preserves an auditable replacement chain
 - subject evolution remains independent of file replacement
 
+### ADR-010 — One normalized validation report
+
+Stage 2.4 combines collection, document-policy, and relationship-policy results into a versioned CLI report `2.0` envelope. Every diagnostic carries a phase, stable code, severity, path, optional location, related paths, message, and remediation.
+
+Terminal output is a concise projection of that same report. JSON is the full machine contract. Quiet mode suppresses output only when there are no errors or warnings; diagnostic-bearing success and all failures remain visible.
+
+Why:
+
+- one aggregate summary prevents consumers from miscounting separate layers
+- one diagnostic shape keeps CI and integrations simple
+- versioned output makes future breaking changes explicit
+- warning-preserving quiet mode avoids hiding maintenance signals
+
 ## Core modules
 
 ### Discovery

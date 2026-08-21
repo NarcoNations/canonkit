@@ -97,13 +97,14 @@ The Stage 2 CLI validates that collection through a read-only command:
 ```sh
 canonkit validate [path]
 canonkit validate [path] --format json
+canonkit validate [path] --quiet
 ```
 
-The command reports schema, parsing, discovery, read, document-policy, and supersession-relationship failures. See the [document policy](./docs/DOCUMENT-POLICY-CONTRACT.md), [relationship policy](./docs/RELATIONSHIP-POLICY-CONTRACT.md), and [CLI](./docs/CLI-CONTRACT.md) contracts for rules, formats, and exit codes.
+The command reports schema, parsing, discovery, read, document-policy, and supersession-relationship failures through one normalized report. Quiet mode suppresses only completely clean runs. See the [document policy](./docs/DOCUMENT-POLICY-CONTRACT.md), [relationship policy](./docs/RELATIONSHIP-POLICY-CONTRACT.md), and [CLI](./docs/CLI-CONTRACT.md) contracts for rules, formats, and exit codes.
 
 ## Status
 
-Stage 1 and Stage 2.3 are complete. The versioned schema, bounded scanner, document policy, and supersession graph validation are implemented; the final Stage 2 reporting checkpoint is next. See [STATUS.md](./STATUS.md) for the exact current state and next task.
+Stages 1 and 2 are complete. The versioned schema, bounded scanner, document and relationship policy, stable reports, and quiet CI mode are implemented; the Stage 3 graph index and eligibility model are next. See [STATUS.md](./STATUS.md) for the exact current state and next task.
 
 ## Licence
 

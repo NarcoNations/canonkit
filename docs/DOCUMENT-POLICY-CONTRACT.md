@@ -2,7 +2,7 @@
 
 Stage 2.2 exposes `validateDocumentPolicies(documents, options)` and runs it automatically after a successful repository scan in `canonkit validate`.
 
-The policy layer is deterministic, read-only, body-blind, and network-disabled. It consumes only explicit normalised metadata. It does not infer subjects for 1.0 documents or evaluate relationship targets and cycles; relationship graph policy belongs to Stage 2.3.
+The policy layer is deterministic, read-only, body-blind, and network-disabled. It consumes only explicit normalised metadata. It does not infer subjects for 1.0 documents or evaluate relationship targets and cycles; the separate relationship policy owns those rules.
 
 ## Rules
 

@@ -3,7 +3,7 @@ import { validateDocumentPolicies } from '../policy/documents.js';
 import { validateRelationshipPolicies } from '../policy/relationships.js';
 import { CANONKIT_VERSION } from '../version.js';
 import { CliUsageError, parseCliArguments } from './arguments.js';
-import { renderJsonReport, renderTerminalReport } from './output.js';
+import { buildValidationReport, renderJsonReport, renderTerminalReport } from './output.js';
 
 export const CLI_EXIT_CODES = Object.freeze({
   success: 0,
@@ -15,13 +15,14 @@ export const CLI_EXIT_CODES = Object.freeze({
 export const CLI_HELP = `CanonKit — deterministic governance for repository Markdown
 
 Usage:
-  canonkit validate [path] [--format terminal|json]
+  canonkit validate [path] [--format terminal|json] [--quiet]
   canonkit --help
   canonkit --version
 
 Options:
   -f, --format <format>  Output format (terminal or json; default: terminal)
   -h, --help             Show this help
+  -q, --quiet            Suppress completely clean validation output
   -v, --version          Show the package version
 
 Exit codes:
@@ -61,12 +62,11 @@ export async function runCli(
     const collection = await dependencies.scanRepository(command.path);
     const documentPolicy = validateDocumentPolicies(collection.documents);
     const relationshipPolicy = validateRelationshipPolicies(collection.documents);
-    io.stdout(
-      command.format === 'json'
-        ? renderJsonReport(collection, documentPolicy, relationshipPolicy)
-        : renderTerminalReport(collection, documentPolicy, relationshipPolicy),
-    );
-    return collection.ok && documentPolicy.ok && relationshipPolicy.ok
+    const report = buildValidationReport(collection, documentPolicy, relationshipPolicy);
+    if (!command.quiet || report.diagnostics.length > 0) {
+      io.stdout(command.format === 'json' ? renderJsonReport(report) : renderTerminalReport(report));
+    }
+    return report.ok
       ? CLI_EXIT_CODES.success
       : CLI_EXIT_CODES.documentFailure;
   } catch (error) {

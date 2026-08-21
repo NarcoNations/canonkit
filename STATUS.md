@@ -1,8 +1,8 @@
 # CanonKit status
 
 - **Updated:** 2026-08-21
-- **Current stage:** Stage 2 in progress — Validate command
-- **Stage state:** Stage 2.3 relationship rules complete; Stage 2.4 is next
+- **Current stage:** Stage 2 complete — Validate command
+- **Stage state:** Stage 2 acceptance gate complete; Stage 3.1 is next
 - **Latest completed release:** None
 - **Production site:** <https://canonkit.vercel.app>
 - **Repository:** <https://github.com/NarcoNations/canonkit>
@@ -46,14 +46,17 @@
 - Supersession references resolve within the scanned collection by document identity or exact identity and version.
 - Deterministic relationship policy detects missing targets, self-supersession, cycles, invalid lifecycle combinations, and multiple active versions.
 - Typed subject relations remain distinct from document replacement and cannot silently change lifecycle state.
+- CLI report `2.0` combines all validation layers into one aggregate summary and normalized diagnostic contract.
+- Concise terminal and JSON formats project the same result without recomputing policy.
+- Quiet CI mode suppresses only completely clean output and preserves warnings and failures.
+- Stage 2 implementation and acceptance gate completed.
 
 ## Next checkpoint
 
-- Stage 2.4 — finalise concise terminal output, stable JSON compatibility, and quiet CI mode.
+- Stage 3.1 — build the deterministic graph index and fail-closed eligibility model.
 
 ## Not started
 
-- Final Stage 2 report contract and quiet CI mode
 - Resolution and trust graph
 - Context-pack export
 - npm publication
@@ -71,15 +74,15 @@
 
 ## Current risks
 
-- Terminal and JSON reports have evolved incrementally and need the explicit Stage 2.4 compatibility checkpoint.
+- Resolution eligibility and ranking rules have not yet been proven against the validated model.
 - Schema `1.0` documents remain valid but cannot participate in subject-based canon checks until explicitly migrated to `1.1`.
 - There is no external usage evidence yet.
 - The Vercel OSS application is not ready until the project demonstrates active development and a functioning tool.
 
 ## Resume here
 
-1. Confirm the Stage 2.3 checkpoint is merged and `main` is clean apart from known unrelated duplicate files.
-2. Read `docs/DEVELOPMENT-HANDOVER.md`, `docs/CLI-CONTRACT.md`, `docs/RELATIONSHIP-POLICY-CONTRACT.md`, `ROADMAP.md`, and `BUILD-PLAN.md`.
-3. Create a branch for **BUILD-PLAN task 2.4 — reports**.
-4. Lock the combined collection, document-policy, and relationship-policy report envelope and add quiet CI mode.
-5. Implement report behaviour only; leave resolution and context packs for later stages.
+1. Confirm the Stage 2.4 checkpoint is merged and `main` is clean apart from known unrelated duplicate files.
+2. Read `docs/DEVELOPMENT-HANDOVER.md`, `ARCHITECTURE.md`, `docs/CLI-CONTRACT.md`, `ROADMAP.md`, and `BUILD-PLAN.md`.
+3. Create a branch for **BUILD-PLAN task 3.1 — graph index and eligibility**.
+4. Build only on normalized documents and validated explicit relationships; do not reparse bodies or infer authority.
+5. Implement the in-memory graph and explainable eligibility only; leave commands and ranking for later Stage 3 checkpoints.

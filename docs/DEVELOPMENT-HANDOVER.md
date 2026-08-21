@@ -5,10 +5,10 @@ This is the durable restart guide for implementation work. It records the comple
 ## Snapshot
 
 - **Snapshot date:** 2026-08-21
-- **Baseline commit:** `67843d0` — Stage 2.2 document model and policy merged to `main`
+- **Baseline commit:** `e14abb2` — Stage 2.3 relationship rules merged to `main`
 - **Completed:** Stage 0 public foundation and Stage 1 schema/repository scanner
-- **Completed after baseline:** Build-plan task 2.3 — relationship rules
-- **Next:** Build-plan task 2.4 — reports
+- **Completed after baseline:** Build-plan task 2.4 — reports and Stage 2 acceptance
+- **Next:** Build-plan task 3.1 — graph index and eligibility
 - **Repository:** <https://github.com/NarcoNations/canonkit>
 - **Production concept site:** <https://canonkit.vercel.app>
 - **Latest release:** None; the package remains private until the public-alpha gate
@@ -17,7 +17,7 @@ This is the durable restart guide for implementation work. It records the comple
 
 ## What exists now
 
-The Stage 1 flow is implemented and tested:
+The Stage 2 validation flow is implemented and tested:
 
 ```text
 explicit path
@@ -26,7 +26,9 @@ explicit path
     -> bounded UTF-8 reads
     -> strict YAML frontmatter parsing
     -> public JSON Schema validation
-    -> normalised documents + unified diagnostics
+    -> normalised documents
+    -> document policy + supersession policy
+    -> one versioned validation report
 ```
 
 Public package APIs:
@@ -36,6 +38,8 @@ Public package APIs:
 | `parseMarkdownFrontmatter()` | Parse and validate one bounded Markdown string | [`PARSER-CONTRACT.md`](./PARSER-CONTRACT.md) |
 | `discoverMarkdownFiles()` | Find eligible Markdown inside one Git boundary | [`DISCOVERY-CONTRACT.md`](./DISCOVERY-CONTRACT.md) |
 | `scanRepository()` | Compose discovery, reading, parsing, and normalisation | [`COLLECTION-CONTRACT.md`](./COLLECTION-CONTRACT.md) |
+| `validateDocumentPolicies()` | Validate document identity, ownership, review, authority, and visibility | [`DOCUMENT-POLICY-CONTRACT.md`](./DOCUMENT-POLICY-CONTRACT.md) |
+| `validateRelationshipPolicies()` | Validate the explicit document supersession graph | [`RELATIONSHIP-POLICY-CONTRACT.md`](./RELATIONSHIP-POLICY-CONTRACT.md) |
 
 The package also exposes the read-only `canonkit validate [path]` executable. Its formats and stable exit behaviour are defined in [`CLI-CONTRACT.md`](./CLI-CONTRACT.md). Document and supersession rules are defined in [`DOCUMENT-POLICY-CONTRACT.md`](./DOCUMENT-POLICY-CONTRACT.md) and [`RELATIONSHIP-POLICY-CONTRACT.md`](./RELATIONSHIP-POLICY-CONTRACT.md).
 
@@ -57,10 +61,10 @@ The public metadata contracts are schema `1.0` and the current schema `1.1` in [
 
 ## Validation baseline
 
-The Stage 2.3 implementation checkpoint passed locally:
+The Stage 2.4 implementation checkpoint passed locally:
 
 - lint and strict typechecking
-- 95 tests across nine test files at the Stage 2.3 implementation checkpoint
+- 98 tests across nine test files at the Stage 2.4 implementation checkpoint
 - declaration and source-map build
 - Node.js 22 and 24 GitHub CI
 - Vercel deployment check
@@ -92,31 +96,32 @@ npm pack --dry-run
 | [#8](https://github.com/NarcoNations/canonkit/pull/8) | Stage 1 documentation and restart checkpoint |
 | [#9](https://github.com/NarcoNations/canonkit/pull/9) | Stage 2.1 CLI shell |
 | [#10](https://github.com/NarcoNations/canonkit/pull/10) | Stage 2.2 document model and policy rules |
+| [#11](https://github.com/NarcoNations/canonkit/pull/11) | Stage 2.3 relationship rules |
 
-## Completed checkpoint — Stage 2.3
+## Completed checkpoint — Stage 2.4
 
-The dedicated `agent/stage-2-3-relationship-rules` checkpoint adds the supersession graph rules described in `BUILD-PLAN.md`:
+The dedicated `agent/stage-2-4-reports` checkpoint completes Stage 2 reporting and acceptance:
 
-- resolve exact and identity-only supersession targets inside the scanned collection
-- reject missing targets and exact or ambiguous self-supersession
-- detect supersession cycles deterministically
-- enforce active/superseded lifecycle consistency and one active version per identity
-- keep typed subject relations separate from document supersession
-- add stable relationship diagnostics to terminal and JSON output
+- combine collection, document-policy, and relationship-policy results once
+- lock the versioned JSON `2.0` envelope with aggregate counts and contract versions
+- normalize every diagnostic with phase, location, related paths, and remediation
+- project concise terminal output from the same report
+- add quiet CI mode that preserves warnings and failures
+- prove valid and broken repositories through the installed CLI process
 
-Final report compatibility and quiet CI mode remain Stage 2.4. Resolution, context packs, dashboards, hosted services, and AI inference remain outside this checkpoint.
+Stage 2 is complete. Resolution, context packs, dashboards, hosted services, and AI inference remain outside this checkpoint.
 
-Stage 2.3 closes only after:
+Stage 2.4 closes only after:
 
-1. Unit tests prove every relationship rule, deterministic order, and typed-relation non-inference boundary.
-2. One valid chain and each intentionally broken repository fixture behave predictably through the real CLI.
-3. CLI process tests prove relationship errors produce exit code `1` and bounded JSON diagnostics.
+1. Compatibility tests lock exact top-level JSON fields, aggregate summaries, and normalized diagnostics.
+2. Terminal output remains concise and derives from the same report.
+3. Quiet mode is silent for clean runs while warning and failure output remains visible.
 4. Run the standard quality, audit, and package gates.
-5. Update durable contracts and handover documents to point to Stage 2.4.
+5. Update durable contracts and handover documents to point to Stage 3.1.
 
-## Exact next checkpoint — Stage 2.4
+## Exact next checkpoint — Stage 3.1
 
-Lock the combined collection, document-policy, and relationship-policy report envelope. Keep terminal output concise while retaining actionable remediation, then add quiet CI mode and compatibility tests. Do not add new policy, resolution, context packs, adapters, or private project knowledge.
+Build a deterministic in-memory graph index over normalized, already validated documents. Index document identities, versions, subjects, and explicit relationships, then define fail-closed lifecycle, authority, visibility, and scope eligibility with explainable exclusions. Do not add CLI commands, candidate ranking, context packs, adapters, or private project knowledge.
 
 ## Remaining route to the OSS application
 
