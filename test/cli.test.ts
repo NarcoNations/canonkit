@@ -229,7 +229,7 @@ describe('runCli', () => {
     expect(await runCli(['--help'], help.io)).toBe(CLI_EXIT_CODES.success);
     expect(help.output.stdout).toContain('canonkit validate [path]');
     expect(await runCli(['--version'], version.io)).toBe(CLI_EXIT_CODES.success);
-    expect(version.output.stdout).toBe('0.0.0\n');
+    expect(version.output.stdout).toBe('0.1.0-alpha.0\n');
   });
 
   it('returns stable success and document-failure exits', async () => {
@@ -520,7 +520,7 @@ function successfulPack(): Extract<PackBuildResult, { ok: true }> {
     failure: null,
     ok: true,
     pack: {
-      generator: { name: 'canonkit', version: '0.0.0' },
+      generator: { name: 'canonkit', version: '0.1.0-alpha.0' },
       items: [],
       packFormatVersion: '1.0',
       policy: {

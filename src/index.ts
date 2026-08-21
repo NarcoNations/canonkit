@@ -1,5 +1,5 @@
 /** The package identifier exposed by the Stage 1.1 foundation build. */
-export const CANONKIT_PACKAGE_NAME = 'canonkit' as const;
+export const CANONKIT_PACKAGE_NAME = '@narconations/canonkit' as const;
 
 export { CANONKIT_VERSION } from './version.js';
 
@@ -38,6 +38,8 @@ export {
 
 export {
   COLLECTION_FORMAT_VERSION,
+  DEFAULT_MAX_TOTAL_BYTES,
+  HARD_MAX_TOTAL_BYTES,
   scanRepository,
   type CollectionDiagnostic,
   type CollectionDiagnosticCode,

@@ -46,7 +46,7 @@ describe('packaged CLI process boundary', () => {
     expect(help.stdout).toContain('canonkit resolve <query> [path]');
     expect(help.stdout).toContain('canonkit pack [path]');
     expect(version.status).toBe(0);
-    expect(version.stdout).toBe('0.0.0\n');
+    expect(version.stdout).toBe('0.1.0-alpha.0\n');
   });
 
   it('emits a public-only Markdown context pack by default', () => {

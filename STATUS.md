@@ -2,7 +2,7 @@
 
 - **Updated:** 2026-08-21
 - **Current stage:** Stage 5 in progress — Public alpha
-- **Stage state:** Stage 5.1 threat model and release boundary complete; Stage 5.2 is next
+- **Stage state:** Stage 5.2 installation and CI usage complete; Stage 5.3 is next
 - **Latest completed release:** None
 - **Production site:** <https://canonkit.vercel.app>
 - **Repository:** <https://github.com/NarcoNations/canonkit>
@@ -89,18 +89,25 @@
 - Security, determinism, provenance, untrusted-body, package, documentation, clean-room, Node-support, and resumability gates are consolidated in `docs/STAGE-4-ACCEPTANCE.md`.
 - Stage 4 implementation and acceptance gate completed.
 - Repository-grounded threat model completed across runtime, filesystem, governance, disclosure, consumer, CI, package, registry, and static-site boundaries.
-- Public-alpha release boundary locks the proposed `@narconations/canonkit@0.1.0-alpha.0` identity without publishing or changing the current private package.
+- Public-alpha release boundary locks `@narconations/canonkit@0.1.0-alpha.0`; Stage 5.2 applied that metadata without publishing the package.
 - Six explicit release blockers preserve package ownership, aggregate input safety, safe CI usage, protected publishing, and cross-platform evidence.
 - Stage 5.1 implementation and acceptance gate completed.
+- Scoped package identity and alpha version applied atomically while `private: true` continues to block publication.
+- Scanner enforces a default 32 MiB and hard 256 MiB aggregate Markdown budget through bounded reads and atomic diagnostics.
+- Neutral end-to-end source, tarball-install, validation, and resolution flows are documented and verified.
+- Public-only GitHub Actions example uses read-only permissions, no persisted checkout credentials, exact package version, disabled install scripts, and no secrets.
+- Git-as-authority, sensitive-output, and untrusted AI-consumer boundaries are documented in the quick start.
+- Release blockers RB-002, RB-003, and RB-004 are closed; Stage 5.2 implementation and acceptance gate completed.
 
 ## Next checkpoint
 
-- Stage 5.2 — close release blockers RB-002, RB-003, and RB-004; then add installation guidance and a public-only CI example.
+- Stage 5.3 — release rehearsal: close RB-001, RB-005, and RB-006 without publishing or tagging.
 
 ## Not started
 
-- Aggregate repository-byte limit and safe CI usage contract
-- Alpha package metadata and installation documentation
+- npm scope ownership and recovery verification
+- Protected trusted-publishing and provenance workflow
+- Cross-platform exact-release-tarball rehearsal
 - npm publication
 - OSS application
 
@@ -116,9 +123,8 @@
 
 ## Current risks
 
-- Six alpha release blockers remain open; publication is explicitly prohibited until all close.
-- The unscoped `canonkit` npm name belongs to an unrelated project; all future installation guidance must use the proposed scoped identity.
-- The scanner needs an aggregate repository-byte budget before public alpha.
+- Three alpha release blockers remain open; publication is explicitly prohibited until all close.
+- The unscoped `canonkit` npm name belongs to an unrelated project; all installation guidance must use the scoped identity.
 - Npm scope ownership, protected trusted publishing, and cross-platform release rehearsal have not started.
 - Schema `1.0` documents remain valid but cannot participate in subject-based canon checks until explicitly migrated to `1.1`.
 - There is no external usage evidence yet.
@@ -126,8 +132,8 @@
 
 ## Resume here
 
-1. Confirm the Stage 5.1 checkpoint is merged and `main` is clean apart from known unrelated duplicate files.
+1. Confirm the Stage 5.2 checkpoint is merged and `main` is clean apart from known unrelated duplicate files.
 2. Read `canonkit-threat-model.md`, `docs/ALPHA-RELEASE-BOUNDARY.md`, `docs/DEVELOPMENT-HANDOVER.md`, `STATUS.md`, and `BUILD-PLAN.md`.
-3. Create a branch for **BUILD-PLAN task 5.2 — installation and CI usage**.
-4. Close RB-002, RB-003, and RB-004 before treating installation or CI guidance as alpha-ready.
-5. Keep `private: true`; do not authenticate npm, publish, tag, add hosted services, or introduce private content during 5.2.
+3. Create a branch for **BUILD-PLAN task 5.3 — release rehearsal**.
+4. Close RB-001, RB-005, and RB-006 with scope-authority, protected-workflow, provenance, exact-tarball, Node, and operating-system evidence.
+5. Keep `private: true`; do not publish or tag without a separate explicit maintainer approval.

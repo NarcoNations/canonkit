@@ -1,0 +1,44 @@
+# Copy this file to .github/workflows/canonkit.yml after the scoped alpha is public.
+name: CanonKit
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+concurrency:
+  group: canonkit-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate-public-canon:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out public repository content
+        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+        with:
+          persist-credentials: false
+
+      - name: Set up Node.js
+        uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5
+        with:
+          node-version: 24
+
+      - name: Install the exact public CanonKit alpha without package scripts
+        env:
+          NPM_CONFIG_IGNORE_SCRIPTS: "true"
+          NPM_CONFIG_REGISTRY: https://registry.npmjs.org
+          NPM_CONFIG_USERCONFIG: /dev/null
+        run: >-
+          npm install --prefix "$RUNNER_TEMP/canonkit-tool" --no-package-lock --no-save
+          @narconations/canonkit@0.1.0-alpha.0
+
+      - name: Validate public canon without emitting document bodies
+        run: >-
+          "$RUNNER_TEMP/canonkit-tool/node_modules/.bin/canonkit"
+          validate "$GITHUB_WORKSPACE" --format json

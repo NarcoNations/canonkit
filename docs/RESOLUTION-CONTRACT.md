@@ -5,7 +5,7 @@
 Stage 3.3 exposes `resolveTrustGraph(graph, query)` from the package root. It selects a governing source from an already validated trust graph using explicit, deterministic rules. It does not read document bodies or traverse inferred relationships. Stage 3.4 projects this unchanged library result through the separate [`RESOLVE-CLI-CONTRACT.md`](./RESOLVE-CLI-CONTRACT.md).
 
 ```ts
-import { buildTrustGraphIndex, resolveTrustGraph } from 'canonkit';
+import { buildTrustGraphIndex, resolveTrustGraph } from '@narconations/canonkit';
 
 const graph = buildTrustGraphIndex(collection.documents);
 const result = resolveTrustGraph(graph, 'products/example');

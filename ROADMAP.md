@@ -134,15 +134,15 @@ Evidence: [`docs/STAGE-4-ACCEPTANCE.md`](./docs/STAGE-4-ACCEPTANCE.md)
 
 ## Stage 5 — Public alpha
 
-**Status:** In progress — threat model and release boundary complete
+**Status:** In progress — installation and safe CI usage complete
 
 **Outcome:** CanonKit is installable, documented, and usable outside its own repository.
 
 Deliverables:
 
 - [ ] npm alpha package
-- [ ] Installation and quick-start documentation
-- [ ] GitHub Actions integration example
+- [x] Installation and quick-start documentation
+- [x] GitHub Actions integration example
 - [x] Threat model
 - [x] Public-alpha package and publishing boundary
 - [ ] Cross-platform and supported-Node test matrix

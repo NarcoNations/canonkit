@@ -48,6 +48,7 @@ See the [concept site](./public/index.html) for the product explanation, extract
 - [Stage 4 acceptance evidence](./docs/STAGE-4-ACCEPTANCE.md)
 - [Repository-grounded threat model](./canonkit-threat-model.md)
 - [Public-alpha release boundary](./docs/ALPHA-RELEASE-BOUNDARY.md)
+- [Installation, CI, and trust-boundary quick start](./docs/QUICKSTART.md)
 - [Development handover and exact restart point](./docs/DEVELOPMENT-HANDOVER.md)
 
 ## Clean-room boundary
@@ -72,7 +73,7 @@ npm run check
 The Stage 1.3 parser is available from the package root:
 
 ```ts
-import { parseMarkdownFrontmatter } from 'canonkit';
+import { parseMarkdownFrontmatter } from '@narconations/canonkit';
 
 const result = parseMarkdownFrontmatter(markdown, {
   path: 'docs/architecture.md',
@@ -84,7 +85,7 @@ It returns either a parsed metadata/body document or stable diagnostics. See the
 Bounded repository discovery is also available:
 
 ```ts
-import { discoverMarkdownFiles } from 'canonkit';
+import { discoverMarkdownFiles } from '@narconations/canonkit';
 
 const result = await discoverMarkdownFiles('./docs');
 ```
@@ -94,7 +95,7 @@ See the [discovery contract](./docs/DISCOVERY-CONTRACT.md) for exclusions, limit
 Discovery and parsing can be composed into a stable collection:
 
 ```ts
-import { scanRepository } from 'canonkit';
+import { scanRepository } from '@narconations/canonkit';
 
 const collection = await scanRepository('./docs');
 ```
@@ -114,7 +115,7 @@ The command reports schema, parsing, discovery, read, document-policy, and super
 Validated documents can be projected into a deterministic in-memory graph:
 
 ```ts
-import { buildTrustGraphIndex } from 'canonkit';
+import { buildTrustGraphIndex } from '@narconations/canonkit';
 
 const graph = buildTrustGraphIndex(collection.documents);
 ```
@@ -135,7 +136,7 @@ Both commands default to public-only metadata, exclude bodies, and refuse partia
 Library callers can deterministically select and explain a governing source from that graph:
 
 ```ts
-import { resolveTrustGraph } from 'canonkit';
+import { resolveTrustGraph } from '@narconations/canonkit';
 
 const resolution = resolveTrustGraph(graph, 'products/example');
 ```
@@ -155,7 +156,7 @@ Only a unique permitted result exits successfully. Ambiguity, ineligible-only ma
 The Stage 4 pack policy can be normalized before pack construction:
 
 ```ts
-import { normalizePackPolicy } from 'canonkit';
+import { normalizePackPolicy } from '@narconations/canonkit';
 
 const policy = normalizePackPolicy({
   audience: 'public',
@@ -172,7 +173,7 @@ import {
   renderContextPackJson,
   renderContextPackMarkdown,
   scanRepository,
-} from 'canonkit';
+} from '@narconations/canonkit';
 
 const collection = await scanRepository('./docs');
 const result = await buildContextPack(collection, {
@@ -202,7 +203,7 @@ Markdown and public-only active governing content are the defaults. Wider audien
 
 ## Status
 
-Stages 1–4 and Stage 5.1 are complete. Stage 5.2 aggregate input safety, installation guidance, and a public-only CI example are next. The package remains private and unpublished. See [STATUS.md](./STATUS.md) for the exact current state and next task.
+Stages 1–4 and Stage 5.2 are complete. The scoped alpha candidate is locally installable, but the package remains deliberately private and unpublished. Stage 5.3 release rehearsal is next. See [STATUS.md](./STATUS.md) for the exact current state and next task.
 
 ## Licence
 

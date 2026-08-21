@@ -285,7 +285,7 @@ Why:
 
 The intended alpha package is `@narconations/canonkit`; the executable remains `canonkit`. The unrelated unscoped package must never appear in installation guidance. The first planned version is `0.1.0-alpha.0`. The normal release path is a protected GitHub Actions environment using npm trusted publishing with provenance; if npm requires an existing package first, the narrowly defined one-time bootstrap in the release boundary applies.
 
-Stage 5.1 defines the boundary but does not publish, tag, authenticate npm, or change the current private package metadata. Every blocker in [`docs/ALPHA-RELEASE-BOUNDARY.md`](./docs/ALPHA-RELEASE-BOUNDARY.md) must close before the first external release.
+Stage 5.1 defined the boundary without publishing, tagging, or authenticating npm. Stage 5.2 applied the scoped alpha metadata while retaining `private: true`; every remaining blocker in [`docs/ALPHA-RELEASE-BOUNDARY.md`](./docs/ALPHA-RELEASE-BOUNDARY.md) must close before the first external release.
 
 Why:
 

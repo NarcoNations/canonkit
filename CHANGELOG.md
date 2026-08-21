@@ -77,6 +77,10 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 - Explicit public, internal, and restricted audience regression coverage.
 - Repository-grounded threat model covering runtime, filesystem, governance, disclosure, AI-consumer, CI, package, registry, and static-site boundaries.
 - Public-alpha release contract for the scoped package identity, intended version, artifact allowlist, protected publishing authority, CI disclosure policy, and mandatory blockers.
+- Default 32 MiB and hard 256 MiB aggregate repository-byte limits with bounded reads and atomic diagnostics.
+- Scoped `@narconations/canonkit@0.1.0-alpha.0` package metadata while publication remains disabled.
+- Neutral end-to-end example, installation quick start, and read-only public pull-request workflow template.
+- Explicit Git-as-authority, sensitive-output, and untrusted AI-consumer guidance.
 
 ## [0.0.0] — 2026-08-18
 
