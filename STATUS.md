@@ -1,8 +1,8 @@
 # CanonKit status
 
 - **Updated:** 2026-08-21
-- **Current stage:** Stage 4 in progress — Safe context packs
-- **Stage state:** Stage 4.3 pack command complete; Stage 4.4 acceptance is next
+- **Current stage:** Stage 5 next — Public alpha
+- **Stage state:** Stage 4 complete; Stage 5.1 threat model and release boundary is next
 - **Latest completed release:** None
 - **Production site:** <https://canonkit.vercel.app>
 - **Repository:** <https://github.com/NarcoNations/canonkit>
@@ -85,14 +85,17 @@
 - Pack failures emit stable Markdown or versioned JSON diagnostics with exit code `1` and no partial items.
 - Rendered process output is capped at 8 MiB independently of the body-content budget.
 - Real-process tests prove deterministic repetition, disclosure defaults, explicit opt-ins, budget failures, and generic validation blocking.
+- Stage 4 acceptance proves public-only defaults across public, internal, and restricted material.
+- Security, determinism, provenance, untrusted-body, package, documentation, clean-room, Node-support, and resumability gates are consolidated in `docs/STAGE-4-ACCEPTANCE.md`.
+- Stage 4 implementation and acceptance gate completed.
 
 ## Next checkpoint
 
-- Stage 4.4 — run and document the complete Stage 4 acceptance gate.
+- Stage 5.1 — write the repository-grounded threat model and lock the public-alpha release boundary.
 
 ## Not started
 
-- Stage 4 acceptance evidence
+- Formal threat model and alpha release contract
 - npm publication
 - OSS application
 
@@ -108,15 +111,15 @@
 
 ## Current risks
 
-- Stage 4 acceptance has not yet consolidated every security, determinism, package, and resumability gate.
+- The formal Stage 5 threat model and cross-platform release rehearsal have not started.
 - Schema `1.0` documents remain valid but cannot participate in subject-based canon checks until explicitly migrated to `1.1`.
 - There is no external usage evidence yet.
 - The Vercel OSS application is not ready until the project demonstrates active development and a functioning tool.
 
 ## Resume here
 
-1. Confirm the Stage 4.3 checkpoint is merged and `main` is clean apart from known unrelated duplicate files.
-2. Read `docs/DEVELOPMENT-HANDOVER.md`, `docs/PACK-CONTRACT.md`, `docs/PACK-CLI-CONTRACT.md`, `ROADMAP.md`, and `BUILD-PLAN.md`.
-3. Create a branch for **BUILD-PLAN task 4.4 — Stage 4 acceptance**.
-4. Run and record every Stage 4 acceptance criterion without adding new feature scope.
-5. Keep adapters, hosted services, and private content outside Stage 4.
+1. Confirm the Stage 4.4 checkpoint is merged and `main` is clean apart from known unrelated duplicate files.
+2. Read `docs/DEVELOPMENT-HANDOVER.md`, `docs/STAGE-4-ACCEPTANCE.md`, `SECURITY.md`, `ROADMAP.md`, and `BUILD-PLAN.md`.
+3. Create a branch for **BUILD-PLAN task 5.1 — threat model and release boundary**.
+4. Model the existing CLI and package boundary before proposing mitigations or release changes.
+5. Do not publish, tag, add hosted services, or introduce private content during 5.1.

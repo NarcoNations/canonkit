@@ -45,6 +45,7 @@ See the [concept site](./public/index.html) for the product explanation, extract
 - [Resolve CLI contract](./docs/RESOLVE-CLI-CONTRACT.md)
 - [Safe context-pack contract](./docs/PACK-CONTRACT.md)
 - [Pack CLI contract](./docs/PACK-CLI-CONTRACT.md)
+- [Stage 4 acceptance evidence](./docs/STAGE-4-ACCEPTANCE.md)
 - [Development handover and exact restart point](./docs/DEVELOPMENT-HANDOVER.md)
 
 ## Clean-room boundary
@@ -199,7 +200,7 @@ Markdown and public-only active governing content are the defaults. Wider audien
 
 ## Status
 
-Stages 1–3 are complete. Stage 4.3 has delivered the safe context-pack command; Stage 4.4 acceptance is next. See [STATUS.md](./STATUS.md) for the exact current state and next task.
+Stages 1–4 are complete. Stage 5.1 threat modelling and the public-alpha release boundary are next. See [STATUS.md](./STATUS.md) for the exact current state and next task.
 
 ## Licence
 

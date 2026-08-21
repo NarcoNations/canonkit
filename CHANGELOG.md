@@ -73,6 +73,8 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 - Explicit audience, exact-scope, repeatable non-active lifecycle, document-count, and content-byte controls.
 - Versioned atomic pack-failure reports with stable exits and no partial content.
 - Fixed 8 MiB rendered-process-output ceiling covering metadata and serialization overhead.
+- Stage 4 acceptance evidence covering disclosure ceilings, provenance completeness, deterministic limits, untrusted-body containment, production packaging, security, clean-room, Node support, and resumability.
+- Explicit public, internal, and restricted audience regression coverage.
 
 ## [0.0.0] — 2026-08-18
 
