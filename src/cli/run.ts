@@ -1,5 +1,6 @@
 import { scanRepository, type DocumentCollection } from '../model/collection.js';
 import { validateDocumentPolicies } from '../policy/documents.js';
+import { validateRelationshipPolicies } from '../policy/relationships.js';
 import { CANONKIT_VERSION } from '../version.js';
 import { CliUsageError, parseCliArguments } from './arguments.js';
 import { renderJsonReport, renderTerminalReport } from './output.js';
@@ -24,8 +25,8 @@ Options:
   -v, --version          Show the package version
 
 Exit codes:
-  0  Scan completed without document errors
-  1  Scan completed with document or discovery errors
+  0  Validation completed without errors
+  1  Validation found collection or policy errors
   2  Command usage error
   3  Unexpected internal error
 `;
@@ -58,13 +59,14 @@ export async function runCli(
     }
 
     const collection = await dependencies.scanRepository(command.path);
-    const policy = validateDocumentPolicies(collection.documents);
+    const documentPolicy = validateDocumentPolicies(collection.documents);
+    const relationshipPolicy = validateRelationshipPolicies(collection.documents);
     io.stdout(
       command.format === 'json'
-        ? renderJsonReport(collection, policy)
-        : renderTerminalReport(collection, policy),
+        ? renderJsonReport(collection, documentPolicy, relationshipPolicy)
+        : renderTerminalReport(collection, documentPolicy, relationshipPolicy),
     );
-    return collection.ok && policy.ok
+    return collection.ok && documentPolicy.ok && relationshipPolicy.ok
       ? CLI_EXIT_CODES.success
       : CLI_EXIT_CODES.documentFailure;
   } catch (error) {

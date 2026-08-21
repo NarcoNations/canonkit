@@ -143,6 +143,21 @@ Why:
 - aliases aid retrieval without becoming identities or authority signals
 - explicit typed relations create a bounded input for later graph validation
 
+### ADR-009 — Supersession is a closed document graph
+
+Stage 2.3 validates `supersedes` only against documents present in the scanned collection. Exact `id@version` references resolve one version; unversioned identities resolve the collected document identity. A document replacing an earlier version of itself must name that earlier version explicitly.
+
+The graph must be acyclic, every superseded document must have an incoming replacement edge, a replaced target cannot remain active, and one document identity cannot have multiple active versions.
+
+Typed schema 1.1 subject relations do not become document-supersession edges. Their targets may be historical or external subject identities, so CanonKit does not invent documents or lifecycle changes from them.
+
+Why:
+
+- closed resolution makes validation repeatable and fail-closed
+- exact same-identity version references avoid ambiguous self-supersession
+- lifecycle consistency preserves an auditable replacement chain
+- subject evolution remains independent of file replacement
+
 ## Core modules
 
 ### Discovery

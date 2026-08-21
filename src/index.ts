@@ -54,3 +54,11 @@ export {
   type DocumentPolicyOptions,
   type DocumentPolicyResult,
 } from './policy/documents.js';
+
+export {
+  RELATIONSHIP_POLICY_FORMAT_VERSION,
+  validateRelationshipPolicies,
+  type RelationshipPolicyDiagnostic,
+  type RelationshipPolicyDiagnosticCode,
+  type RelationshipPolicyResult,
+} from './policy/relationships.js';

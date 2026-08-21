@@ -1,19 +1,21 @@
 import type { DocumentCollection } from '../model/collection.js';
 import type { DocumentPolicyResult } from '../policy/documents.js';
+import type { RelationshipPolicyResult } from '../policy/relationships.js';
 
-export const CLI_REPORT_FORMAT_VERSION = '1.1' as const;
+export const CLI_REPORT_FORMAT_VERSION = '1.2' as const;
 
 export function renderTerminalReport(
   collection: DocumentCollection,
-  policy: DocumentPolicyResult,
+  documentPolicy: DocumentPolicyResult,
+  relationshipPolicy: RelationshipPolicyResult,
 ): string {
-  const ok = collection.ok && policy.ok;
+  const ok = collection.ok && documentPolicy.ok && relationshipPolicy.ok;
   const lines = [
     'CanonKit validate',
     `Repository: ${collection.repositoryRoot ?? 'unresolved'}`,
     `Documents: ${collection.summary.validDocuments} valid, ${collection.summary.invalidDocuments} invalid, ${collection.summary.discoveredFiles} discovered`,
-    `Errors: ${collection.summary.errors + policy.summary.errors}`,
-    `Warnings: ${policy.summary.warnings}`,
+    `Errors: ${collection.summary.errors + documentPolicy.summary.errors + relationshipPolicy.summary.errors}`,
+    `Warnings: ${documentPolicy.summary.warnings + relationshipPolicy.summary.warnings}`,
     `Result: ${ok ? 'valid' : 'invalid'}`,
   ];
 
@@ -29,9 +31,19 @@ export function renderTerminalReport(
     }
   }
 
-  if (policy.diagnostics.length > 0) {
-    lines.push('', 'Policy diagnostics:');
-    for (const diagnostic of policy.diagnostics) {
+  if (documentPolicy.diagnostics.length > 0) {
+    lines.push('', 'Document policy diagnostics:');
+    for (const diagnostic of documentPolicy.diagnostics) {
+      lines.push(
+        `- ${diagnostic.severity.toUpperCase()} ${diagnostic.code} ${diagnostic.path} — ${diagnostic.message}`,
+        `  Fix: ${diagnostic.remediation}`,
+      );
+    }
+  }
+
+  if (relationshipPolicy.diagnostics.length > 0) {
+    lines.push('', 'Relationship policy diagnostics:');
+    for (const diagnostic of relationshipPolicy.diagnostics) {
       lines.push(
         `- ${diagnostic.severity.toUpperCase()} ${diagnostic.code} ${diagnostic.path} — ${diagnostic.message}`,
         `  Fix: ${diagnostic.remediation}`,
@@ -44,7 +56,8 @@ export function renderTerminalReport(
 
 export function renderJsonReport(
   collection: DocumentCollection,
-  policy: DocumentPolicyResult,
+  documentPolicy: DocumentPolicyResult,
+  relationshipPolicy: RelationshipPolicyResult,
 ): string {
   return `${JSON.stringify(
     {
@@ -65,10 +78,13 @@ export function renderJsonReport(
         version: document.version,
         visibility: document.visibility,
       })),
-      ok: collection.ok && policy.ok,
-      policyDiagnostics: policy.diagnostics,
-      policyFormatVersion: policy.policyFormatVersion,
-      policySummary: policy.summary,
+      ok: collection.ok && documentPolicy.ok && relationshipPolicy.ok,
+      policyDiagnostics: documentPolicy.diagnostics,
+      policyFormatVersion: documentPolicy.policyFormatVersion,
+      policySummary: documentPolicy.summary,
+      relationshipDiagnostics: relationshipPolicy.diagnostics,
+      relationshipPolicyFormatVersion: relationshipPolicy.policyFormatVersion,
+      relationshipSummary: relationshipPolicy.summary,
       repositoryRoot: collection.repositoryRoot,
       scanRoots: collection.scanRoots,
       summary: collection.summary,

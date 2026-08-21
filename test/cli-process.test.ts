@@ -46,7 +46,7 @@ describe('packaged CLI process boundary', () => {
   });
 
   it('returns success for valid documents and failure for invalid neighbours', () => {
-    const valid = run(['validate', 'fixtures/frontmatter/valid', '--format=json']);
+    const valid = run(['validate', 'fixtures/relationships/valid', '--format=json']);
     const invalid = run(['validate', 'fixtures/collection', '--format=json']);
 
     expect(valid.status).toBe(0);
@@ -79,5 +79,37 @@ describe('packaged CLI process boundary', () => {
       ok: true,
       policySummary: { errors: 0, warnings: 1 },
     });
+  });
+
+  it('reports relationship policy failures', () => {
+    const missing = run(['validate', 'fixtures/relationships/missing', '--format=json']);
+
+    expect(missing.status).toBe(1);
+    expect(JSON.parse(missing.stdout)).toMatchObject({
+      ok: false,
+      relationshipDiagnostics: [
+        {
+          code: 'CKR001_SUPERSESSION_TARGET_MISSING',
+          path: 'fixtures/relationships/missing/current.md',
+        },
+      ],
+      relationshipSummary: { errors: 1, warnings: 0 },
+    });
+  });
+
+  it.each([
+    ['fixtures/relationships/self', 'CKR002_SELF_SUPERSESSION'],
+    ['fixtures/relationships/cycle', 'CKR003_SUPERSESSION_CYCLE'],
+    ['fixtures/relationships/active-target', 'CKR004_SUPERSEDED_TARGET_ACTIVE'],
+    ['fixtures/relationships/orphan', 'CKR005_SUPERSEDED_DOCUMENT_UNREFERENCED'],
+    ['fixtures/relationships/multiple-current', 'CKR006_MULTIPLE_CURRENT_VERSIONS'],
+  ])('fails %s for %s', (path, expectedCode) => {
+    const result = run(['validate', path, '--format=json']);
+    const report = JSON.parse(result.stdout) as {
+      relationshipDiagnostics: Array<{ code: string }>;
+    };
+
+    expect(result.status).toBe(1);
+    expect(report.relationshipDiagnostics.map(({ code }) => code)).toContain(expectedCode);
   });
 });

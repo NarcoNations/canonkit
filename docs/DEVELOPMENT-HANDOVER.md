@@ -5,10 +5,10 @@ This is the durable restart guide for implementation work. It records the comple
 ## Snapshot
 
 - **Snapshot date:** 2026-08-21
-- **Baseline commit:** `5ebe394` — Stage 2.1 CLI shell merged to `main`
+- **Baseline commit:** `67843d0` — Stage 2.2 document model and policy merged to `main`
 - **Completed:** Stage 0 public foundation and Stage 1 schema/repository scanner
-- **Completed after baseline:** Build-plan task 2.2 — document model checkpoint and policy rules
-- **Next:** Build-plan task 2.3 — relationship rules
+- **Completed after baseline:** Build-plan task 2.3 — relationship rules
+- **Next:** Build-plan task 2.4 — reports
 - **Repository:** <https://github.com/NarcoNations/canonkit>
 - **Production concept site:** <https://canonkit.vercel.app>
 - **Latest release:** None; the package remains private until the public-alpha gate
@@ -37,7 +37,7 @@ Public package APIs:
 | `discoverMarkdownFiles()` | Find eligible Markdown inside one Git boundary | [`DISCOVERY-CONTRACT.md`](./DISCOVERY-CONTRACT.md) |
 | `scanRepository()` | Compose discovery, reading, parsing, and normalisation | [`COLLECTION-CONTRACT.md`](./COLLECTION-CONTRACT.md) |
 
-The package also exposes the read-only `canonkit validate [path]` executable. Its formats and stable exit behaviour are defined in [`CLI-CONTRACT.md`](./CLI-CONTRACT.md).
+The package also exposes the read-only `canonkit validate [path]` executable. Its formats and stable exit behaviour are defined in [`CLI-CONTRACT.md`](./CLI-CONTRACT.md). Document and supersession rules are defined in [`DOCUMENT-POLICY-CONTRACT.md`](./DOCUMENT-POLICY-CONTRACT.md) and [`RELATIONSHIP-POLICY-CONTRACT.md`](./RELATIONSHIP-POLICY-CONTRACT.md).
 
 The public metadata contracts are schema `1.0` and the current schema `1.1` in [`schema/`](../schema/). Version `1.1` separates document identity from explicit governed subjects, aliases, document kinds, and typed lineage. Version `1.0` remains supported without inference.
 
@@ -57,15 +57,15 @@ The public metadata contracts are schema `1.0` and the current schema `1.1` in [
 
 ## Validation baseline
 
-The Stage 1 checkpoint passed:
+The Stage 2.3 implementation checkpoint passed locally:
 
 - lint and strict typechecking
-- 81 tests across eight test files at the Stage 2.2 implementation checkpoint
+- 95 tests across nine test files at the Stage 2.3 implementation checkpoint
 - declaration and source-map build
 - Node.js 22 and 24 GitHub CI
 - Vercel deployment check
 - dependency audit with zero reported vulnerabilities
-- clean-checkout package preview with 21 intended files
+- package preview with 50 intended distributable files
 - production-only collection scan with development dependencies removed
 - JSON round-trip, documentation-link, and clean-room vocabulary checks
 
@@ -91,31 +91,32 @@ npm pack --dry-run
 | [#7](https://github.com/NarcoNations/canonkit/pull/7) | Normalised collection and diagnostics |
 | [#8](https://github.com/NarcoNations/canonkit/pull/8) | Stage 1 documentation and restart checkpoint |
 | [#9](https://github.com/NarcoNations/canonkit/pull/9) | Stage 2.1 CLI shell |
+| [#10](https://github.com/NarcoNations/canonkit/pull/10) | Stage 2.2 document model and policy rules |
 
-## Completed checkpoint — Stage 2.2
+## Completed checkpoint — Stage 2.3
 
-The dedicated `agent/stage-2-2-document-model` checkpoint adds the versioned model and document rules described in `BUILD-PLAN.md`:
+The dedicated `agent/stage-2-3-relationship-rules` checkpoint adds the supersession graph rules described in `BUILD-PLAN.md`:
 
-- add schema `1.1` while retaining exact schema `1.0` compatibility
-- distinguish document identity and supersession from subject identity and lineage
-- normalise explicit kinds, subjects, aliases, and typed relations without inference
-- enforce duplicate-version, active-owner, active-scope, review-date, subject-authority, and visibility rules
-- add stable policy diagnostics and warning-aware terminal/JSON output
-- retain read-only, body-blind, network-disabled operation and neutral fixtures
+- resolve exact and identity-only supersession targets inside the scanned collection
+- reject missing targets and exact or ambiguous self-supersession
+- detect supersession cycles deterministically
+- enforce active/superseded lifecycle consistency and one active version per identity
+- keep typed subject relations separate from document supersession
+- add stable relationship diagnostics to terminal and JSON output
 
-Relationship target, self-reference, lifecycle, and cycle validation remain Stage 2.3. Resolution, context packs, dashboards, hosted services, and AI inference remain outside this checkpoint.
+Final report compatibility and quiet CI mode remain Stage 2.4. Resolution, context packs, dashboards, hosted services, and AI inference remain outside this checkpoint.
 
-Stage 2.2 closes only after:
+Stage 2.3 closes only after:
 
-1. Schema and parser tests prove both supported versions and intended 1.1 failures.
-2. Policy tests prove each error, warning, deterministic order, and non-inference boundary.
-3. CLI process tests prove warning-only success and policy-error failure.
+1. Unit tests prove every relationship rule, deterministic order, and typed-relation non-inference boundary.
+2. One valid chain and each intentionally broken repository fixture behave predictably through the real CLI.
+3. CLI process tests prove relationship errors produce exit code `1` and bounded JSON diagnostics.
 4. Run the standard quality, audit, and package gates.
-5. Update durable contracts and handover documents to point to Stage 2.3.
+5. Update durable contracts and handover documents to point to Stage 2.4.
 
-## Exact next checkpoint — Stage 2.3
+## Exact next checkpoint — Stage 2.4
 
-Use explicit `supersedes` and typed `relations` to validate missing targets, self-supersession, cycles, invalid active/superseded combinations, and multiple current versions. Keep all graph behaviour deterministic and diagnostics explainable. Do not infer edges from aliases, filenames, Markdown bodies, or private project knowledge.
+Lock the combined collection, document-policy, and relationship-policy report envelope. Keep terminal output concise while retaining actionable remediation, then add quiet CI mode and compatibility tests. Do not add new policy, resolution, context packs, adapters, or private project knowledge.
 
 ## Remaining route to the OSS application
 
@@ -133,7 +134,7 @@ Stage 3 is expected to be the most implementation-intensive remaining stage. Sta
 src/discovery/       repository boundary and Markdown discovery
 src/metadata/        frontmatter and public-schema validation
 src/model/           normalised collection and unified diagnostics
-src/policy/          deterministic document policy; relationship rules are next
+src/policy/          deterministic document and relationship policy
 schema/              versioned public metadata contract
 fixtures/            synthetic contract, parser, discovery, and collection cases
 test/                unit and integration coverage
