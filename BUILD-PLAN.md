@@ -128,17 +128,46 @@ Acceptance:
 
 ### 2.4 Reports
 
-- Concise terminal summary
-- Detailed diagnostics with remediation
-- Stable JSON contract
-- Quiet mode for CI
+**Status:** Complete
+
+- [x] Emit one concise terminal summary across all validation layers.
+- [x] Normalise every diagnostic with phase, severity, location, related paths, and remediation.
+- [x] Lock the versioned JSON report `2.0` envelope and compatibility tests.
+- [x] Add quiet CI mode that suppresses clean output but preserves warnings and failures.
 
 Stage 2 is complete only when `canonkit validate fixtures/relationships/valid` succeeds and every intentionally broken repository fails predictably.
 
-## Later stages
+## Stage 3 tasks — Resolution and trust graph
 
-Stage 3 and beyond are intentionally kept at roadmap granularity until validation proves the document model. Do not implement resolution, context packs, adapters, or a dashboard while Stage 1 or Stage 2 acceptance gates remain open.
+### 3.1 Graph index and eligibility
+
+**Status:** Next
+
+- Index validated documents by identity, version, subject, and explicit relationship.
+- Reuse the validated supersession graph without reparsing metadata.
+- Define fail-closed lifecycle, authority, visibility, and scope eligibility.
+- Return deterministic graph data plus explainable exclusions.
+
+### 3.2 List and graph commands
+
+- Add deterministic `canonkit list` output.
+- Add bounded `canonkit graph` terminal and JSON output.
+- Preserve the read-only and visibility boundaries.
+
+### 3.3 Resolution rules
+
+- Define explicit candidate selection and ranking.
+- Reject ambiguous current authority rather than guessing.
+- Explain selected and rejected candidates.
+
+### 3.4 Resolve command
+
+- Add `canonkit resolve <query>`.
+- Prove stable repeated results and bounded output.
+- Complete the Stage 3 acceptance gate.
+
+Stage 4 and beyond remain at roadmap granularity until resolution proves the trust graph. Do not begin context packs, adapters, or a dashboard during Stage 3.
 
 ## Exact next task
 
-After the Stage 2.3 checkpoint is merged, start **2.4 reports** on a dedicated branch. Finalise concise terminal output, stable JSON compatibility, and quiet CI mode across collection, document-policy, and relationship-policy failures. Do not begin resolution, context packs, adapters, or private content migration in the same change.
+After the Stage 2.4 checkpoint is merged, start **3.1 graph index and eligibility** on a dedicated branch. Build a deterministic in-memory index over already validated documents, then define fail-closed eligibility and explainable exclusions. Do not add commands, ranking, context packs, adapters, or private content migration in the same change.

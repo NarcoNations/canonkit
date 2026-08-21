@@ -75,11 +75,19 @@ describe('CLI arguments', () => {
       format: 'terminal',
       kind: 'validate',
       path: '.',
+      quiet: false,
     });
     expect(parseCliArguments(['validate', 'docs', '--format', 'json'])).toEqual({
       format: 'json',
       kind: 'validate',
       path: 'docs',
+      quiet: false,
+    });
+    expect(parseCliArguments(['validate', '--quiet'])).toEqual({
+      format: 'terminal',
+      kind: 'validate',
+      path: '.',
+      quiet: true,
     });
   });
 
@@ -118,7 +126,7 @@ describe('runCli', () => {
     expect(
       await runCli(['validate'], valid.io, { scanRepository: async () => collection(true) }),
     ).toBe(CLI_EXIT_CODES.success);
-    expect(valid.output.stdout).toContain('Result: valid');
+    expect(valid.output.stdout).toContain('CanonKit validate — VALID');
 
     expect(
       await runCli(['validate'], invalid.io, { scanRepository: async () => collection(false) }),
@@ -134,11 +142,75 @@ describe('runCli', () => {
     const report = JSON.parse(captured.output.stdout) as Record<string, unknown>;
 
     expect(exitCode).toBe(CLI_EXIT_CODES.success);
-    expect(report['cliReportFormatVersion']).toBe('1.2');
-    expect(report['policySummary']).toEqual({ errors: 0, warnings: 0 });
-    expect(report['relationshipSummary']).toEqual({ errors: 0, warnings: 0 });
+    expect(Object.keys(report)).toEqual([
+      'cliReportFormatVersion',
+      'command',
+      'contracts',
+      'diagnostics',
+      'documents',
+      'ok',
+      'repositoryRoot',
+      'scanRoots',
+      'summary',
+    ]);
+    expect(report['cliReportFormatVersion']).toBe('2.0');
+    expect(report['contracts']).toEqual({
+      collection: '1.0',
+      documentPolicy: '1.0',
+      relationshipPolicy: '1.0',
+    });
+    expect(report['diagnostics']).toEqual([]);
+    expect(report['summary']).toEqual({
+      discoveredFiles: 1,
+      errors: 0,
+      invalidDocuments: 0,
+      validDocuments: 1,
+      warnings: 0,
+    });
     expect(captured.output.stdout).not.toContain('Private document body');
     expect(captured.output.stdout).not.toContain('rawMetadata');
+  });
+
+  it('suppresses only completely clean reports in quiet mode', async () => {
+    const clean = capture();
+    const invalid = capture();
+
+    expect(
+      await runCli(['validate', '--quiet', '--format=json'], clean.io, {
+        scanRepository: async () => collection(true),
+      }),
+    ).toBe(CLI_EXIT_CODES.success);
+    expect(clean.output.stdout).toBe('');
+
+    expect(
+      await runCli(['validate', '--quiet'], invalid.io, {
+        scanRepository: async () => collection(false),
+      }),
+    ).toBe(CLI_EXIT_CODES.documentFailure);
+    expect(invalid.output.stdout).toContain('CKP002_FRONTMATTER_MISSING');
+  });
+
+  it('normalises collection failures into actionable JSON diagnostics', async () => {
+    const captured = capture();
+    await runCli(['validate', '--format=json'], captured.io, {
+      scanRepository: async () => collection(false),
+    });
+    const report = JSON.parse(captured.output.stdout) as {
+      diagnostics: Array<Record<string, unknown>>;
+    };
+
+    expect(report.diagnostics).toEqual([
+      {
+        code: 'CKP002_FRONTMATTER_MISSING',
+        location: { column: 1, line: 1 },
+        message: 'Document must begin with YAML frontmatter.',
+        path: 'docs/broken.md',
+        phase: 'parse',
+        relatedPaths: [],
+        remediation: 'Correct the Markdown frontmatter or metadata contract error and rerun validation.',
+        severity: 'error',
+      },
+    ]);
   });
 
   it('separates usage and unexpected failures', async () => {

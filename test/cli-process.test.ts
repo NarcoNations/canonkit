@@ -72,12 +72,12 @@ describe('packaged CLI process boundary', () => {
     expect(competing.status).toBe(1);
     expect(JSON.parse(competing.stdout)).toMatchObject({
       ok: false,
-      policySummary: { errors: 4, warnings: 0 },
+      summary: { errors: 4, warnings: 0 },
     });
     expect(overdue.status).toBe(0);
     expect(JSON.parse(overdue.stdout)).toMatchObject({
       ok: true,
-      policySummary: { errors: 0, warnings: 1 },
+      summary: { errors: 0, warnings: 1 },
     });
   });
 
@@ -87,13 +87,14 @@ describe('packaged CLI process boundary', () => {
     expect(missing.status).toBe(1);
     expect(JSON.parse(missing.stdout)).toMatchObject({
       ok: false,
-      relationshipDiagnostics: [
+      diagnostics: [
         {
           code: 'CKR001_SUPERSESSION_TARGET_MISSING',
           path: 'fixtures/relationships/missing/current.md',
+          phase: 'relationship-policy',
         },
       ],
-      relationshipSummary: { errors: 1, warnings: 0 },
+      summary: { errors: 1, warnings: 0 },
     });
   });
 
@@ -106,10 +107,20 @@ describe('packaged CLI process boundary', () => {
   ])('fails %s for %s', (path, expectedCode) => {
     const result = run(['validate', path, '--format=json']);
     const report = JSON.parse(result.stdout) as {
-      relationshipDiagnostics: Array<{ code: string }>;
+      diagnostics: Array<{ code: string }>;
     };
 
     expect(result.status).toBe(1);
-    expect(report.relationshipDiagnostics.map(({ code }) => code)).toContain(expectedCode);
+    expect(report.diagnostics.map(({ code }) => code)).toContain(expectedCode);
+  });
+
+  it('keeps clean quiet runs silent and preserves warning output', () => {
+    const clean = run(['validate', 'fixtures/relationships/valid', '--quiet']);
+    const warning = run(['validate', 'fixtures/policy/overdue', '--quiet']);
+
+    expect(clean.status).toBe(0);
+    expect(clean.stdout).toBe('');
+    expect(warning.status).toBe(0);
+    expect(warning.stdout).toContain('CKV003_REVIEW_OVERDUE');
   });
 });
