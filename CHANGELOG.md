@@ -40,6 +40,9 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 - Typed document kinds, aliases, subject identities, and explicit lineage relations with neutral migration fixtures.
 - Deterministic document-policy engine for duplicate versions, active ownership and scope, overdue reviews, competing subject canon, and visibility conflicts.
 - Stable terminal and JSON policy diagnostics with severities, related paths, remediation, and warning-aware exit behaviour.
+- Deterministic supersession graph validation for missing targets, self-reference, cycles, lifecycle consistency, and multiple active versions.
+- Stable relationship-policy diagnostics and neutral valid/broken repository fixtures.
+- Explicit boundary keeping typed subject relations separate from document supersession.
 
 ## [0.0.0] — 2026-08-18
 

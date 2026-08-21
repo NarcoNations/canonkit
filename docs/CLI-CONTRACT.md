@@ -2,7 +2,7 @@
 
 ## Purpose
 
-The CLI exposes repository collection and deterministic Stage 2.2 document policy through a minimal, read-only process boundary. It does not yet perform relationship graph validation, authority resolution, or mutation.
+The CLI exposes repository collection plus deterministic document and Stage 2.3 relationship policy through a minimal, read-only process boundary. It does not perform authority resolution or mutation.
 
 ## Commands
 
@@ -16,9 +16,9 @@ canonkit --version
 
 ## Formats
 
-`terminal` is the default. It reports the resolved repository, document counts, result, collection diagnostics, and document-policy diagnostics with remediation.
+`terminal` is the default. It reports the resolved repository, document counts, combined result, and separate collection, document-policy, and relationship-policy diagnostics with remediation.
 
-`json` emits a stable report envelope with `cliFormatVersion: "1.1"` containing:
+`json` emits a versioned report envelope with `cliReportFormatVersion: "1.2"` containing:
 
 - CLI and collection format versions
 - command and result
@@ -27,6 +27,7 @@ canonkit --version
 - bounded document identity summaries
 - collection diagnostics
 - document-policy format version, summary, and diagnostics
+- relationship-policy format version, summary, and diagnostics
 
 JSON output deliberately excludes Markdown bodies and reporting-only raw metadata. Context export belongs to a later stage with explicit visibility policy.
 
@@ -34,8 +35,8 @@ JSON output deliberately excludes Markdown bodies and reporting-only raw metadat
 
 | Code | Meaning |
 | --- | --- |
-| `0` | Scan and document policy completed without errors; warnings may exist |
-| `1` | Validation found collection or document-policy errors |
+| `0` | Collection and both policy layers completed without errors; warnings may exist |
+| `1` | Validation found collection, document-policy, or relationship-policy errors |
 | `2` | Command usage error |
 | `3` | Unexpected internal error |
 
@@ -48,6 +49,6 @@ Diagnostics go to standard output for completed validation reports. Usage and un
 - no document body can influence command behaviour
 - reports expose bounded governance metadata but omit document bodies and reporting-only raw metadata
 - policy consumes explicit normalised fields only; no subject or authority is inferred
-- relationship target and graph checks remain out of scope until Stage 2.3
+- typed subject relations remain distinct from the validated document-supersession graph
 
-The document rules are defined in [`DOCUMENT-POLICY-CONTRACT.md`](./DOCUMENT-POLICY-CONTRACT.md). Stage 2.3 owns relationship rules.
+The rules are defined in [`DOCUMENT-POLICY-CONTRACT.md`](./DOCUMENT-POLICY-CONTRACT.md) and [`RELATIONSHIP-POLICY-CONTRACT.md`](./RELATIONSHIP-POLICY-CONTRACT.md). Stage 2.4 will lock final report compatibility and quiet CI mode.

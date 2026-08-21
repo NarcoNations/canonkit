@@ -116,11 +116,15 @@ Acceptance:
 
 ### 2.3 Relationship rules
 
-- Missing supersession targets
-- Self-supersession
-- Cycles
-- Invalid active/superseded combinations
-- Multiple current versions
+**Status:** Complete
+
+- [x] Reject missing exact and identity-only supersession targets.
+- [x] Reject exact and ambiguous unversioned self-supersession.
+- [x] Detect deterministic supersession cycles.
+- [x] Reject active superseded targets and unreferenced superseded documents.
+- [x] Detect multiple active versions of one document identity.
+- [x] Keep typed subject relations distinct from document supersession.
+- [x] Emit stable terminal and JSON relationship diagnostics with remediation.
 
 ### 2.4 Reports
 
@@ -129,7 +133,7 @@ Acceptance:
 - Stable JSON contract
 - Quiet mode for CI
 
-Stage 2 is complete only when `canonkit validate fixtures/valid` succeeds and every intentionally broken repository fails predictably.
+Stage 2 is complete only when `canonkit validate fixtures/relationships/valid` succeeds and every intentionally broken repository fails predictably.
 
 ## Later stages
 
@@ -137,4 +141,4 @@ Stage 3 and beyond are intentionally kept at roadmap granularity until validatio
 
 ## Exact next task
 
-After the Stage 2.2 checkpoint is merged, start **2.3 relationship rules** on a dedicated branch. Validate document supersession targets, self-references, cycles, lifecycle combinations, and multiple-current-version conflicts. Do not begin resolution, context packs, adapters, or private content migration in the same change.
+After the Stage 2.3 checkpoint is merged, start **2.4 reports** on a dedicated branch. Finalise concise terminal output, stable JSON compatibility, and quiet CI mode across collection, document-policy, and relationship-policy failures. Do not begin resolution, context packs, adapters, or private content migration in the same change.

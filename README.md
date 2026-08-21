@@ -37,6 +37,7 @@ See the [concept site](./public/index.html) for the product explanation, extract
 - [Repository discovery contract](./docs/DISCOVERY-CONTRACT.md)
 - [Normalised collection contract](./docs/COLLECTION-CONTRACT.md)
 - [Document policy contract](./docs/DOCUMENT-POLICY-CONTRACT.md)
+- [Relationship policy contract](./docs/RELATIONSHIP-POLICY-CONTRACT.md)
 - [Validate CLI contract](./docs/CLI-CONTRACT.md)
 - [Development handover and exact restart point](./docs/DEVELOPMENT-HANDOVER.md)
 
@@ -98,11 +99,11 @@ canonkit validate [path]
 canonkit validate [path] --format json
 ```
 
-The command reports schema, parsing, discovery, read, and deterministic document-policy failures. See the [document policy](./docs/DOCUMENT-POLICY-CONTRACT.md) and [CLI](./docs/CLI-CONTRACT.md) contracts for rules, formats, and exit codes.
+The command reports schema, parsing, discovery, read, document-policy, and supersession-relationship failures. See the [document policy](./docs/DOCUMENT-POLICY-CONTRACT.md), [relationship policy](./docs/RELATIONSHIP-POLICY-CONTRACT.md), and [CLI](./docs/CLI-CONTRACT.md) contracts for rules, formats, and exit codes.
 
 ## Status
 
-Stage 1 and Stage 2.2 are complete. The versioned schema, bounded parser, repository discovery, normalised collection, executable boundary, and document-policy rules are implemented; relationship validation is next. See [STATUS.md](./STATUS.md) for the exact current state and next task.
+Stage 1 and Stage 2.3 are complete. The versioned schema, bounded scanner, document policy, and supersession graph validation are implemented; the final Stage 2 reporting checkpoint is next. See [STATUS.md](./STATUS.md) for the exact current state and next task.
 
 ## Licence
 

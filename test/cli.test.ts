@@ -134,8 +134,9 @@ describe('runCli', () => {
     const report = JSON.parse(captured.output.stdout) as Record<string, unknown>;
 
     expect(exitCode).toBe(CLI_EXIT_CODES.success);
-    expect(report['cliReportFormatVersion']).toBe('1.1');
+    expect(report['cliReportFormatVersion']).toBe('1.2');
     expect(report['policySummary']).toEqual({ errors: 0, warnings: 0 });
+    expect(report['relationshipSummary']).toEqual({ errors: 0, warnings: 0 });
     expect(captured.output.stdout).not.toContain('Private document body');
     expect(captured.output.stdout).not.toContain('rawMetadata');
   });
