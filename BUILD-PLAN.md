@@ -256,7 +256,7 @@ Acceptance:
 
 ### 5.3 Release rehearsal
 
-**Status:** In progress — non-publishing rehearsal implemented; cross-platform run is next
+**Status:** In progress — safe non-publishing rehearsal complete; ownership and provenance deferred
 
 - [x] Verify the current public-registry status of `canonkit`, `@canonkit/canonkit`, and `@vibelabz/canonkit`.
 - [x] Select `@vibelabz/canonkit` without renaming CanonKit or creating a multi-package architecture.
@@ -264,7 +264,7 @@ Acceptance:
 - [ ] Verify authenticated `vibelabz` organisation ownership, owner access, recovery, and enforced MFA.
 - [ ] Add the protected least-privilege trusted-publishing workflow with automatic provenance.
 - [x] Add a manual, read-only, secret-free, non-publishing rehearsal workflow.
-- [ ] Run the locked candidate on Ubuntu and macOS with Node.js 22 and 24.
+- [x] Run the locked candidate on Ubuntu and macOS with Node.js 22 and 24.
 - [x] Install and exercise the exact locked candidate tarball outside this repository.
 - [x] Confirm package contents, runtime licences, and draft release notes.
 - [ ] Confirm real trusted-publishing provenance after authenticated package ownership exists.
@@ -279,4 +279,4 @@ Acceptance:
 
 ## Exact next task
 
-Merge the non-publishing rehearsal checkpoint, then manually run [`.github/workflows/release-rehearsal.yml`](./.github/workflows/release-rehearsal.yml) from protected `main`. Record all four Ubuntu/macOS and Node 22/24 results in [`docs/STAGE-5-3-REHEARSAL.md`](./docs/STAGE-5-3-REHEARSAL.md) and close only RB-006 if they pass. RB-001 and RB-005 remain deferred until Ashley is ready to establish the npm organisation and recovery boundary. Keep `private: true`; do not publish, stage, upload the tarball, create a tag, or silently fall back to NarcoNations.
+Pause at the ownership gate. When Ashley is ready to establish the npm organisation, verify authenticated `vibelabz` ownership, recovery, and MFA before adding the protected trusted-publishing and provenance workflow. RB-001 and RB-005 remain open. Keep `private: true`; do not publish, stage, upload the tarball, create a tag, or silently fall back to NarcoNations.

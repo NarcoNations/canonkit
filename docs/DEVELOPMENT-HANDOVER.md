@@ -5,10 +5,10 @@ This is the durable restart guide for implementation work. It records the comple
 ## Snapshot
 
 - **Snapshot date:** 2026-08-21
-- **Baseline commit:** `9250b1a` — Stage 5.3 package identity merged to `main`
-- **Completed:** Stages 0–4, Stage 5.1 threat model/release boundary, Stage 5.2 installation/CI usage, and the Stage 5.3 package-identity checkpoint
-- **Completed after baseline:** Stage 5.3 non-publishing rehearsal implementation and local evidence
-- **Next:** Merge and manually run the Stage 5.3 Ubuntu/macOS and Node.js 22/24 matrix
+- **Baseline commit:** `8c440bb` — Stage 5.3 non-publishing rehearsal merged to `main`
+- **Completed:** Stages 0–4, Stage 5.1 threat model/release boundary, Stage 5.2 installation/CI usage, the Stage 5.3 package-identity checkpoint, and the safe non-publishing rehearsal
+- **Completed after baseline:** Ubuntu/macOS and Node.js 22/24 evidence recorded from protected-main run 32510120043
+- **Next:** Pause until Ashley is ready to establish the npm organisation, recovery boundary, and protected trusted publishing
 - **Repository:** <https://github.com/NarcoNations/canonkit>
 - **Production concept site:** <https://canonkit.vercel.app>
 - **Latest release:** None; the package remains private until the public-alpha gate
@@ -127,6 +127,7 @@ npm pack --dry-run
 | [#21](https://github.com/NarcoNations/canonkit/pull/21) | Stage 5.1 threat model and public-alpha release boundary |
 | [#22](https://github.com/NarcoNations/canonkit/pull/22) | Stage 5.2 installation, aggregate input budget, and safe CI usage |
 | [#23](https://github.com/NarcoNations/canonkit/pull/23) | Stage 5.3 package identity decision and private candidate migration |
+| [#24](https://github.com/NarcoNations/canonkit/pull/24) | Stage 5.3 locked non-publishing release rehearsal |
 
 ## Completed checkpoint — Stage 3.4 and Stage 3 acceptance
 
@@ -177,13 +178,13 @@ RB-002, RB-003, and RB-004 are closed. Stage 5.2 used transitional private scope
 
 The current public registry evidence, alternatives, security implications, and lineage are recorded in [`PACKAGE-IDENTITY-REVIEW.md`](./PACKAGE-IDENTITY-REVIEW.md) and ADR-019. Unscoped `canonkit` is occupied by related-looking third-party software. An independent `@canonkit` organisation is not justified for the single package. `@vibelabz/canonkit` is selected and applied to private metadata; `@narconations/canonkit` is transitional history only. Nothing was published or tagged.
 
-## Implemented checkpoint — Stage 5.3 non-publishing rehearsal
+## Completed checkpoint — Stage 5.3 non-publishing rehearsal
 
-[`STAGE-5-3-REHEARSAL.md`](./STAGE-5-3-REHEARSAL.md) defines a locked private candidate and a manual, read-only workflow across Ubuntu/macOS and Node.js 22/24. Each job must reproduce the same unpacked-content manifest, audit dependencies, verify licences and package boundaries, install its exact tarball with scripts disabled, import the public API, and exercise `validate`, `resolve`, and `pack`. The workflow has no credential, OIDC, package upload, publish, tag, or release path.
+[`STAGE-5-3-REHEARSAL.md`](./STAGE-5-3-REHEARSAL.md) records the locked private candidate and the passing manual, read-only workflow across Ubuntu/macOS and Node.js 22/24. Every job reproduced the same 78-file unpacked-content manifest, audited dependencies, verified licences and package boundaries, installed its exact tarball with scripts disabled, imported the public API, and exercised `validate`, `resolve`, and `pack`. The workflow has no credential, OIDC, package upload, publish, tag, or release path. RB-006 is closed by [run 32510120043](https://github.com/NarcoNations/canonkit/actions/runs/32510120043).
 
-## Exact next checkpoint — execute and record the matrix
+## Exact next checkpoint — deferred ownership and provenance gate
 
-Merge the rehearsal implementation, manually run `.github/workflows/release-rehearsal.yml` from `main`, and record the run URL and four job results. Close only RB-006 if the locked candidate passes every job. RB-001 and RB-005 remain deferred until Ashley is ready to establish the npm organisation and recovery boundary. Publication and tagging remain separate actions requiring explicit maintainer approval.
+RB-001 and RB-005 remain deferred until Ashley is ready to establish the npm organisation and recovery boundary. On resumption, verify authenticated `vibelabz` ownership, owner recovery, and MFA before implementing protected trusted publishing and recording real provenance. Publication and tagging remain separate actions requiring explicit maintainer approval.
 
 ## Remaining route to the OSS application
 
