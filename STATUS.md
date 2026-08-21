@@ -2,7 +2,7 @@
 
 - **Updated:** 2026-08-21
 - **Current stage:** Stage 4 in progress — Safe context packs
-- **Stage state:** Stage 4.2 projection library complete; Stage 4.3 pack command is next
+- **Stage state:** Stage 4.3 pack command complete; Stage 4.4 acceptance is next
 - **Latest completed release:** None
 - **Production site:** <https://canonkit.vercel.app>
 - **Repository:** <https://github.com/NarcoNations/canonkit>
@@ -80,14 +80,19 @@
 - Selected source files are repository-bounded, re-read, reparsed, compared with the validated model, and SHA-256 hashed.
 - Stable JSON and injection-safe Markdown renderers preserve explicit untrusted-body boundaries.
 - Empty selection, validation, budget, path, source-change, and integrity failures return no partial pack.
+- Packaged `canonkit pack [path]` emits public-only Markdown by default or the versioned JSON envelope explicitly.
+- Audience, exact scope, repeatable non-active lifecycle, document, and content-byte options map directly to the library policy.
+- Pack failures emit stable Markdown or versioned JSON diagnostics with exit code `1` and no partial items.
+- Rendered process output is capped at 8 MiB independently of the body-content budget.
+- Real-process tests prove deterministic repetition, disclosure defaults, explicit opt-ins, budget failures, and generic validation blocking.
 
 ## Next checkpoint
 
-- Stage 4.3 — expose the tested projection library through the bounded `canonkit pack` command.
+- Stage 4.4 — run and document the complete Stage 4 acceptance gate.
 
 ## Not started
 
-- Context-pack CLI export
+- Stage 4 acceptance evidence
 - npm publication
 - OSS application
 
@@ -103,15 +108,15 @@
 
 ## Current risks
 
-- Pack CLI syntax, process output, and exit behaviour are not yet implemented.
+- Stage 4 acceptance has not yet consolidated every security, determinism, package, and resumability gate.
 - Schema `1.0` documents remain valid but cannot participate in subject-based canon checks until explicitly migrated to `1.1`.
 - There is no external usage evidence yet.
 - The Vercel OSS application is not ready until the project demonstrates active development and a functioning tool.
 
 ## Resume here
 
-1. Confirm the Stage 4.2 checkpoint is merged and `main` is clean apart from known unrelated duplicate files.
-2. Read `docs/DEVELOPMENT-HANDOVER.md`, `docs/PACK-CONTRACT.md`, `ROADMAP.md`, and `BUILD-PLAN.md`.
-3. Create a branch for **BUILD-PLAN task 4.3 — pack command**.
-4. Wire the existing projection and renderer APIs into bounded Markdown and JSON process output.
+1. Confirm the Stage 4.3 checkpoint is merged and `main` is clean apart from known unrelated duplicate files.
+2. Read `docs/DEVELOPMENT-HANDOVER.md`, `docs/PACK-CONTRACT.md`, `docs/PACK-CLI-CONTRACT.md`, `ROADMAP.md`, and `BUILD-PLAN.md`.
+3. Create a branch for **BUILD-PLAN task 4.4 — Stage 4 acceptance**.
+4. Run and record every Stage 4 acceptance criterion without adding new feature scope.
 5. Keep adapters, hosted services, and private content outside Stage 4.

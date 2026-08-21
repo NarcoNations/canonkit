@@ -44,8 +44,111 @@ describe('packaged CLI process boundary', () => {
     expect(help.stdout).toContain('canonkit list [path]');
     expect(help.stdout).toContain('canonkit graph [path]');
     expect(help.stdout).toContain('canonkit resolve <query> [path]');
+    expect(help.stdout).toContain('canonkit pack [path]');
     expect(version.status).toBe(0);
     expect(version.stdout).toBe('0.0.0\n');
+  });
+
+  it('emits a public-only Markdown context pack by default', () => {
+    const first = run(['pack', 'fixtures/graph']);
+    const second = run(['pack', 'fixtures/graph']);
+
+    expect(first.status).toBe(0);
+    expect(second.stdout).toBe(first.stdout);
+    expect(first.stdout).toContain('# CanonKit context pack');
+    expect(first.stdout).toContain('fixtures/graph/canon-v2.md');
+    expect(first.stdout).toContain('# Example service v2');
+    expect(first.stdout).not.toContain('fixtures/graph/canon-v1.md');
+    expect(first.stdout).not.toContain('fixtures/graph/decision.md');
+  });
+
+  it('emits deterministic JSON with explicit audience and lifecycle opt-ins', () => {
+    const args = [
+      'pack',
+      'fixtures/graph',
+      '--format=json',
+      '--audience=internal',
+      '--include-status=superseded',
+      '--scope=products/example',
+    ];
+    const first = run(args);
+    const second = run(args);
+    const pack = JSON.parse(first.stdout) as {
+      items: Array<{ document: { status: string }; provenance: { sourcePath: string } }>;
+      policy: Record<string, unknown>;
+      summary: Record<string, unknown>;
+    };
+
+    expect(first.status).toBe(0);
+    expect(second.stdout).toBe(first.stdout);
+    expect(pack.items.map(({ provenance }) => provenance.sourcePath)).toEqual([
+      'fixtures/graph/canon-v1.md',
+      'fixtures/graph/canon-v2.md',
+      'fixtures/graph/decision.md',
+    ]);
+    expect(pack.policy).toMatchObject({
+      audience: 'internal',
+      allowedStatuses: ['active', 'superseded'],
+      scope: 'products/example',
+    });
+    expect(pack.summary).toMatchObject({ documents: 3 });
+    expect(first.stdout).not.toContain('rawMetadata');
+    expect(first.stdout).not.toContain('repositoryRoot');
+  });
+
+  it('requires explicit lifecycle opt-in and fails pack budgets atomically', () => {
+    const hidden = run(['pack', 'fixtures/resolution/ineligible', '--format=json']);
+    const optedIn = run([
+      'pack',
+      'fixtures/resolution/ineligible',
+      '--format=json',
+      '--include-status=archived',
+    ]);
+    const documentLimit = run([
+      'pack',
+      'fixtures/graph',
+      '--format=json',
+      '--audience=internal',
+      '--max-documents=1',
+    ]);
+    const byteLimit = run([
+      'pack',
+      'fixtures/graph',
+      '--format=json',
+      '--max-content-bytes=1',
+    ]);
+
+    expect(hidden.status).toBe(1);
+    expect(JSON.parse(hidden.stdout)).toMatchObject({
+      error: { code: 'CKX002_EMPTY' },
+      ok: false,
+    });
+    expect(hidden.stdout).not.toContain('archived.md');
+    expect(optedIn.status).toBe(0);
+    expect(JSON.parse(optedIn.stdout)).toMatchObject({
+      items: [expect.objectContaining({ document: expect.objectContaining({ status: 'archived' }) })],
+    });
+    expect(documentLimit.status).toBe(1);
+    expect(JSON.parse(documentLimit.stdout)).toMatchObject({
+      error: { code: 'CKX003_DOCUMENT_LIMIT_EXCEEDED' },
+      ok: false,
+    });
+    expect(byteLimit.status).toBe(1);
+    expect(JSON.parse(byteLimit.stdout)).toMatchObject({
+      error: { code: 'CKX004_CONTENT_BYTES_EXCEEDED' },
+      ok: false,
+    });
+  });
+
+  it('fails invalid repositories without leaking partial pack paths', () => {
+    const result = run(['pack', 'fixtures/collection', '--format=json']);
+
+    expect(result.status).toBe(1);
+    expect(JSON.parse(result.stdout)).toMatchObject({
+      error: { code: 'CKX001_VALIDATION_REQUIRED' },
+      ok: false,
+    });
+    expect(result.stdout).not.toContain('.md');
   });
 
   it('lists only eligible public documents by default', () => {

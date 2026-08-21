@@ -588,8 +588,8 @@ review_after: 2026-11-01
             </div>
             <div class="flow-panel" id="flow-share" role="tabpanel" aria-labelledby="tab-share" hidden>
               <span class="flow-label">Step 04 · Share</span><h3>Generate bounded context for tools</h3>
-              <p>Export a safe agent pack containing only eligible sources and compact provenance. Private, archived, or unverified material stays excluded unless an authorised caller opts in.</p>
-              <div class="command-row"><span class="command">canonkit pack</span><span class="command">--audience agent</span><span class="command">--format json</span></div>
+              <p>Export a safe agent pack containing only eligible sources and compact provenance. Internal or archived material requires explicit opt-in; unverified material never becomes pack authority.</p>
+              <div class="command-row"><span class="command">canonkit pack</span><span class="command">--audience public</span><span class="command">--format json</span></div>
             </div>
           </div>
         </div>

@@ -265,6 +265,22 @@ Why:
 - dynamic Markdown fences preserve the data-versus-instruction boundary
 - one projection object keeps JSON and Markdown policy consistent
 
+### ADR-017 — Pack CLI is a bounded adapter over one projection result
+
+Stage 4.3 adds `canonkit pack` without reimplementing selection. The command scans once, passes normalized CLI options to `buildContextPack()`, then renders that single result as Markdown or JSON. Markdown is the default because it is immediately consumable by people and context tools; JSON is explicit for automation.
+
+Audience, exact scope, repeatable non-active lifecycle, document count, and Markdown-body byte controls map directly to the locked pack policy. Graph visibility and generic result-limit flags are rejected rather than translated. A separate fixed 8 MiB process-output ceiling bounds normalized metadata and renderer overhead that the body budget does not count.
+
+Failures emit a small versioned report and exit non-zero. No output file is created, no source is edited, and no partial pack survives validation, budget, provenance, or rendering failure.
+
+Why:
+
+- one projection path prevents library and CLI disclosure rules from drifting
+- command-specific options make wider disclosure deliberate and reviewable
+- a rendered-byte ceiling closes the metadata-overhead gap
+- stdout-only output preserves read-only operation and shell composability
+- versioned failures remain safe for both people and automation
+
 ## Core modules
 
 ### Discovery

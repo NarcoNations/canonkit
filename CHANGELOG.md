@@ -69,6 +69,10 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 - Repository-bounded source revalidation with strict UTF-8 parsing, normalized-model comparison, and exact SHA-256 provenance.
 - Stable JSON and injection-safe Markdown library renderers with explicit untrusted-content boundaries.
 - Atomic empty, validation, budget, and source-integrity failures without hidden-document disclosure.
+- Packaged `canonkit pack [path]` command with Markdown-default and explicit JSON output.
+- Explicit audience, exact-scope, repeatable non-active lifecycle, document-count, and content-byte controls.
+- Versioned atomic pack-failure reports with stable exits and no partial content.
+- Fixed 8 MiB rendered-process-output ceiling covering metadata and serialization overhead.
 
 ## [0.0.0] — 2026-08-18
 

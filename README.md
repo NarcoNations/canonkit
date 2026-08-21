@@ -44,6 +44,7 @@ See the [concept site](./public/index.html) for the product explanation, extract
 - [Deterministic resolution contract](./docs/RESOLUTION-CONTRACT.md)
 - [Resolve CLI contract](./docs/RESOLVE-CLI-CONTRACT.md)
 - [Safe context-pack contract](./docs/PACK-CONTRACT.md)
+- [Pack CLI contract](./docs/PACK-CLI-CONTRACT.md)
 - [Development handover and exact restart point](./docs/DEVELOPMENT-HANDOVER.md)
 
 ## Clean-room boundary
@@ -185,9 +186,20 @@ if (result.ok) {
 
 Construction revalidates the complete policy graph and exact selected source bytes, then fails atomically on validation, disclosure, provenance, or budget errors. See the [safe context-pack contract](./docs/PACK-CONTRACT.md).
 
+The same projection is available through the read-only CLI:
+
+```sh
+canonkit pack [path]
+canonkit pack [path] --format json
+canonkit pack [path] --audience internal --include-status superseded
+canonkit pack [path] --scope products/example --max-documents 20 --max-content-bytes 131072
+```
+
+Markdown and public-only active governing content are the defaults. Wider audience and every non-active lifecycle require explicit options. See the [pack CLI contract](./docs/PACK-CLI-CONTRACT.md).
+
 ## Status
 
-Stages 1–3 are complete. Stage 4.2 has delivered the safe context-pack projection library; Stage 4.3 CLI integration is next. See [STATUS.md](./STATUS.md) for the exact current state and next task.
+Stages 1–3 are complete. Stage 4.3 has delivered the safe context-pack command; Stage 4.4 acceptance is next. See [STATUS.md](./STATUS.md) for the exact current state and next task.
 
 ## Licence
 
