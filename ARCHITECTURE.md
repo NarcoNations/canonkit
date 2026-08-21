@@ -187,6 +187,20 @@ Why:
 - exact scope matching avoids unsupported hierarchy inference
 - separating eligibility from ranking keeps Stage 3 decisions reviewable
 
+### ADR-012 — CLI graph projections preserve visibility before audit detail
+
+Stage 3.2 exposes the validated graph through two bounded projections. `list` contains eligible nodes only. `graph` retains lifecycle- and authority-excluded nodes for audit, but removes every visibility- or scope-excluded node before applying node and edge limits.
+
+Public is the only implicit visibility. Any internal or restricted projection requires an explicit repeatable option naming every included class. Invalid collections emit a generic validation-required result without document paths or partial graph data. Successful outputs remain body-free, deterministically ordered, versioned, and read-only.
+
+Why:
+
+- visibility and scope are disclosure boundaries, not merely ranking signals
+- retaining safe excluded history explains lifecycle without promoting it
+- complete validation prevents a broken repository from yielding misleading partial truth
+- hard limits keep CLI and integration output predictable
+- list and graph inspection remain separate from future candidate resolution
+
 ## Core modules
 
 ### Discovery

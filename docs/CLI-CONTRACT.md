@@ -8,11 +8,15 @@
 
 ```text
 canonkit validate [path] [--format terminal|json] [--quiet]
+canonkit list [path] [...]
+canonkit graph [path] [...]
 canonkit --help
 canonkit --version
 ```
 
 `path` defaults to the current directory. Discovery resolves and enforces the nearest Git repository boundary according to the discovery contract.
+
+The list and graph command options and output envelopes are defined separately in [`GRAPH-CLI-CONTRACT.md`](./GRAPH-CLI-CONTRACT.md).
 
 ## Terminal format
 

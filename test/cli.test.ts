@@ -91,6 +91,34 @@ describe('CLI arguments', () => {
     });
   });
 
+  it('parses bounded list and graph projections', () => {
+    expect(parseCliArguments(['list'])).toEqual({
+      allowedVisibilities: ['public'],
+      format: 'terminal',
+      kind: 'list',
+      limit: 100,
+      path: '.',
+    });
+    expect(
+      parseCliArguments([
+        'graph',
+        'docs',
+        '--format=json',
+        '--allow-visibility=internal',
+        '--allow-visibility=public',
+        '--scope=guides',
+        '--limit=12',
+      ]),
+    ).toEqual({
+      allowedVisibilities: ['internal', 'public'],
+      format: 'json',
+      kind: 'graph',
+      limit: 12,
+      path: 'docs',
+      scope: 'guides',
+    });
+  });
+
   it('recognises help and version without scanning', () => {
     expect(parseCliArguments(['--help'])).toEqual({ kind: 'help' });
     expect(parseCliArguments(['-v'])).toEqual({ kind: 'version' });
@@ -101,6 +129,13 @@ describe('CLI arguments', () => {
     ['unknown'],
     ['validate', 'one', 'two'],
     ['validate', '--format', 'xml'],
+    ['validate', '--limit', '1'],
+    ['list', '--quiet'],
+    ['list', '--allow-visibility', 'secret'],
+    ['graph', '--limit', '0'],
+    ['graph', '--limit', '1001'],
+    ['graph', '--limit', 'many'],
+    ['graph', '--scope', 'Products/Example'],
   ];
 
   it.each(invalidArguments.map((args) => [args] as const))('rejects invalid usage: %j', (args) => {
@@ -169,6 +204,56 @@ describe('runCli', () => {
     });
     expect(captured.output.stdout).not.toContain('Private document body');
     expect(captured.output.stdout).not.toContain('rawMetadata');
+  });
+
+  it('defaults list and graph to public and permits explicit visibility opt-in', async () => {
+    const hidden = capture();
+    const explicit = capture();
+
+    expect(
+      await runCli(['list', '--format=json'], hidden.io, {
+        scanRepository: async () => collection(true),
+      }),
+    ).toBe(CLI_EXIT_CODES.success);
+    expect(JSON.parse(hidden.output.stdout)).toMatchObject({
+      command: 'list',
+      items: [],
+      ok: true,
+      summary: { returnedNodes: 0, totalEligibleNodes: 0 },
+    });
+    expect(hidden.output.stdout).not.toContain('docs/example.md');
+
+    expect(
+      await runCli(
+        ['graph', '--format=json', '--allow-visibility=internal'],
+        explicit.io,
+        { scanRepository: async () => collection(true) },
+      ),
+    ).toBe(CLI_EXIT_CODES.success);
+    expect(JSON.parse(explicit.output.stdout)).toMatchObject({
+      command: 'graph',
+      nodes: [{ nodeId: 'docs/example.md', visibility: 'internal' }],
+      ok: true,
+    });
+    expect(explicit.output.stdout).not.toContain('Private document body');
+    expect(explicit.output.stdout).not.toContain('rawMetadata');
+  });
+
+  it('blocks graph output with a generic report when validation fails', async () => {
+    const captured = capture();
+    expect(
+      await runCli(['graph', '--format=json'], captured.io, {
+        scanRepository: async () => collection(false),
+      }),
+    ).toBe(CLI_EXIT_CODES.documentFailure);
+    expect(JSON.parse(captured.output.stdout)).toMatchObject({
+      command: 'graph',
+      error: { code: 'CKC001_VALIDATION_REQUIRED' },
+      ok: false,
+      summary: { errors: 1, warnings: 0 },
+    });
+    expect(captured.output.stdout).not.toContain('docs/broken.md');
+    expect(captured.output.stdout).not.toContain('docs/example.md');
   });
 
   it('suppresses only completely clean reports in quiet mode', async () => {

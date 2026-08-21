@@ -66,7 +66,7 @@ An excluded node remains in the graph for auditability; `eligible: false` preven
 
 The caller must run collection plus both Stage 2 policy layers before graph construction. `buildTrustGraphIndex` additionally rejects duplicate source paths, duplicate identity/version pairs, and unresolved supersession references with `TrustGraphInputError` so ambiguous input cannot silently enter the graph.
 
-Stage 3.1 does not add candidate ranking or CLI commands. Typed subject relations remain explicit records; an empty subject list remains empty and no source identity is invented.
+The graph does not add candidate ranking. Stage 3.2 projects it through bounded list and graph commands without changing its semantics. Typed subject relations remain explicit records; an empty subject list remains empty and no source identity is invented.
 
 ## Safety boundary
 

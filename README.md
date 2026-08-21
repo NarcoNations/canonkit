@@ -40,6 +40,7 @@ See the [concept site](./public/index.html) for the product explanation, extract
 - [Relationship policy contract](./docs/RELATIONSHIP-POLICY-CONTRACT.md)
 - [Trust graph index contract](./docs/GRAPH-CONTRACT.md)
 - [Validate CLI contract](./docs/CLI-CONTRACT.md)
+- [List and graph CLI contract](./docs/GRAPH-CLI-CONTRACT.md)
 - [Development handover and exact restart point](./docs/DEVELOPMENT-HANDOVER.md)
 
 ## Clean-room boundary
@@ -113,9 +114,20 @@ const graph = buildTrustGraphIndex(collection.documents);
 
 The graph indexes identities, versions, subjects, supersession, and explicit relations while applying public-only fail-closed eligibility by default. See the [graph contract](./docs/GRAPH-CONTRACT.md).
 
+Validated repositories can be inspected through bounded, read-only projections:
+
+```sh
+canonkit list [path] --format json
+canonkit graph [path] --format json
+canonkit graph [path] --allow-visibility public --allow-visibility internal
+canonkit graph [path] --scope products/example --limit 50
+```
+
+Both commands default to public-only metadata, exclude bodies, and refuse partial graph output when validation fails. See the [list and graph CLI contract](./docs/GRAPH-CLI-CONTRACT.md).
+
 ## Status
 
-Stages 1 and 2 are complete, and Stage 3.1 now provides the graph index and eligibility model. Bounded `list` and `graph` command projections are next. See [STATUS.md](./STATUS.md) for the exact current state and next task.
+Stages 1 and 2 are complete. Stage 3.2 now provides the graph index, eligibility model, and bounded `list` and `graph` projections; deterministic resolution rules are next. See [STATUS.md](./STATUS.md) for the exact current state and next task.
 
 ## Licence
 
