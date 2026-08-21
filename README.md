@@ -160,11 +160,34 @@ const policy = normalizePackPolicy({
 });
 ```
 
-This locks public-only, active-only defaults, hard budgets, exact scope, and explicit lifecycle opt-ins. Pack generation begins in Stage 4.2; see the [safe context-pack contract](./docs/PACK-CONTRACT.md).
+Build and render a pack from a scanned collection:
+
+```ts
+import {
+  buildContextPack,
+  renderContextPackJson,
+  renderContextPackMarkdown,
+  scanRepository,
+} from 'canonkit';
+
+const collection = await scanRepository('./docs');
+const result = await buildContextPack(collection, {
+  audience: 'public',
+  maxDocuments: 20,
+  maxContentBytes: 128 * 1024,
+});
+
+if (result.ok) {
+  const json = renderContextPackJson(result.pack);
+  const markdown = renderContextPackMarkdown(result.pack);
+}
+```
+
+Construction revalidates the complete policy graph and exact selected source bytes, then fails atomically on validation, disclosure, provenance, or budget errors. See the [safe context-pack contract](./docs/PACK-CONTRACT.md).
 
 ## Status
 
-Stages 1–3 are complete. Stage 4.1 has locked the safe context-pack contract and budgets; Stage 4.2 pack construction is next. See [STATUS.md](./STATUS.md) for the exact current state and next task.
+Stages 1–3 are complete. Stage 4.2 has delivered the safe context-pack projection library; Stage 4.3 CLI integration is next. See [STATUS.md](./STATUS.md) for the exact current state and next task.
 
 ## Licence
 
