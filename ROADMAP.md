@@ -107,18 +107,19 @@ Acceptance gate:
 
 ## Stage 4 — Safe context packs
 
-**Status:** Next
+**Status:** In progress — pack contract and budgets complete
 
 **Outcome:** People and tools can consume a bounded, provenance-backed context pack.
 
 Deliverables:
 
-- `canonkit pack`
-- Markdown and JSON formats
-- Audience and visibility filtering
-- Provenance on every included document
-- Size and document-count limits
-- Explicit opt-in for non-active material
+- [x] Versioned pack and policy contract
+- [x] Provenance requirements for every included document
+- [x] Size and document-count budget contract
+- [x] Explicit opt-in contract for non-active material
+- [ ] `canonkit pack`
+- [ ] Markdown and JSON formats
+- [ ] Audience and visibility filtering implementation
 
 Acceptance gate:
 

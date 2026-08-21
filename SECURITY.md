@@ -6,6 +6,6 @@ Please report security vulnerabilities privately using GitHub's **Report a vulne
 
 ## Current security posture
 
-The current repository contains a static concept site with no server-side code, user accounts, data storage, telemetry, or third-party scripts.
+The repository contains a static concept site and a local TypeScript CLI. It has no hosted application server, user accounts, data storage, telemetry, or third-party browser scripts. The CLI is repository-bounded, read-only, and network-disabled.
 
-The planned CanonKit core will be local-first, read-only by default, repository-bounded, and network-disabled by default. Repository documents will be treated as untrusted data rather than executable instructions.
+Repository documents and context-pack bodies are untrusted data rather than executable instructions. Pack policy defaults to public, active, governing documents; wider disclosure and historical material require explicit opt-in. Pack generation must verify exact source provenance, remove visibility- and scope-excluded material before disclosure, enforce hard limits, and return no partial output on failure.

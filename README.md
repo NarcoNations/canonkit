@@ -43,6 +43,7 @@ See the [concept site](./public/index.html) for the product explanation, extract
 - [List and graph CLI contract](./docs/GRAPH-CLI-CONTRACT.md)
 - [Deterministic resolution contract](./docs/RESOLUTION-CONTRACT.md)
 - [Resolve CLI contract](./docs/RESOLVE-CLI-CONTRACT.md)
+- [Safe context-pack contract](./docs/PACK-CONTRACT.md)
 - [Development handover and exact restart point](./docs/DEVELOPMENT-HANDOVER.md)
 
 ## Clean-room boundary
@@ -147,9 +148,23 @@ canonkit resolve products/example [path] --allow-visibility public --allow-visib
 
 Only a unique permitted result exits successfully. Ambiguity, ineligible-only matches, no match, and invalid repositories fail closed. See the [resolve CLI contract](./docs/RESOLVE-CLI-CONTRACT.md).
 
+The Stage 4 pack policy can be normalized before pack construction:
+
+```ts
+import { normalizePackPolicy } from 'canonkit';
+
+const policy = normalizePackPolicy({
+  audience: 'public',
+  maxDocuments: 20,
+  maxContentBytes: 128 * 1024,
+});
+```
+
+This locks public-only, active-only defaults, hard budgets, exact scope, and explicit lifecycle opt-ins. Pack generation begins in Stage 4.2; see the [safe context-pack contract](./docs/PACK-CONTRACT.md).
+
 ## Status
 
-Stages 1–3 are complete: CanonKit can validate governed documents, inspect the trust graph, and deterministically resolve a governing source with explanations. Stage 4 safe context packs are next. See [STATUS.md](./STATUS.md) for the exact current state and next task.
+Stages 1–3 are complete. Stage 4.1 has locked the safe context-pack contract and budgets; Stage 4.2 pack construction is next. See [STATUS.md](./STATUS.md) for the exact current state and next task.
 
 ## Licence
 
