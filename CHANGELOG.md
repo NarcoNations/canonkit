@@ -90,6 +90,7 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 - Structured bug and feature intake with private security-report routing and a bounded pull-request checklist.
 - Public support boundary, solo-maintainer operating model, and gated publication runbook.
 - Truthful OSS application evidence register that separates delivered project proof from future adoption evidence.
+- Launch-ready responsive landing page with current alpha capabilities, real CLI output, verified evidence, GitHub/docs routes, honest npm status, and keyboard-safe mobile navigation.
 
 ## [0.0.0] — 2026-08-18
 

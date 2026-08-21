@@ -277,6 +277,7 @@ Acceptance:
 - [x] Add support expectations and the solo-maintainer operating model.
 - [x] Add a gated first-publication and protected-publishing runbook without executable publication authority.
 - [x] Prepare the OSS application evidence register without inventing adoption.
+- [x] Refresh the public landing page around current capabilities, verified proof, actionable documentation, and honest release status.
 - [ ] Publish only after explicit maintainer approval.
 - [ ] Create the alpha tag and final release notes.
 
