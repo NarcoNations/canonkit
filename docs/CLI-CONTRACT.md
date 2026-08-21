@@ -1,8 +1,8 @@
-# CLI shell contract
+# Validate CLI contract
 
 ## Purpose
 
-The Stage 2.1 CLI exposes the existing repository collection through a minimal, deterministic, read-only process boundary. It adds no document-policy, relationship, authority-resolution, or mutation behaviour.
+The CLI exposes repository collection and deterministic Stage 2.2 document policy through a minimal, read-only process boundary. It does not yet perform relationship graph validation, authority resolution, or mutation.
 
 ## Commands
 
@@ -16,9 +16,9 @@ canonkit --version
 
 ## Formats
 
-`terminal` is the default. It reports the resolved repository, document counts, result, and collection diagnostics.
+`terminal` is the default. It reports the resolved repository, document counts, result, collection diagnostics, and document-policy diagnostics with remediation.
 
-`json` emits a stable Stage 2.1 report envelope containing:
+`json` emits a stable report envelope with `cliFormatVersion: "1.1"` containing:
 
 - CLI and collection format versions
 - command and result
@@ -26,6 +26,7 @@ canonkit --version
 - summary counts
 - bounded document identity summaries
 - collection diagnostics
+- document-policy format version, summary, and diagnostics
 
 JSON output deliberately excludes Markdown bodies and reporting-only raw metadata. Context export belongs to a later stage with explicit visibility policy.
 
@@ -33,8 +34,8 @@ JSON output deliberately excludes Markdown bodies and reporting-only raw metadat
 
 | Code | Meaning |
 | --- | --- |
-| `0` | Scan completed without document errors |
-| `1` | Scan completed with document, read, parse, or discovery errors |
+| `0` | Scan and document policy completed without errors; warnings may exist |
+| `1` | Validation found collection or document-policy errors |
 | `2` | Command usage error |
 | `3` | Unexpected internal error |
 
@@ -46,6 +47,7 @@ Diagnostics go to standard output for completed validation reports. Usage and un
 - no network requests or telemetry occur
 - no document body can influence command behaviour
 - reports expose bounded governance metadata but omit document bodies and reporting-only raw metadata
-- no authority, lifecycle, relationship, or promotion decision is inferred beyond the Stage 1 collection contract
+- policy consumes explicit normalised fields only; no subject or authority is inferred
+- relationship target and graph checks remain out of scope until Stage 2.3
 
-Stage 2.2 owns the first document policy rules. Stage 2.3 owns relationship rules.
+The document rules are defined in [`DOCUMENT-POLICY-CONTRACT.md`](./DOCUMENT-POLICY-CONTRACT.md). Stage 2.3 owns relationship rules.

@@ -10,5 +10,8 @@
   "invalid-status.json": { "keyword": "enum", "instancePath": "/status" },
   "invalid-authority.json": { "keyword": "enum", "instancePath": "/authority" },
   "invalid-visibility.json": { "keyword": "enum", "instancePath": "/visibility" },
-  "unsupported-schema-version.json": { "keyword": "const", "instancePath": "/schema_version" }
+  "unsupported-schema-version.json": { "keyword": "const", "instancePath": "/schema_version" },
+  "v1.1-missing-kind.json": { "keyword": "required", "missingProperty": "kind" },
+  "v1.1-canon-missing-subjects.json": { "keyword": "required", "missingProperty": "subjects" },
+  "v1.1-invalid-relation.json": { "keyword": "enum", "instancePath": "/relations/0/type" }
 }

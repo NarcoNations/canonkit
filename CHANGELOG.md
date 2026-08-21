@@ -36,6 +36,10 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 - Stable CLI exits for clean scans, document failures, usage errors, and unexpected failures.
 - Bounded JSON reports that omit document bodies and reporting-only raw metadata.
 - CLI unit and real-process coverage for valid, invalid, help, version, format, and usage paths.
+- Backward-compatible metadata schema `1.1` separating document identity from governed subjects.
+- Typed document kinds, aliases, subject identities, and explicit lineage relations with neutral migration fixtures.
+- Deterministic document-policy engine for duplicate versions, active ownership and scope, overdue reviews, competing subject canon, and visibility conflicts.
+- Stable terminal and JSON policy diagnostics with severities, related paths, remediation, and warning-aware exit behaviour.
 
 ## [0.0.0] — 2026-08-18
 

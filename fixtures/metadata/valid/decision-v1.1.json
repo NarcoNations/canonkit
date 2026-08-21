@@ -1,0 +1,13 @@
+{
+  "schema_version": "1.1",
+  "id": "decisions/mobility-positioning",
+  "kind": "decision",
+  "title": "Adopt the mobility service positioning",
+  "status": "active",
+  "authority": "approved",
+  "owner": "product",
+  "version": "1.0",
+  "visibility": "internal",
+  "scope": "products/mobility",
+  "subjects": ["products/mobility-service"]
+}

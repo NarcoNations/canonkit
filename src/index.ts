@@ -16,10 +16,15 @@ export {
 
 export {
   DEFAULT_MAX_FILE_BYTES,
+  LATEST_SCHEMA_VERSION,
   parseMarkdownFrontmatter,
   SUPPORTED_SCHEMA_VERSION,
+  SUPPORTED_SCHEMA_VERSIONS,
   type CanonKitMetadata,
   type DocumentAuthority,
+  type DocumentKind,
+  type DocumentRelation,
+  type DocumentRelationType,
   type DocumentStatus,
   type DocumentVisibility,
   type ParsedMarkdownDocument,
@@ -28,6 +33,7 @@ export {
   type ParserDiagnostic,
   type ParserDiagnosticCode,
   type SourceLocation,
+  type SchemaVersion,
 } from './metadata/frontmatter.js';
 
 export {
@@ -39,3 +45,12 @@ export {
   type NormalizedDocument,
   type ScanRepositoryOptions,
 } from './model/collection.js';
+
+export {
+  DOCUMENT_POLICY_FORMAT_VERSION,
+  validateDocumentPolicies,
+  type DocumentPolicyDiagnostic,
+  type DocumentPolicyDiagnosticCode,
+  type DocumentPolicyOptions,
+  type DocumentPolicyResult,
+} from './policy/documents.js';

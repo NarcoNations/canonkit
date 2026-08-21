@@ -2,7 +2,7 @@
 
 - **Updated:** 2026-08-21
 - **Current stage:** Stage 2 in progress — Validate command
-- **Stage state:** Stage 2.1 CLI shell complete; Stage 2.2 is next
+- **Stage state:** Stage 2.2 document model and rules complete; Stage 2.3 is next
 - **Latest completed release:** None
 - **Production site:** <https://canonkit.vercel.app>
 - **Repository:** <https://github.com/NarcoNations/canonkit>
@@ -39,14 +39,18 @@
 - Stable exit codes distinguish clean scans, document failures, usage errors, and unexpected errors.
 - CLI JSON output excludes Markdown bodies and reporting-only raw metadata.
 - Unit and real-process tests cover the executable boundary and package `bin` target.
+- Schema `1.1` separates document identity from governed subjects while preserving `1.0` compatibility.
+- Typed document kinds, aliases, subject identities, and explicit lineage relations are normalised without inference.
+- Deterministic document policy detects duplicate versions, missing ownership or scope, overdue review, competing subject canon, and visibility conflicts.
+- Terminal and JSON CLI reports include stable policy codes, severity, related paths, remediation, and warning-aware exits.
 
 ## Next checkpoint
 
-- Stage 2.2 — run the versioned document-model checkpoint, then add deterministic document policy rules.
+- Stage 2.3 — validate supersession targets, self-references, cycles, lifecycle combinations, and multiple current versions.
 
 ## Not started
 
-- Document and relationship policy validation
+- Relationship policy validation
 - Resolution and trust graph
 - Context-pack export
 - npm publication
@@ -64,15 +68,15 @@
 
 ## Current risks
 
-- The CLI currently reports collection failures only; it does not yet detect competing authority, overdue review, or relationship failures.
-- The document-centered `1.0` contract needs a bounded model checkpoint before subject, decision, alias, and typed-lineage rules are locked.
+- Relationship targets and cycles are represented but are not yet validated.
+- Schema `1.0` documents remain valid but cannot participate in subject-based canon checks until explicitly migrated to `1.1`.
 - There is no external usage evidence yet.
 - The Vercel OSS application is not ready until the project demonstrates active development and a functioning tool.
 
 ## Resume here
 
-1. Confirm the Stage 2.1 CLI-shell checkpoint is merged and `main` is clean.
-2. Read `docs/DEVELOPMENT-HANDOVER.md`, `docs/CLI-CONTRACT.md`, `ARCHITECTURE.md`, `ROADMAP.md`, and `BUILD-PLAN.md`.
-3. Create a branch for **BUILD-PLAN task 2.2 — document model and policy rules**.
-4. Test the generic document contract against subject, decision, alias, and typed-lineage requirements before changing the public schema.
-5. Implement only the accepted document rules and fixtures; leave relationship graph rules for Stage 2.3.
+1. Confirm the Stage 2.2 checkpoint is merged and `main` is clean.
+2. Read `docs/DEVELOPMENT-HANDOVER.md`, `docs/DOCUMENT-POLICY-CONTRACT.md`, `ARCHITECTURE.md`, `ROADMAP.md`, and `BUILD-PLAN.md`.
+3. Create a branch for **BUILD-PLAN task 2.3 — relationship rules**.
+4. Reuse the explicit `supersedes` and typed `relations` inputs; do not infer graph edges from aliases or Markdown bodies.
+5. Implement relationship validation only; leave resolution and context packs for later stages.

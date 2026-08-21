@@ -4,7 +4,7 @@ Make repository knowledge trustworthy.
 
 CanonKit is a local-first trust layer for repository documentation. It is designed to help people and AI agents determine which documents are current, authoritative, owned, superseded, and safe to use.
 
-This repository currently contains the public concept site and the clean-room boundary for the planned v0.1 CLI.
+This repository contains the public concept site and the clean-room implementation of the planned v0.1 CLI.
 
 ## Principles
 
@@ -36,7 +36,8 @@ See the [concept site](./public/index.html) for the product explanation, extract
 - [Frontmatter parser contract](./docs/PARSER-CONTRACT.md)
 - [Repository discovery contract](./docs/DISCOVERY-CONTRACT.md)
 - [Normalised collection contract](./docs/COLLECTION-CONTRACT.md)
-- [CLI shell contract](./docs/CLI-CONTRACT.md)
+- [Document policy contract](./docs/DOCUMENT-POLICY-CONTRACT.md)
+- [Validate CLI contract](./docs/CLI-CONTRACT.md)
 - [Development handover and exact restart point](./docs/DEVELOPMENT-HANDOVER.md)
 
 ## Clean-room boundary
@@ -90,18 +91,18 @@ const collection = await scanRepository('./docs');
 
 See the [collection contract](./docs/COLLECTION-CONTRACT.md) for normalised documents, unified diagnostics, and summary counts.
 
-The Stage 2 CLI shell exposes that collection through a read-only command:
+The Stage 2 CLI validates that collection through a read-only command:
 
 ```sh
 canonkit validate [path]
 canonkit validate [path] --format json
 ```
 
-The shell currently reports schema, parsing, discovery, and read failures. Stage 2.2 adds document-policy rules. See the [CLI contract](./docs/CLI-CONTRACT.md) for formats and exit codes.
+The command reports schema, parsing, discovery, read, and deterministic document-policy failures. See the [document policy](./docs/DOCUMENT-POLICY-CONTRACT.md) and [CLI](./docs/CLI-CONTRACT.md) contracts for rules, formats, and exit codes.
 
 ## Status
 
-Stage 1 and the Stage 2.1 CLI shell are complete. The schema, bounded parser, repository discovery, normalised collection, and executable boundary are implemented; document policy rules are next. See [STATUS.md](./STATUS.md) for the exact current state and next task.
+Stage 1 and Stage 2.2 are complete. The versioned schema, bounded parser, repository discovery, normalised collection, executable boundary, and document-policy rules are implemented; relationship validation is next. See [STATUS.md](./STATUS.md) for the exact current state and next task.
 
 ## Licence
 

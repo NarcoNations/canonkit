@@ -34,13 +34,17 @@ The complete result contains only JSON-safe values. Ordinary repository, file, Y
 
 Each document copies the validated governance fields into a fixed model:
 
-- identity: `id`, `title`, and `version`
+- identity: `id`, `title`, `version`, and nullable document `kind`
 - governance: `status`, `authority`, `owner`, `visibility`, and nullable `scope`
-- relationships and review: `supersedes`, nullable `reviewAfter`, and `tags`
+- governed identity: `subjects`, human-readable `aliases`, and typed `relations`
+- document relationships and review: `supersedes`, nullable `reviewAfter`, and `tags`
+- contract provenance: `schemaVersion`
 - provenance: repository-relative source `path` and UTF-8 file `bytes`
 - untrusted Markdown `body`
 
 Missing optional arrays become empty arrays and missing optional scalar fields become `null`, so callers never need to infer meaning from `undefined`.
+
+Version `1.0` remains supported without inference: its normalised `kind` is `null`, while `subjects`, `aliases`, and `relations` are empty arrays. Version `1.1` carries only the identities and relationships explicitly declared in metadata.
 
 The validated source metadata is copied to `reporting.rawMetadata`. It exists for transparent reporting only. Later authority and policy code must consume the explicit normalised fields and must not infer additional authority from unknown or raw metadata.
 

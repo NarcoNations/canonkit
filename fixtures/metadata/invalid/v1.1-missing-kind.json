@@ -1,0 +1,10 @@
+{
+  "schema_version": "1.1",
+  "id": "canon/example",
+  "title": "Missing kind",
+  "status": "draft",
+  "authority": "unverified",
+  "owner": "documentation",
+  "version": "0.1",
+  "visibility": "internal"
+}

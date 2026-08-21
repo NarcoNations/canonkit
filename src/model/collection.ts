@@ -11,6 +11,8 @@ import {
   parseMarkdownFrontmatter,
   type CanonKitMetadata,
   type DocumentAuthority,
+  type DocumentKind,
+  type DocumentRelation,
   type DocumentStatus,
   type DocumentVisibility,
   type ParserDiagnostic,
@@ -25,20 +27,25 @@ export interface ScanRepositoryOptions extends DiscoveryOptions {
 }
 
 export interface NormalizedDocument {
+  aliases: string[];
   authority: DocumentAuthority;
   body: string;
   id: string;
+  kind: DocumentKind | null;
   owner: string;
   reporting: {
     rawMetadata: CanonKitMetadata;
   };
   reviewAfter: string | null;
+  relations: DocumentRelation[];
+  schemaVersion: CanonKitMetadata['schema_version'];
   scope: string | null;
   source: {
     bytes: number;
     path: string;
   };
   status: DocumentStatus;
+  subjects: string[];
   supersedes: string[];
   tags: string[];
   title: string;
@@ -196,15 +203,20 @@ function normalizeDocument(
   bytes: number,
 ): NormalizedDocument {
   return {
+    aliases: [...(metadata.aliases ?? [])],
     authority: metadata.authority,
     body,
     id: metadata.id,
+    kind: metadata.kind ?? null,
     owner: metadata.owner,
     reporting: { rawMetadata: structuredClone(metadata) },
     reviewAfter: metadata.review_after ?? null,
+    relations: structuredClone(metadata.relations ?? []),
+    schemaVersion: metadata.schema_version,
     scope: metadata.scope ?? null,
     source: { bytes, path },
     status: metadata.status,
+    subjects: [...(metadata.subjects ?? [])],
     supersedes: [...(metadata.supersedes ?? [])],
     tags: [...(metadata.tags ?? [])],
     title: metadata.title,

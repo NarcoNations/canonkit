@@ -23,7 +23,7 @@ if (result.ok) {
 - Input is measured as UTF-8 bytes before parsing. The default maximum is 1 MiB.
 - A leading UTF-8 byte-order mark is accepted.
 - One leading YAML frontmatter envelope is required.
-- Metadata must satisfy the public `1.0` JSON Schema.
+- Metadata must satisfy its declared public `1.0` or `1.1` JSON Schema.
 - The Markdown body is returned unchanged and never interpreted as metadata or instructions.
 - Ordinary document failures return diagnostics; they do not throw.
 - Invalid parser configuration, such as a non-positive byte limit, throws `RangeError`.
@@ -41,7 +41,7 @@ YAML merge keys are disabled, aliases are rejected during conversion, and duplic
 | `CKP004_FRONTMATTER_MULTIPLE` | A second leading metadata envelope was found |
 | `CKP005_YAML_INVALID` | YAML is malformed, ambiguous, or uses rejected aliases |
 | `CKP006_METADATA_NOT_OBJECT` | Parsed frontmatter is not an object |
-| `CKP007_SCHEMA_VERSION_UNSUPPORTED` | `schema_version` is present but unsupported |
+| `CKP007_SCHEMA_VERSION_UNSUPPORTED` | `schema_version` is present but is not `1.0` or `1.1` |
 | `CKP008_METADATA_INVALID` | Metadata fails the public JSON Schema |
 
 Every diagnostic includes the supplied path and a one-based Markdown line and column. When a missing field has no exact source token, its location falls back to the start of the frontmatter content.

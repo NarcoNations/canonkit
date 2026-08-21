@@ -41,6 +41,24 @@ describe('parseMarkdownFrontmatter', () => {
     });
   });
 
+  it('parses the 1.1 subject and lineage contract', () => {
+    const result = parseMarkdownFrontmatter(fixture('valid/subject-lineage-v1.1.md'));
+
+    expect(result.ok).toBe(true);
+    if (!result.ok) return;
+    expect(result.document.metadata).toMatchObject({
+      aliases: ['City Transport Planner'],
+      id: 'canon/mobility-service',
+      kind: 'canon',
+      relations: [
+        { target: 'products/route-planner', type: 'evolved_from' },
+        { target: 'decisions/mobility-positioning', type: 'decided_by' },
+      ],
+      schema_version: '1.1',
+      subjects: ['products/mobility-service'],
+    });
+  });
+
   it.each([
     ['invalid/missing.md', 'CKP002_FRONTMATTER_MISSING'],
     ['invalid/malformed.md', 'CKP005_YAML_INVALID'],
@@ -52,6 +70,20 @@ describe('parseMarkdownFrontmatter', () => {
     expect(result.ok).toBe(false);
     if (result.ok) return;
     expect(result.diagnostics[0]).toMatchObject({ code, path });
+  });
+
+  it('rejects 1.1 canon without governed subjects', () => {
+    const source = fixture('valid/subject-lineage-v1.1.md').replace(
+      /subjects:\n {2}- products\/mobility-service\n/,
+      '',
+    );
+    const result = parseMarkdownFrontmatter(source);
+
+    expect(result.ok).toBe(false);
+    if (result.ok) return;
+    expect(result.diagnostics).toContainEqual(
+      expect.objectContaining({ code: 'CKP008_METADATA_INVALID' }),
+    );
   });
 
   it('reports schema failures at the relevant Markdown line', () => {

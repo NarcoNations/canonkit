@@ -64,4 +64,20 @@ describe('packaged CLI process boundary', () => {
     expect(result.status).toBe(2);
     expect(result.stderr).toContain('usage error');
   });
+
+  it('reports document policy failures and non-failing review warnings', () => {
+    const competing = run(['validate', 'fixtures/policy/competing', '--format=json']);
+    const overdue = run(['validate', 'fixtures/policy/overdue', '--format=json']);
+
+    expect(competing.status).toBe(1);
+    expect(JSON.parse(competing.stdout)).toMatchObject({
+      ok: false,
+      policySummary: { errors: 4, warnings: 0 },
+    });
+    expect(overdue.status).toBe(0);
+    expect(JSON.parse(overdue.stdout)).toMatchObject({
+      ok: true,
+      policySummary: { errors: 0, warnings: 1 },
+    });
+  });
 });
