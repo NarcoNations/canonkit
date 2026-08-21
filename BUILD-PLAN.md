@@ -256,16 +256,18 @@ Acceptance:
 
 ### 5.3 Release rehearsal
 
-**Status:** In progress — package identity selected; authenticated ownership is next
+**Status:** In progress — non-publishing rehearsal implemented; cross-platform run is next
 
 - [x] Verify the current public-registry status of `canonkit`, `@canonkit/canonkit`, and `@vibelabz/canonkit`.
 - [x] Select `@vibelabz/canonkit` without renaming CanonKit or creating a multi-package architecture.
 - [x] Apply the selected candidate atomically while retaining `private: true`.
 - [ ] Verify authenticated `vibelabz` organisation ownership, owner access, recovery, and enforced MFA.
 - [ ] Add the protected least-privilege trusted-publishing workflow with automatic provenance.
-- [ ] Verify supported Node versions and target operating systems.
-- [ ] Install and exercise the exact release tarball outside this repository.
-- [ ] Confirm package contents, provenance, licences, and release notes.
+- [x] Add a manual, read-only, secret-free, non-publishing rehearsal workflow.
+- [ ] Run the locked candidate on Ubuntu and macOS with Node.js 22 and 24.
+- [x] Install and exercise the exact locked candidate tarball outside this repository.
+- [x] Confirm package contents, runtime licences, and draft release notes.
+- [ ] Confirm real trusted-publishing provenance after authenticated package ownership exists.
 
 ### 5.4 Public alpha release
 
@@ -277,4 +279,4 @@ Acceptance:
 
 ## Exact next task
 
-Continue **5.3 Release rehearsal** by completing the authenticated ownership gate in [`docs/PACKAGE-IDENTITY-REVIEW.md`](./docs/PACKAGE-IDENTITY-REVIEW.md): prove that Ashley controls the npm `vibelabz` organisation, then record MFA and recovery readiness without storing secrets. If the scope cannot be claimed, stop and revisit ADR-019 with evidence. Only after RB-001 closes should the protected trusted-publishing/provenance workflow and exact cross-platform tarball rehearsal proceed. Keep `private: true`; do not publish, tag, or silently fall back to NarcoNations without explicit maintainer approval.
+Merge the non-publishing rehearsal checkpoint, then manually run [`.github/workflows/release-rehearsal.yml`](./.github/workflows/release-rehearsal.yml) from protected `main`. Record all four Ubuntu/macOS and Node 22/24 results in [`docs/STAGE-5-3-REHEARSAL.md`](./docs/STAGE-5-3-REHEARSAL.md) and close only RB-006 if they pass. RB-001 and RB-005 remain deferred until Ashley is ready to establish the npm organisation and recovery boundary. Keep `private: true`; do not publish, stage, upload the tarball, create a tag, or silently fall back to NarcoNations.

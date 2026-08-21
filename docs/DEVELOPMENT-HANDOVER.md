@@ -5,10 +5,10 @@ This is the durable restart guide for implementation work. It records the comple
 ## Snapshot
 
 - **Snapshot date:** 2026-08-21
-- **Baseline commit:** `e2f9f85` — Stage 5.2 merged to `main`
+- **Baseline commit:** `9250b1a` — Stage 5.3 package identity merged to `main`
 - **Completed:** Stages 0–4, Stage 5.1 threat model/release boundary, Stage 5.2 installation/CI usage, and the Stage 5.3 package-identity checkpoint
-- **Completed after baseline:** Stage 5.3 public package identity review and private candidate migration
-- **Next:** Stage 5.3 authenticated `vibelabz` organisation ownership and recovery gate
+- **Completed after baseline:** Stage 5.3 non-publishing rehearsal implementation and local evidence
+- **Next:** Merge and manually run the Stage 5.3 Ubuntu/macOS and Node.js 22/24 matrix
 - **Repository:** <https://github.com/NarcoNations/canonkit>
 - **Production concept site:** <https://canonkit.vercel.app>
 - **Latest release:** None; the package remains private until the public-alpha gate
@@ -76,7 +76,7 @@ The public metadata contracts are schema `1.0` and the current schema `1.1` in [
 The Stage 4.4 acceptance checkpoint passed locally while preserving every earlier acceptance baseline:
 
 - lint and strict typechecking
-- 185 tests across sixteen test files
+- 188 tests across seventeen test files
 - declaration and source-map build
 - Node.js 22 and 24 GitHub CI
 - Vercel deployment check
@@ -84,6 +84,7 @@ The Stage 4.4 acceptance checkpoint passed locally while preserving every earlie
 - package preview with 78 intended distributable files
 - historical clean local installation and execution of the transitional `@narconations/canonkit@0.1.0-alpha.0` Stage 5.2 tarball
 - clean local installation and execution of the selected private `@vibelabz/canonkit@0.1.0-alpha.0` candidate tarball
+- locked 78-file unpacked-content manifest reproduced by the non-publishing rehearsal
 - production-only packaged `canonkit resolve` run with development dependencies absent
 - production-only packaged pack-projection API import with development dependencies absent
 - production-only packaged `canonkit pack` Markdown and JSON runs with development dependencies absent
@@ -125,6 +126,7 @@ npm pack --dry-run
 | [#20](https://github.com/NarcoNations/canonkit/pull/20) | Stage 4.4 acceptance and Stage 4 completion |
 | [#21](https://github.com/NarcoNations/canonkit/pull/21) | Stage 5.1 threat model and public-alpha release boundary |
 | [#22](https://github.com/NarcoNations/canonkit/pull/22) | Stage 5.2 installation, aggregate input budget, and safe CI usage |
+| [#23](https://github.com/NarcoNations/canonkit/pull/23) | Stage 5.3 package identity decision and private candidate migration |
 
 ## Completed checkpoint — Stage 3.4 and Stage 3 acceptance
 
@@ -175,9 +177,13 @@ RB-002, RB-003, and RB-004 are closed. Stage 5.2 used transitional private scope
 
 The current public registry evidence, alternatives, security implications, and lineage are recorded in [`PACKAGE-IDENTITY-REVIEW.md`](./PACKAGE-IDENTITY-REVIEW.md) and ADR-019. Unscoped `canonkit` is occupied by related-looking third-party software. An independent `@canonkit` organisation is not justified for the single package. `@vibelabz/canonkit` is selected and applied to private metadata; `@narconations/canonkit` is transitional history only. Nothing was published or tagged.
 
-## Exact next checkpoint — Stage 5.3 ownership and recovery
+## Implemented checkpoint — Stage 5.3 non-publishing rehearsal
 
-Use Ashley's npm account to create or prove control of the `vibelabz` organisation, then record owner access, WebAuthn MFA, organisation 2FA enforcement, offline recovery readiness, and the backup-owner or accepted solo-owner decision without recording secrets. If the scope cannot be claimed, stop and revisit ADR-019 with evidence. Only after RB-001 closes should RB-005 and RB-006 proceed. Publication and tagging remain separate actions requiring explicit maintainer approval.
+[`STAGE-5-3-REHEARSAL.md`](./STAGE-5-3-REHEARSAL.md) defines a locked private candidate and a manual, read-only workflow across Ubuntu/macOS and Node.js 22/24. Each job must reproduce the same unpacked-content manifest, audit dependencies, verify licences and package boundaries, install its exact tarball with scripts disabled, import the public API, and exercise `validate`, `resolve`, and `pack`. The workflow has no credential, OIDC, package upload, publish, tag, or release path.
+
+## Exact next checkpoint — execute and record the matrix
+
+Merge the rehearsal implementation, manually run `.github/workflows/release-rehearsal.yml` from `main`, and record the run URL and four job results. Close only RB-006 if the locked candidate passes every job. RB-001 and RB-005 remain deferred until Ashley is ready to establish the npm organisation and recovery boundary. Publication and tagging remain separate actions requiring explicit maintainer approval.
 
 ## Remaining route to the OSS application
 

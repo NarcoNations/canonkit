@@ -84,6 +84,9 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 - Public package identity review rejecting the occupied unscoped name and selecting the single-package `@vibelabz/canonkit` candidate.
 - Private package metadata migrated away from the transitional NarcoNations namespace without publishing or tagging.
 - Authenticated VibeLabz organisation ownership, MFA, recovery, trusted-publishing, and provenance gates.
+- Locked 78-file private alpha-candidate manifest and dependency-free exact-tarball rehearsal script.
+- Manual read-only Ubuntu/macOS and Node.js 22/24 rehearsal workflow with no credentials, OIDC, publication, tag, release, or uploaded package artifact.
+- Draft `0.1.0-alpha.0` release notes and Stage 5.3 evidence contract.
 
 ## [0.0.0] — 2026-08-18
 

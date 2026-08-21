@@ -2,7 +2,7 @@
 
 - **Updated:** 2026-08-21
 - **Current stage:** Stage 5 in progress — Public alpha
-- **Stage state:** Stage 5.3 in progress — public package candidate selected; authenticated scope ownership is next
+- **Stage state:** Stage 5.3 in progress — non-publishing rehearsal implemented; cross-platform run is next
 - **Latest completed release:** None
 - **Production site:** <https://canonkit.vercel.app>
 - **Repository:** <https://github.com/NarcoNations/canonkit>
@@ -102,16 +102,20 @@
 - `@vibelabz/canonkit@0.1.0-alpha.0` is selected as the single-package public candidate and applied to private metadata without publishing.
 - `@narconations/canonkit` is recorded as transitional build history, not the public identity.
 - The package identity, alternatives, security implications, recovery requirements, and exact ownership gate are recorded in `docs/PACKAGE-IDENTITY-REVIEW.md` and ADR-019.
+- A dependency-free rehearsal locks the private candidate to 78 permitted files and one unpacked-content manifest.
+- The exact tarball installs into a clean synthetic consumer and passes library import plus packaged `validate`, `resolve`, and `pack` flows.
+- A manual read-only GitHub workflow covers Ubuntu/macOS and Node.js 22/24 without npm credentials, OIDC, publication, tags, releases, or uploaded package artifacts.
+- Draft alpha release notes and the evidence contract are recorded without granting publication approval.
 
 ## Next checkpoint
 
-- Stage 5.3 — verify authenticated ownership and recovery for the npm `vibelabz` organisation; then close RB-005 and RB-006 through protected publishing and exact-artifact rehearsal.
+- Stage 5.3 — run the non-publishing matrix from protected `main`, record the evidence, and close only RB-006 if all four jobs pass.
 
 ## Not started
 
 - Authenticated npm `vibelabz` organisation ownership and recovery verification
 - Protected trusted-publishing and provenance workflow
-- Cross-platform exact-release-tarball rehearsal
+- Cross-platform execution of the implemented non-publishing rehearsal
 - npm publication
 - OSS application
 
@@ -133,15 +137,15 @@
 - Three alpha release blockers remain open; publication is explicitly prohibited until all close.
 - The unscoped `canonkit` npm name belongs to a similarly positioned unrelated project and must never be used in installation guidance.
 - Public absence of `@vibelabz/canonkit` does not prove that the `vibelabz` organisation scope is claimable; authenticated ownership is still the first release blocker.
-- Protected trusted publishing and cross-platform release rehearsal have not started.
+- Protected trusted publishing has not started; the cross-platform rehearsal is implemented but not yet executed on GitHub.
 - Schema `1.0` documents remain valid but cannot participate in subject-based canon checks until explicitly migrated to `1.1`.
 - There is no external usage evidence yet.
 - The Vercel OSS application is not ready until the project demonstrates active development and a functioning tool.
 
 ## Resume here
 
-1. Confirm the Stage 5.3 package-identity checkpoint is merged and `main` is clean apart from known unrelated duplicate files.
-2. Read `docs/PACKAGE-IDENTITY-REVIEW.md`, `canonkit-threat-model.md`, `docs/ALPHA-RELEASE-BOUNDARY.md`, `docs/DEVELOPMENT-HANDOVER.md`, `STATUS.md`, and `BUILD-PLAN.md`.
-3. Use Ashley's npm account to create or prove control of the `vibelabz` organisation; do not expose credentials or recovery material to Codex, Git, logs, or screenshots.
-4. Close RB-001 with dated pass/fail evidence for owner access, MFA enforcement, recovery, and the bootstrap decision.
-5. Only then implement RB-005 and RB-006. Keep `private: true`; do not publish or tag without separate explicit maintainer approval.
+1. Confirm the non-publishing rehearsal checkpoint is merged and `main` is clean apart from known unrelated duplicate files.
+2. Manually run `.github/workflows/release-rehearsal.yml` from `main`.
+3. Record the run URL and all four Ubuntu/macOS and Node.js 22/24 results in `docs/STAGE-5-3-REHEARSAL.md`.
+4. Close only RB-006 if every job reproduces the locked candidate and passes.
+5. Leave RB-001 and RB-005 deferred. Keep `private: true`; do not authenticate npm, publish, stage, upload the tarball, tag, or create a release.
