@@ -103,6 +103,44 @@ describe('context-pack projection', () => {
     expect(JSON.stringify(hidden)).not.toContain('fixtures/graph');
   });
 
+  it('requires an explicit audience ceiling for internal and restricted documents', async () => {
+    const repository = await createRepository('# Public body\n');
+    await writeFile(
+      join(repository, 'docs/internal.md'),
+      document('# Internal body\n', 'canon/internal', 'internal'),
+      'utf8',
+    );
+    await writeFile(
+      join(repository, 'docs/restricted.md'),
+      document('# Restricted body\n', 'canon/restricted', 'restricted'),
+      'utf8',
+    );
+    const collection = await scanRepository(repository);
+
+    const publicResult = await buildContextPack(collection);
+    const internalResult = await buildContextPack(collection, { audience: 'internal' });
+    const restrictedResult = await buildContextPack(collection, { audience: 'restricted' });
+
+    if (!publicResult.ok || !internalResult.ok || !restrictedResult.ok) {
+      throw new Error('Expected disclosure packs.');
+    }
+    expect(publicResult.pack.items.map(({ document }) => document.id)).toEqual([
+      'canon/example',
+    ]);
+    expect(JSON.stringify(publicResult.pack)).not.toContain('Internal body');
+    expect(JSON.stringify(publicResult.pack)).not.toContain('Restricted body');
+    expect(internalResult.pack.items.map(({ document }) => document.id)).toEqual([
+      'canon/example',
+      'canon/internal',
+    ]);
+    expect(JSON.stringify(internalResult.pack)).not.toContain('Restricted body');
+    expect(restrictedResult.pack.items.map(({ document }) => document.id)).toEqual([
+      'canon/example',
+      'canon/internal',
+      'canon/restricted',
+    ]);
+  });
+
   it('includes non-active governing material only through explicit opt-in', async () => {
     const collection = await scanRepository(`${root}/fixtures/resolution/ineligible`);
     const defaultResult = await buildContextPack(collection);
@@ -228,20 +266,25 @@ async function createRepository(body: string): Promise<string> {
   return repository;
 }
 
-function document(body: string): string {
+function document(
+  body: string,
+  id = 'canon/example',
+  visibility: 'public' | 'internal' | 'restricted' = 'public',
+): string {
+  const subject = `products/${id.split('/').at(-1)}`;
   return `---
 schema_version: "1.1"
-id: canon/example
+id: ${id}
 kind: canon
 title: Example canon
 status: active
 authority: canonical
 owner: product
 version: "1.0"
-visibility: public
-scope: products/example
+visibility: ${visibility}
+scope: ${subject}
 subjects:
-  - products/example
+  - ${subject}
 ---
 ${body}`;
 }

@@ -5,10 +5,10 @@ This is the durable restart guide for implementation work. It records the comple
 ## Snapshot
 
 - **Snapshot date:** 2026-08-21
-- **Baseline commit:** `e1ff15b` — Stage 4.2 pack projection library merged to `main`
-- **Completed:** Stages 0–3 plus Stage 4.1–4.3 pack contract, projection library, and command
-- **Completed after baseline:** Build-plan task 4.3 — pack command
-- **Next:** Build-plan task 4.4 — Stage 4 acceptance
+- **Baseline commit:** `495ba44` — Stage 4.3 pack command merged to `main`
+- **Completed:** Stages 0–4, including safe context-pack acceptance
+- **Completed after baseline:** Build-plan task 4.4 — Stage 4 acceptance
+- **Next:** Build-plan task 5.1 — threat model and public-alpha release boundary
 - **Repository:** <https://github.com/NarcoNations/canonkit>
 - **Production concept site:** <https://canonkit.vercel.app>
 - **Latest release:** None; the package remains private until the public-alpha gate
@@ -17,7 +17,7 @@ This is the durable restart guide for implementation work. It records the comple
 
 ## What exists now
 
-The complete Stage 3 validation, graph, command, and resolution flow is implemented and tested:
+The complete validation, graph, resolution, and safe context-pack flow is implemented and tested:
 
 ```text
 explicit path
@@ -33,6 +33,8 @@ explicit path
     -> bounded list or graph projection
     -> deterministic candidate resolution + explanation
     -> bounded terminal or JSON resolve report
+    -> disclosure-safe source selection + integrity verification
+    -> bounded provenance-backed Markdown or JSON context pack
 ```
 
 Public package APIs:
@@ -71,10 +73,10 @@ The public metadata contracts are schema `1.0` and the current schema `1.1` in [
 
 ## Validation baseline
 
-The Stage 4.3 checkpoint passed locally while preserving the Stage 3 acceptance baseline:
+The Stage 4.4 acceptance checkpoint passed locally while preserving every earlier acceptance baseline:
 
 - lint and strict typechecking
-- 178 tests across fifteen test files at the Stage 4.3 implementation checkpoint
+- 179 tests across fifteen test files
 - declaration and source-map build
 - Node.js 22 and 24 GitHub CI
 - Vercel deployment check
@@ -84,6 +86,7 @@ The Stage 4.3 checkpoint passed locally while preserving the Stage 3 acceptance 
 - production-only packaged pack-projection API import with development dependencies absent
 - production-only packaged `canonkit pack` Markdown and JSON runs with development dependencies absent
 - JSON round-trip, documentation-link, and clean-room vocabulary checks
+- consolidated Stage 4 acceptance evidence in [`STAGE-4-ACCEPTANCE.md`](./STAGE-4-ACCEPTANCE.md)
 
 Run the standard local gate with:
 
@@ -116,6 +119,7 @@ npm pack --dry-run
 | [#16](https://github.com/NarcoNations/canonkit/pull/16) | Stage 3.4 resolve command and Stage 3 acceptance |
 | [#17](https://github.com/NarcoNations/canonkit/pull/17) | Stage 4.1 pack contract and budgets |
 | [#18](https://github.com/NarcoNations/canonkit/pull/18) | Stage 4.2 pack projection library |
+| [#19](https://github.com/NarcoNations/canonkit/pull/19) | Stage 4.3 pack command |
 
 ## Completed checkpoint — Stage 3.4 and Stage 3 acceptance
 
@@ -150,17 +154,20 @@ The projection library now validates the complete collection and policy graph, f
 
 The packaged command now maps explicit CLI controls into the existing projection policy, defaults to public Markdown, emits the JSON envelope directly, caps rendered output, and returns versioned atomic failures. Real-process tests cover disclosure, lifecycle, determinism, invalid repositories, and both budgets.
 
-## Exact next checkpoint — Stage 4.4
+## Completed checkpoint — Stage 4.4 and Stage 4 acceptance
 
-Run the complete Stage 4 acceptance gate and record the evidence. Confirm default disclosure, identity and provenance completeness, deterministic limits, untrusted-body boundaries, production-only packaging, Node support, documentation links, clean-room vocabulary, and the exact Stage 5 restart point. Do not add features during acceptance.
+The complete security, disclosure, identity, provenance, determinism, untrusted-body, package, Node-support, documentation, clean-room, and resumability evidence is recorded in [`STAGE-4-ACCEPTANCE.md`](./STAGE-4-ACCEPTANCE.md). Stage 4 is complete without adapters, hosted services, or private content.
+
+## Exact next checkpoint — Stage 5.1
+
+Write the repository-grounded threat model and lock the public-alpha release boundary. Cover assets, actors, filesystem and disclosure trust boundaries, output consumers, supply-chain risks, residual risks, release-blocking controls, and publication authority. Do not publish or tag a package during 5.1.
 
 ## Remaining route to the OSS application
 
-1. Stage 4 — fail-closed, provenance-backed context packs.
-2. Stage 5 — installable npm public alpha, threat model, CI example, and release evidence.
-3. Stage 6 — external feedback, usage evidence, maintenance cadence, and Vercel OSS application pack.
+1. Stage 5 — installable npm public alpha, threat model, CI example, and release evidence.
+2. Stage 6 — external feedback, usage evidence, maintenance cadence, and Vercel OSS application pack.
 
-Stage 4 is expected to be the most implementation-intensive remaining stage. Stage 6 requires the most elapsed real-world time because credible adoption evidence cannot be manufactured by implementation alone.
+Stage 6 requires the most elapsed real-world time because credible adoption evidence cannot be manufactured by implementation alone.
 
 ## Source map
 

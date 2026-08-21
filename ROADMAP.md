@@ -107,7 +107,7 @@ Acceptance gate:
 
 ## Stage 4 — Safe context packs
 
-**Status:** In progress — implementation complete; acceptance next
+**Status:** Complete
 
 **Outcome:** People and tools can consume a bounded, provenance-backed context pack.
 
@@ -125,10 +125,12 @@ Deliverables:
 
 Acceptance gate:
 
-- [ ] Private or restricted content is excluded by default.
-- [ ] Every included item carries identity, authority, lifecycle, and provenance.
-- [ ] Pack limits are enforced deterministically.
-- [ ] Document bodies are treated as untrusted data.
+- [x] Private or restricted content is excluded by default.
+- [x] Every included item carries identity, authority, lifecycle, and provenance.
+- [x] Pack limits are enforced deterministically.
+- [x] Document bodies are treated as untrusted data.
+
+Evidence: [`docs/STAGE-4-ACCEPTANCE.md`](./docs/STAGE-4-ACCEPTANCE.md)
 
 ## Stage 5 — Public alpha
 

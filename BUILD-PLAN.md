@@ -213,12 +213,58 @@ Stage 2 is complete only when `canonkit validate fixtures/relationships/valid` s
 
 ### 4.4 Stage 4 acceptance
 
-**Status:** Next
+**Status:** Complete
 
-- Complete security, determinism, package, and resumability gates.
+- [x] Complete the security review without widening the Stage 4 capability boundary.
+- [x] Prove default disclosure and every explicit audience ceiling.
+- [x] Re-run determinism, atomic budget, provenance, and untrusted-body gates.
+- [x] Verify the production-only package, CLI, public API, and package contents.
+- [x] Verify documentation, clean-room vocabulary, Node support, and resumability.
+- [x] Record the evidence in [`docs/STAGE-4-ACCEPTANCE.md`](./docs/STAGE-4-ACCEPTANCE.md).
 
 Do not begin adapters, a dashboard, hosted services, or private content migration during Stage 4.
 
+## Stage 5 tasks — Public alpha
+
+### 5.1 Threat model and release boundary
+
+**Status:** Next
+
+- Define protected assets, actors, attacker capabilities, and trust boundaries.
+- Enumerate filesystem, metadata, disclosure, output-consumer, package, and supply-chain threats.
+- Record existing controls, residual risks, and release-blocking mitigations.
+- Lock the intended public package name, versioning, contents, and publication authority.
+
+Acceptance:
+
+- The threat model is repository-grounded and covers the complete local CLI flow.
+- Every High or Critical risk is resolved or explicitly blocks the alpha.
+- Publication remains a separate, explicitly approved action.
+
+### 5.2 Installation and CI usage
+
+**Status:** Not started
+
+- Write installation and quick-start documentation.
+- Add a neutral end-to-end example repository.
+- Add a GitHub Actions validation example.
+
+### 5.3 Release rehearsal
+
+**Status:** Not started
+
+- Verify supported Node versions and target operating systems.
+- Install and exercise the exact release tarball outside this repository.
+- Confirm package contents, provenance, licences, and release notes.
+
+### 5.4 Public alpha release
+
+**Status:** Not started
+
+- Publish only after explicit maintainer approval.
+- Create the alpha tag and release notes.
+- Add feedback issue templates and support expectations.
+
 ## Exact next task
 
-After the Stage 4.3 checkpoint is merged, start **4.4 Stage 4 acceptance** on a dedicated branch. Run the complete security, determinism, package, clean-room, CLI, production-only install, documentation, and resumability gates; close Stage 4 only if every acceptance criterion in [`ROADMAP.md`](./ROADMAP.md) is evidenced. Do not add adapters, hosted services, or private project content.
+After the Stage 4.4 checkpoint is merged, start **5.1 Threat model and release boundary** on a dedicated branch. Model the repository-grounded threats and lock the alpha publication boundary before adding release documentation or publishing a package. Do not publish, tag, add hosted services, or introduce private project content during 5.1.
