@@ -5,10 +5,10 @@ This is the durable restart guide for implementation work. It records the comple
 ## Snapshot
 
 - **Snapshot date:** 2026-08-21
-- **Baseline commit:** `e14abb2` — Stage 2.3 relationship rules merged to `main`
+- **Baseline commit:** `8ad08d9` — Stage 2.4 reports and Stage 2 acceptance merged to `main`
 - **Completed:** Stage 0 public foundation and Stage 1 schema/repository scanner
-- **Completed after baseline:** Build-plan task 2.4 — reports and Stage 2 acceptance
-- **Next:** Build-plan task 3.1 — graph index and eligibility
+- **Completed after baseline:** Build-plan task 3.1 — graph index and eligibility
+- **Next:** Build-plan task 3.2 — list and graph commands
 - **Repository:** <https://github.com/NarcoNations/canonkit>
 - **Production concept site:** <https://canonkit.vercel.app>
 - **Latest release:** None; the package remains private until the public-alpha gate
@@ -17,7 +17,7 @@ This is the durable restart guide for implementation work. It records the comple
 
 ## What exists now
 
-The Stage 2 validation flow is implemented and tested:
+The Stage 3.1 validation and graph flow is implemented and tested:
 
 ```text
 explicit path
@@ -29,6 +29,7 @@ explicit path
     -> normalised documents
     -> document policy + supersession policy
     -> one versioned validation report
+    -> deterministic graph index + explainable eligibility
 ```
 
 Public package APIs:
@@ -40,6 +41,7 @@ Public package APIs:
 | `scanRepository()` | Compose discovery, reading, parsing, and normalisation | [`COLLECTION-CONTRACT.md`](./COLLECTION-CONTRACT.md) |
 | `validateDocumentPolicies()` | Validate document identity, ownership, review, authority, and visibility | [`DOCUMENT-POLICY-CONTRACT.md`](./DOCUMENT-POLICY-CONTRACT.md) |
 | `validateRelationshipPolicies()` | Validate the explicit document supersession graph | [`RELATIONSHIP-POLICY-CONTRACT.md`](./RELATIONSHIP-POLICY-CONTRACT.md) |
+| `buildTrustGraphIndex()` | Index validated documents and apply fail-closed eligibility | [`GRAPH-CONTRACT.md`](./GRAPH-CONTRACT.md) |
 
 The package also exposes the read-only `canonkit validate [path]` executable. Its formats and stable exit behaviour are defined in [`CLI-CONTRACT.md`](./CLI-CONTRACT.md). Document and supersession rules are defined in [`DOCUMENT-POLICY-CONTRACT.md`](./DOCUMENT-POLICY-CONTRACT.md) and [`RELATIONSHIP-POLICY-CONTRACT.md`](./RELATIONSHIP-POLICY-CONTRACT.md).
 
@@ -61,15 +63,15 @@ The public metadata contracts are schema `1.0` and the current schema `1.1` in [
 
 ## Validation baseline
 
-The Stage 2.4 implementation checkpoint passed locally:
+The Stage 3.1 implementation checkpoint passed locally:
 
 - lint and strict typechecking
-- 98 tests across nine test files at the Stage 2.4 implementation checkpoint
+- 105 tests across eleven test files at the Stage 3.1 implementation checkpoint
 - declaration and source-map build
 - Node.js 22 and 24 GitHub CI
 - Vercel deployment check
 - dependency audit with zero reported vulnerabilities
-- package preview with 50 intended distributable files
+- package preview with 54 intended distributable files
 - production-only collection scan with development dependencies removed
 - JSON round-trip, documentation-link, and clean-room vocabulary checks
 
@@ -97,31 +99,32 @@ npm pack --dry-run
 | [#9](https://github.com/NarcoNations/canonkit/pull/9) | Stage 2.1 CLI shell |
 | [#10](https://github.com/NarcoNations/canonkit/pull/10) | Stage 2.2 document model and policy rules |
 | [#11](https://github.com/NarcoNations/canonkit/pull/11) | Stage 2.3 relationship rules |
+| [#12](https://github.com/NarcoNations/canonkit/pull/12) | Stage 2.4 reports and Stage 2 acceptance |
 
-## Completed checkpoint — Stage 2.4
+## Completed checkpoint — Stage 3.1
 
-The dedicated `agent/stage-2-4-reports` checkpoint completes Stage 2 reporting and acceptance:
+The dedicated `agent/stage-3-1-graph-index` checkpoint adds the reusable trust graph substrate:
 
-- combine collection, document-policy, and relationship-policy results once
-- lock the versioned JSON `2.0` envelope with aggregate counts and contract versions
-- normalize every diagnostic with phase, location, related paths, and remediation
-- project concise terminal output from the same report
-- add quiet CI mode that preserves warnings and failures
-- prove valid and broken repositories through the installed CLI process
+- use repository-relative paths as unambiguous node IDs
+- index explicit document identity, version, subjects, supersession, and typed relations
+- retain excluded nodes for audit without promoting them to eligible candidates
+- default to active, canonical-or-approved, public-only eligibility
+- require explicit visibility opt-in and exact requested scope
+- exclude Markdown bodies, raw metadata, timestamps, and inferred relationships
 
-Stage 2 is complete. Resolution, context packs, dashboards, hosted services, and AI inference remain outside this checkpoint.
+List and graph commands, candidate ranking, and resolution remain later Stage 3 checkpoints. Context packs, dashboards, hosted services, and AI inference remain outside this checkpoint.
 
-Stage 2.4 closes only after:
+Stage 3.1 closes only after:
 
-1. Compatibility tests lock exact top-level JSON fields, aggregate summaries, and normalized diagnostics.
-2. Terminal output remains concise and derives from the same report.
-3. Quiet mode is silent for clean runs while warning and failure output remains visible.
+1. Stable-output tests prove ordering is independent of input document order.
+2. Unit tests prove every lifecycle, authority, visibility, and scope exclusion.
+3. A neutral scanned repository passes both policies and produces the expected graph without document bodies.
 4. Run the standard quality, audit, and package gates.
-5. Update durable contracts and handover documents to point to Stage 3.1.
+5. Update durable contracts and handover documents to point to Stage 3.2.
 
-## Exact next checkpoint — Stage 3.1
+## Exact next checkpoint — Stage 3.2
 
-Build a deterministic in-memory graph index over normalized, already validated documents. Index document identities, versions, subjects, and explicit relationships, then define fail-closed lifecycle, authority, visibility, and scope eligibility with explainable exclusions. Do not add CLI commands, candidate ranking, context packs, adapters, or private project knowledge.
+Add bounded `canonkit list` and `canonkit graph` terminal and JSON projections over the existing graph contract. Preserve its eligibility, visibility, ordering, and body-exclusion rules. Do not add candidate ranking, resolution, context packs, adapters, or private project knowledge.
 
 ## Remaining route to the OSS application
 
@@ -140,6 +143,7 @@ src/discovery/       repository boundary and Markdown discovery
 src/metadata/        frontmatter and public-schema validation
 src/model/           normalised collection and unified diagnostics
 src/policy/          deterministic document and relationship policy
+src/graph/           deterministic graph index and fail-closed eligibility
 schema/              versioned public metadata contract
 fixtures/            synthetic contract, parser, discovery, and collection cases
 test/                unit and integration coverage

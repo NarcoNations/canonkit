@@ -171,6 +171,22 @@ Why:
 - versioned output makes future breaking changes explicit
 - warning-preserving quiet mode avoids hiding maintenance signals
 
+### ADR-011 — Graph indexing is deterministic and eligibility is fail-closed
+
+Stage 3.1 builds one JSON-safe graph over normalized documents only after collection and both policy layers pass. Repository-relative source paths are unambiguous graph node IDs; stable document identity, version, and subject remain separate indexes.
+
+The graph preserves explicit supersession and typed relation metadata but never reads Markdown bodies or invents relation sources. Every node stays visible for audit, while eligibility excludes anything that is not active, canonical or approved, explicitly visible to the caller, and—when requested—in the exact scope.
+
+Public visibility is the default. Internal and restricted material require explicit caller opt-in. Authority eligibility cannot be widened beyond canonical and approved.
+
+Why:
+
+- source paths avoid ambiguous composite keys when document versions are human-readable
+- retained excluded nodes preserve audit evidence without promoting them
+- explicit visibility opt-in prevents accidental disclosure
+- exact scope matching avoids unsupported hierarchy inference
+- separating eligibility from ranking keeps Stage 3 decisions reviewable
+
 ## Core modules
 
 ### Discovery

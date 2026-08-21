@@ -141,14 +141,18 @@ Stage 2 is complete only when `canonkit validate fixtures/relationships/valid` s
 
 ### 3.1 Graph index and eligibility
 
-**Status:** Next
+**Status:** Complete
 
-- Index validated documents by identity, version, subject, and explicit relationship.
-- Reuse the validated supersession graph without reparsing metadata.
-- Define fail-closed lifecycle, authority, visibility, and scope eligibility.
-- Return deterministic graph data plus explainable exclusions.
+- [x] Index validated documents by identity, version, subject, and explicit relationship.
+- [x] Reuse normalized supersession metadata without reparsing document bodies.
+- [x] Define fail-closed lifecycle, authority, visibility, and scope eligibility.
+- [x] Return deterministic graph data plus explainable exclusions.
+- [x] Preserve explicit typed relations without inventing source subjects.
+- [x] Reject ambiguous duplicate or unresolved graph input.
 
 ### 3.2 List and graph commands
+
+**Status:** Next
 
 - Add deterministic `canonkit list` output.
 - Add bounded `canonkit graph` terminal and JSON output.
@@ -170,4 +174,4 @@ Stage 4 and beyond remain at roadmap granularity until resolution proves the tru
 
 ## Exact next task
 
-After the Stage 2.4 checkpoint is merged, start **3.1 graph index and eligibility** on a dedicated branch. Build a deterministic in-memory index over already validated documents, then define fail-closed eligibility and explainable exclusions. Do not add commands, ranking, context packs, adapters, or private content migration in the same change.
+After the Stage 3.1 checkpoint is merged, start **3.2 list and graph commands** on a dedicated branch. Project the existing graph through bounded deterministic terminal and JSON output without adding candidate ranking or resolution. Do not begin context packs, adapters, or private content migration in the same change.

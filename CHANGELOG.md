@@ -46,6 +46,9 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 - Versioned CLI JSON report `2.0` with one aggregate summary and normalized diagnostics.
 - Concise terminal reporting projected from the same validation result.
 - Quiet CI mode that suppresses completely clean runs while retaining warnings and failures.
+- Deterministic trust graph indexes for document identity, version, subjects, supersession, and explicit relations.
+- Fail-closed node eligibility with explainable lifecycle, authority, visibility, and scope exclusions.
+- Neutral graph fixtures and integration coverage proving bodies and inferred relationships remain outside graph output.
 
 ## [0.0.0] — 2026-08-18
 
