@@ -108,10 +108,14 @@
 - Draft alpha release notes and the evidence contract are recorded without granting publication approval.
 - The protected-main rehearsal passed on Ubuntu and macOS with Node.js 22 and 24; all four jobs reproduced the locked 78-file candidate manifest.
 - Release blocker RB-006 is closed by [run 32510120043](https://github.com/NarcoNations/canonkit/actions/runs/32510120043).
+- Structured bug and feature forms collect reproducible public evidence while routing vulnerabilities away from public issues.
+- The support boundary and solo-maintainer model set honest expectations without promising an SLA or larger team.
+- The publication runbook records the ownership, immutable-candidate, first-package bootstrap, protected-publishing, and post-publication verification sequence while deliberately omitting an executable publish command.
+- The OSS application evidence register separates existing proof, missing public installation, and future external-adoption evidence.
 
 ## Next checkpoint
 
-- Stage 5.3 — pause safely until Ashley is ready to establish the npm organisation, recovery boundary, and protected trusted publishing.
+- Stage 5.3/5.4 — pause safely until Ashley is ready to establish the npm organisation, recovery boundary, and protected trusted publishing. Account-independent public-project preparation is complete.
 
 ## Not started
 

@@ -7,7 +7,7 @@ This is the durable restart guide for implementation work. It records the comple
 - **Snapshot date:** 2026-08-21
 - **Baseline commit:** `8c440bb` — Stage 5.3 non-publishing rehearsal merged to `main`
 - **Completed:** Stages 0–4, Stage 5.1 threat model/release boundary, Stage 5.2 installation/CI usage, the Stage 5.3 package-identity checkpoint, and the safe non-publishing rehearsal
-- **Completed after baseline:** Ubuntu/macOS and Node.js 22/24 evidence recorded from protected-main run 32510120043
+- **Completed after baseline:** Ubuntu/macOS and Node.js 22/24 evidence recorded from protected-main run 32510120043; account-independent community and publication preparation
 - **Next:** Pause until Ashley is ready to establish the npm organisation, recovery boundary, and protected trusted publishing
 - **Repository:** <https://github.com/NarcoNations/canonkit>
 - **Production concept site:** <https://canonkit.vercel.app>
@@ -185,6 +185,8 @@ The current public registry evidence, alternatives, security implications, and l
 ## Exact next checkpoint — deferred ownership and provenance gate
 
 RB-001 and RB-005 remain deferred until Ashley is ready to establish the npm organisation and recovery boundary. On resumption, verify authenticated `vibelabz` ownership, owner recovery, and MFA before implementing protected trusted publishing and recording real provenance. Publication and tagging remain separate actions requiring explicit maintainer approval.
+
+The account-independent preparation is already complete: structured issue and pull-request intake, private security routing, support expectations, a solo-maintainer model, a gated publication runbook, and a truthful OSS application evidence register. Do not recreate these during release; update them only from real ownership, registry, or adoption evidence.
 
 ## Remaining route to the OSS application
 

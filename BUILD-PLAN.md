@@ -271,11 +271,14 @@ Acceptance:
 
 ### 5.4 Public alpha release
 
-**Status:** Not started
+**Status:** Preparation in progress — account-independent community and operator work complete; publication remains blocked
 
-- Publish only after explicit maintainer approval.
-- Create the alpha tag and release notes.
-- Add feedback issue templates and support expectations.
+- [x] Add structured feedback issue templates and private security routing.
+- [x] Add support expectations and the solo-maintainer operating model.
+- [x] Add a gated first-publication and protected-publishing runbook without executable publication authority.
+- [x] Prepare the OSS application evidence register without inventing adoption.
+- [ ] Publish only after explicit maintainer approval.
+- [ ] Create the alpha tag and final release notes.
 
 ## Exact next task
 
