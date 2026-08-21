@@ -201,6 +201,22 @@ Why:
 - hard limits keep CLI and integration output predictable
 - list and graph inspection remain separate from future candidate resolution
 
+### ADR-013 — Resolution uses lexicographic policy and never arbitrary tie-breakers
+
+Stage 3.3 resolves an explicit query against graph subjects, document identities, and normalized exact aliases. Candidates are compared by match type, then document role, then governing authority. Only graph-eligible nodes may be selected.
+
+Subject matches outrank document-identity matches, which outrank aliases. Canon outranks policy, decision, reference, and legacy roles; canonical outranks approved within an otherwise equal rank. An equal complete top rank is an ambiguity, not permission to choose by path, filename, version text, modification time, body content, or input order.
+
+Every matching node remains in the result with its disposition and reasons. Ineligible nodes preserve upstream graph exclusions; eligible lower-ranked nodes identify the first decisive policy dimension.
+
+Why:
+
+- explicit governed subjects are stronger evidence than discovery labels
+- document role prevents an incidental decision from displacing available canon
+- ambiguity is a governance condition that requires a human-authored distinction
+- excluding operational metadata prevents accidental authority inference
+- candidate-level explanations make selection auditable and testable
+
 ## Core modules
 
 ### Discovery

@@ -162,13 +162,17 @@ Stage 2 is complete only when `canonkit validate fixtures/relationships/valid` s
 
 ### 3.3 Resolution rules
 
-**Status:** Next
+**Status:** Complete
 
-- Define explicit candidate selection and ranking.
-- Reject ambiguous current authority rather than guessing.
-- Explain selected and rejected candidates.
+- [x] Match only explicit subject, document identity, or normalized alias fields.
+- [x] Rank candidates by match type, document role, and governing authority.
+- [x] Reject ambiguous top-ranked authority rather than guessing.
+- [x] Explain selected, tied, ineligible, and lower-ranked candidates.
+- [x] Exclude paths, versions, timestamps, bodies, and input order from authority ranking.
 
 ### 3.4 Resolve command
+
+**Status:** Next
 
 - Add `canonkit resolve <query>`.
 - Prove stable repeated results and bounded output.
@@ -178,4 +182,4 @@ Stage 4 and beyond remain at roadmap granularity until resolution proves the tru
 
 ## Exact next task
 
-After the Stage 3.2 checkpoint is merged, start **3.3 resolution rules** on a dedicated branch. Define deterministic candidate selection, rejection, ambiguity, and explanation semantics over the existing graph without adding the `resolve` process command. Do not begin context packs, adapters, or private content migration in the same change.
+After the Stage 3.3 checkpoint is merged, start **3.4 resolve command** on a dedicated branch. Project the existing resolution result through bounded terminal and JSON output, preserve generic fail-closed validation behaviour, and complete the Stage 3 acceptance gate. Do not begin context packs, adapters, or private content migration in the same change.

@@ -53,6 +53,10 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 - Public-only defaults with repeatable explicit visibility opt-in, exact scope filtering, and deterministic node limits.
 - Generic fail-closed command reports that withhold partial graph paths when repository validation fails.
 - Versioned list/graph report contract with bounded indexes, edges, warnings, and truncation summaries.
+- Deterministic `resolveTrustGraph()` library API with a versioned result contract.
+- Explicit subject, document-identity, and normalized-alias match precedence.
+- Document-role and governing-authority ranking without filename, version, timestamp, or body tie-breakers.
+- Fail-closed ambiguity, no-eligible-candidate, and no-match outcomes with candidate-level explanations.
 
 ## [0.0.0] — 2026-08-18
 

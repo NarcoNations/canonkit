@@ -2,7 +2,7 @@
 
 - **Updated:** 2026-08-21
 - **Current stage:** Stage 3 in progress — Resolution and trust graph
-- **Stage state:** Stage 3.2 list and graph commands complete; Stage 3.3 is next
+- **Stage state:** Stage 3.3 deterministic resolution rules complete; Stage 3.4 is next
 - **Latest completed release:** None
 - **Production site:** <https://canonkit.vercel.app>
 - **Repository:** <https://github.com/NarcoNations/canonkit>
@@ -60,14 +60,19 @@
 - Both commands default to public-only metadata and require explicit visibility and exact-scope filters.
 - Invalid collections fail closed with a generic validation-required report and no partial paths.
 - Terminal and versioned JSON formats cap nodes at 1000 and graph edges at 1000.
+- Public `resolveTrustGraph()` selects from eligible graph nodes using explicit stable rules.
+- Subject, document-identity, and normalized-alias matches have declared precedence.
+- Canon, policy, decision, reference, and legacy roles have declared precedence before authority.
+- Equal top-rank candidates return an explicit ambiguity with no selected source.
+- Every match is explained as selected, tied, ineligible, or lower-ranked without body access.
 
 ## Next checkpoint
 
-- Stage 3.3 — define deterministic candidate selection, rejection, ambiguity, and explanation rules.
+- Stage 3.4 — expose bounded terminal and JSON `canonkit resolve <query>` output and complete Stage 3.
 
 ## Not started
 
-- Candidate ranking and resolution
+- Resolve CLI command and Stage 3 acceptance
 - Context-pack export
 - npm publication
 - OSS application
@@ -84,15 +89,15 @@
 
 ## Current risks
 
-- Candidate ranking and ambiguity handling have not yet been proven against the graph.
+- The resolution rules are proven at the library boundary but are not yet available through the packaged CLI.
 - Schema `1.0` documents remain valid but cannot participate in subject-based canon checks until explicitly migrated to `1.1`.
 - There is no external usage evidence yet.
 - The Vercel OSS application is not ready until the project demonstrates active development and a functioning tool.
 
 ## Resume here
 
-1. Confirm the Stage 3.2 checkpoint is merged and `main` is clean apart from known unrelated duplicate files.
-2. Read `docs/DEVELOPMENT-HANDOVER.md`, `docs/GRAPH-CONTRACT.md`, `docs/GRAPH-CLI-CONTRACT.md`, `ROADMAP.md`, and `BUILD-PLAN.md`.
-3. Create a branch for **BUILD-PLAN task 3.3 — resolution rules**.
-4. Define candidate selection and rejection over the existing eligible graph with explicit ambiguity failures.
-5. Keep the process-level `resolve` command for Stage 3.4.
+1. Confirm the Stage 3.3 checkpoint is merged and `main` is clean apart from known unrelated duplicate files.
+2. Read `docs/DEVELOPMENT-HANDOVER.md`, `docs/GRAPH-CONTRACT.md`, `docs/RESOLUTION-CONTRACT.md`, `docs/CLI-CONTRACT.md`, `ROADMAP.md`, and `BUILD-PLAN.md`.
+3. Create a branch for **BUILD-PLAN task 3.4 — resolve command**.
+4. Project the existing result without recomputing or widening resolution policy.
+5. Complete the Stage 3 acceptance gate; leave context packs for Stage 4.

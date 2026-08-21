@@ -77,3 +77,22 @@ export {
   type TrustGraphIndex,
   type TrustGraphNode,
 } from './graph/index.js';
+
+export {
+  MAX_RESOLUTION_NODES,
+  RESOLUTION_AUTHORITY_PRIORITY,
+  RESOLUTION_FORMAT_VERSION,
+  RESOLUTION_KIND_PRIORITY,
+  RESOLUTION_MATCH_PRIORITY,
+  ResolutionInputError,
+  resolveTrustGraph,
+  type ResolutionCandidate,
+  type ResolutionDisposition,
+  type ResolutionExplanationCode,
+  type ResolutionMatch,
+  type ResolutionRank,
+  type ResolutionReason,
+  type ResolutionRejectionCode,
+  type ResolutionResult,
+  type ResolutionStatus,
+} from './resolution/index.js';

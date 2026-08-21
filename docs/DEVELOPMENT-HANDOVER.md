@@ -5,10 +5,10 @@ This is the durable restart guide for implementation work. It records the comple
 ## Snapshot
 
 - **Snapshot date:** 2026-08-21
-- **Baseline commit:** `676afde` — Stage 3.1 graph index and eligibility merged to `main`
-- **Completed:** Stage 0 public foundation and Stage 1 schema/repository scanner
-- **Completed after baseline:** Build-plan task 3.2 — list and graph commands
-- **Next:** Build-plan task 3.3 — resolution rules
+- **Baseline commit:** `e2d040a` — Stage 3.2 list and graph commands merged to `main`
+- **Completed:** Stages 0–2 plus Stage 3.1 graph indexing and Stage 3.2 inspection commands
+- **Completed after baseline:** Build-plan task 3.3 — deterministic resolution rules
+- **Next:** Build-plan task 3.4 — resolve command and Stage 3 acceptance
 - **Repository:** <https://github.com/NarcoNations/canonkit>
 - **Production concept site:** <https://canonkit.vercel.app>
 - **Latest release:** None; the package remains private until the public-alpha gate
@@ -17,7 +17,7 @@ This is the durable restart guide for implementation work. It records the comple
 
 ## What exists now
 
-The Stage 3.2 validation, graph, and command flow is implemented and tested:
+The Stage 3.3 validation, graph, command, and resolution flow is implemented and tested:
 
 ```text
 explicit path
@@ -31,6 +31,7 @@ explicit path
     -> one versioned validation report
     -> deterministic graph index + explainable eligibility
     -> bounded list or graph projection
+    -> deterministic candidate resolution + explanation
 ```
 
 Public package APIs:
@@ -43,6 +44,7 @@ Public package APIs:
 | `validateDocumentPolicies()` | Validate document identity, ownership, review, authority, and visibility | [`DOCUMENT-POLICY-CONTRACT.md`](./DOCUMENT-POLICY-CONTRACT.md) |
 | `validateRelationshipPolicies()` | Validate the explicit document supersession graph | [`RELATIONSHIP-POLICY-CONTRACT.md`](./RELATIONSHIP-POLICY-CONTRACT.md) |
 | `buildTrustGraphIndex()` | Index validated documents and apply fail-closed eligibility | [`GRAPH-CONTRACT.md`](./GRAPH-CONTRACT.md) |
+| `resolveTrustGraph()` | Select and explain a governing source without arbitrary tie-breakers | [`RESOLUTION-CONTRACT.md`](./RESOLUTION-CONTRACT.md) |
 
 The package exposes read-only `canonkit validate`, `canonkit list`, and `canonkit graph` commands. Their formats and stable exit behaviour are defined in [`CLI-CONTRACT.md`](./CLI-CONTRACT.md) and [`GRAPH-CLI-CONTRACT.md`](./GRAPH-CLI-CONTRACT.md). Document and supersession rules are defined in [`DOCUMENT-POLICY-CONTRACT.md`](./DOCUMENT-POLICY-CONTRACT.md) and [`RELATIONSHIP-POLICY-CONTRACT.md`](./RELATIONSHIP-POLICY-CONTRACT.md).
 
@@ -64,15 +66,15 @@ The public metadata contracts are schema `1.0` and the current schema `1.1` in [
 
 ## Validation baseline
 
-The Stage 3.2 implementation checkpoint passed locally:
+The Stage 3.3 implementation checkpoint passed locally:
 
 - lint and strict typechecking
-- 119 tests across eleven test files at the Stage 3.2 implementation checkpoint
+- 127 tests across twelve test files at the Stage 3.3 implementation checkpoint
 - declaration and source-map build
 - Node.js 22 and 24 GitHub CI
 - Vercel deployment check
 - dependency audit with zero reported vulnerabilities
-- package preview with 58 intended distributable files
+- package preview with 62 intended distributable files
 - production-only collection scan with development dependencies removed
 - JSON round-trip, documentation-link, and clean-room vocabulary checks
 
@@ -102,31 +104,32 @@ npm pack --dry-run
 | [#11](https://github.com/NarcoNations/canonkit/pull/11) | Stage 2.3 relationship rules |
 | [#12](https://github.com/NarcoNations/canonkit/pull/12) | Stage 2.4 reports and Stage 2 acceptance |
 | [#13](https://github.com/NarcoNations/canonkit/pull/13) | Stage 3.1 graph index and eligibility |
+| [#14](https://github.com/NarcoNations/canonkit/pull/14) | Stage 3.2 list and graph commands |
 
-## Completed checkpoint — Stage 3.2
+## Completed checkpoint — Stage 3.3
 
-The dedicated `agent/stage-3-2-list-graph-commands` checkpoint adds bounded CLI projections:
+The dedicated `agent/stage-3-3-resolution-rules` checkpoint adds deterministic authority selection:
 
-- `list` returns only eligible documents
-- `graph` retains safe lifecycle and authority history for audit
-- both default to public-only metadata and require explicit opt-in for wider visibility
-- exact scope and deterministic node limits constrain projections
-- invalid repositories fail closed without emitting partial document paths
-- Markdown bodies, raw metadata, ranking, and inferred authority remain excluded
+- match only explicit subjects, document identities, and normalized exact aliases
+- rank by match strength, document role, and governing authority
+- preserve graph eligibility as the sole lifecycle, authority, visibility, and scope gate
+- return no winner for equal top-ranked candidates
+- explain selected, tied, ineligible, and lower-ranked matches
+- exclude paths, versions, timestamps, bodies, and input order as authority signals
 
-Candidate ranking and resolution remain later Stage 3 checkpoints. Context packs, dashboards, hosted services, and AI inference remain outside this checkpoint.
+The process-level resolve command remains Stage 3.4. Context packs, dashboards, hosted services, and AI inference remain outside this checkpoint.
 
-Stage 3.2 closes only after:
+Stage 3.3 closes only after:
 
-1. Real-process tests prove list eligibility, graph history, visibility opt-in, exact scope, and limits.
-2. Invalid repositories emit only the generic validation-required result.
-3. Terminal and JSON reports remain body-free and deterministic.
+1. Unit tests prove every match, rank, outcome, and rejection path.
+2. Equal top ranks remain ambiguous regardless of path or version text.
+3. A neutral validated repository resolves its governing canon without document bodies.
 4. Run the standard quality, audit, and package gates.
-5. Update durable contracts and handover documents to point to Stage 3.3.
+5. Update durable contracts and handover documents to point to Stage 3.4.
 
-## Exact next checkpoint — Stage 3.3
+## Exact next checkpoint — Stage 3.4
 
-Define deterministic candidate selection, rejection, ambiguity, and explanation semantics over the existing graph. Do not add the process-level resolve command, context packs, adapters, or private project knowledge.
+Expose `canonkit resolve <query>` through bounded terminal and JSON projections of the existing resolution result. Preserve generic fail-closed repository validation, visibility options, exact scope, output limits, and body exclusion. Complete the Stage 3 acceptance gate without adding context packs, adapters, or private project knowledge.
 
 ## Remaining route to the OSS application
 
@@ -146,6 +149,7 @@ src/metadata/        frontmatter and public-schema validation
 src/model/           normalised collection and unified diagnostics
 src/policy/          deterministic document and relationship policy
 src/graph/           deterministic graph index and fail-closed eligibility
+src/resolution/      deterministic candidate selection and explanations
 schema/              versioned public metadata contract
 fixtures/            synthetic contract, parser, discovery, and collection cases
 test/                unit and integration coverage

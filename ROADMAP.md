@@ -83,7 +83,7 @@ Acceptance gate:
 
 ## Stage 3 — Resolution and trust graph
 
-**Status:** In progress — graph index, eligibility, list, and graph commands complete
+**Status:** In progress — deterministic resolution rules complete
 
 **Outcome:** CanonKit can identify the governing source and explain the decision.
 
@@ -94,9 +94,9 @@ Deliverables:
 - `canonkit resolve <query>`
 - [x] Deterministic fail-closed eligibility rules
 - [x] Supersession and explicit-relation graph index
-- Candidate ranking rules
-- Graph conflict reporting
-- Explain output showing selected and rejected candidates
+- [x] Candidate ranking rules
+- [x] Graph conflict reporting through explicit ambiguity results
+- [x] Explainable selected, tied, ineligible, and rejected candidates
 
 Acceptance gate:
 
