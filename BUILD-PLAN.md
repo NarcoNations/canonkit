@@ -93,15 +93,21 @@ Acceptance:
 
 ### 2.1 CLI shell
 
-**Status:** Next
+**Status:** Complete
 
-- Add the `canonkit` executable.
-- Use native argument parsing unless a concrete limitation is proven.
-- Support `--help`, `--version`, `--format`, and an optional path.
-- Return documented exit codes.
+- [x] Add the `canonkit` executable.
+- [x] Use native argument parsing unless a concrete limitation is proven.
+- [x] Support `--help`, `--version`, `--format`, and an optional path.
+- [x] Return documented exit codes.
 
 ### 2.2 Document rules
 
+**Status:** Next
+
+- Run a bounded, generic model checkpoint before locking document policy:
+  - distinguish document identity from the governed subject where necessary
+  - test typed document kinds, aliases, decision references, and lineage relations
+  - publish any accepted metadata change as a versioned schema revision with migration fixtures
 - Required metadata and enum validation
 - Stable identity uniqueness
 - Owner requirement for active governing documents
@@ -132,4 +138,4 @@ Stage 3 and beyond are intentionally kept at roadmap granularity until validatio
 
 ## Exact next task
 
-After the Stage 1.5 checkpoint is merged, start **2.1 CLI shell** on a dedicated branch. Expose the existing collection through a minimal `canonkit` executable with help, version, format, path, and stable exit-code handling; do not begin document policy rules in the same change.
+After the Stage 2.1 checkpoint is merged, start **2.2 document model and policy rules** on a dedicated branch. Prove the smallest generic metadata refinement needed for subject, decision, alias, and lineage use cases with neutral fixtures, then implement document rules only. Do not begin relationship graph validation, resolution, context packs, adapters, or private content migration in the same change.

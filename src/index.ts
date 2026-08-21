@@ -1,6 +1,8 @@
 /** The package identifier exposed by the Stage 1.1 foundation build. */
 export const CANONKIT_PACKAGE_NAME = 'canonkit' as const;
 
+export { CANONKIT_VERSION } from './version.js';
+
 export {
   DEFAULT_EXCLUDED_DIRECTORY_NAMES,
   DEFAULT_MAX_DOCUMENTS,

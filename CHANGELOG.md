@@ -31,6 +31,11 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 - Explicit normalised governance fields with reporting-only raw metadata.
 - UTF-8 validation, source byte provenance, scan summaries, and synthetic mixed-validity fixtures.
 - Durable Stage 1 development handover with the exact Stage 2.1 restart boundary.
+- Minimal read-only `canonkit validate [path]` executable and npm `bin` entry.
+- Native help, version, terminal/JSON format, and optional-path argument handling.
+- Stable CLI exits for clean scans, document failures, usage errors, and unexpected failures.
+- Bounded JSON reports that omit document bodies and reporting-only raw metadata.
+- CLI unit and real-process coverage for valid, invalid, help, version, format, and usage paths.
 
 ## [0.0.0] — 2026-08-18
 

@@ -1,8 +1,8 @@
 # CanonKit status
 
-- **Updated:** 2026-08-18
-- **Current stage:** Stage 1 complete — Schema and repository scanner
-- **Stage state:** Stage 1 acceptance gate passed; Stage 2.1 is next
+- **Updated:** 2026-08-21
+- **Current stage:** Stage 2 in progress — Validate command
+- **Stage state:** Stage 2.1 CLI shell complete; Stage 2.2 is next
 - **Latest completed release:** None
 - **Production site:** <https://canonkit.vercel.app>
 - **Repository:** <https://github.com/NarcoNations/canonkit>
@@ -34,14 +34,19 @@
 - Stable JSON-safe collections preserve valid documents and every neighbouring invalid-file diagnostic.
 - Raw metadata is isolated under a reporting-only boundary; explicit normalised fields own later decisions.
 - Stage 1 implementation and acceptance gate completed.
+- Minimal `canonkit validate [path]` executable added without duplicating scanner logic.
+- Native argument parsing supports help, version, terminal/JSON format selection, and one optional path.
+- Stable exit codes distinguish clean scans, document failures, usage errors, and unexpected errors.
+- CLI JSON output excludes Markdown bodies and reporting-only raw metadata.
+- Unit and real-process tests cover the executable boundary and package `bin` target.
 
 ## Next checkpoint
 
-- Stage 2.1 — expose the collection through the minimal `canonkit` CLI shell.
+- Stage 2.2 — run the versioned document-model checkpoint, then add deterministic document policy rules.
 
 ## Not started
 
-- Validation CLI
+- Document and relationship policy validation
 - Resolution and trust graph
 - Context-pack export
 - npm publication
@@ -59,15 +64,15 @@
 
 ## Current risks
 
-- The collection has no user-facing CLI yet.
-- The project has a concept and plan but no working CLI yet.
+- The CLI currently reports collection failures only; it does not yet detect competing authority, overdue review, or relationship failures.
+- The document-centered `1.0` contract needs a bounded model checkpoint before subject, decision, alias, and typed-lineage rules are locked.
 - There is no external usage evidence yet.
 - The Vercel OSS application is not ready until the project demonstrates active development and a functioning tool.
 
 ## Resume here
 
-1. Confirm the Stage 1.5 normalised-model checkpoint is merged and `main` is clean.
-2. Read `docs/DEVELOPMENT-HANDOVER.md`, `ARCHITECTURE.md`, `ROADMAP.md`, and `BUILD-PLAN.md`.
-3. Create a branch for **BUILD-PLAN task 2.1 — CLI shell**.
-4. Add the minimal executable, formats, and exit codes without beginning document policy rules.
-5. Validate locally and update this file before closing the task.
+1. Confirm the Stage 2.1 CLI-shell checkpoint is merged and `main` is clean.
+2. Read `docs/DEVELOPMENT-HANDOVER.md`, `docs/CLI-CONTRACT.md`, `ARCHITECTURE.md`, `ROADMAP.md`, and `BUILD-PLAN.md`.
+3. Create a branch for **BUILD-PLAN task 2.2 — document model and policy rules**.
+4. Test the generic document contract against subject, decision, alias, and typed-lineage requirements before changing the public schema.
+5. Implement only the accepted document rules and fixtures; leave relationship graph rules for Stage 2.3.
