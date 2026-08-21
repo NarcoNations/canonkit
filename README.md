@@ -1,8 +1,10 @@
 # CanonKit
 
-Make repository knowledge trustworthy.
+Govern what becomes authoritative.
 
-CanonKit is a local-first trust layer for repository documentation. It is designed to help people and AI agents determine which documents are current, authoritative, owned, superseded, and safe to use.
+CanonKit is an open-source canonical knowledge governance toolkit. It is designed to help people and AI agents determine which repository documents are current, authoritative, owned, superseded, and safe to use.
+
+**CanonKit — from VibeLabz.** CanonKit is independently branded and technically independent of FABRIC.
 
 This repository contains the public concept site and the clean-room implementation of the planned v0.1 CLI.
 
@@ -48,6 +50,7 @@ See the [concept site](./public/index.html) for the product explanation, extract
 - [Stage 4 acceptance evidence](./docs/STAGE-4-ACCEPTANCE.md)
 - [Repository-grounded threat model](./canonkit-threat-model.md)
 - [Public-alpha release boundary](./docs/ALPHA-RELEASE-BOUNDARY.md)
+- [Public package identity review](./docs/PACKAGE-IDENTITY-REVIEW.md)
 - [Installation, CI, and trust-boundary quick start](./docs/QUICKSTART.md)
 - [Development handover and exact restart point](./docs/DEVELOPMENT-HANDOVER.md)
 
@@ -73,7 +76,7 @@ npm run check
 The Stage 1.3 parser is available from the package root:
 
 ```ts
-import { parseMarkdownFrontmatter } from '@narconations/canonkit';
+import { parseMarkdownFrontmatter } from '@vibelabz/canonkit';
 
 const result = parseMarkdownFrontmatter(markdown, {
   path: 'docs/architecture.md',
@@ -85,7 +88,7 @@ It returns either a parsed metadata/body document or stable diagnostics. See the
 Bounded repository discovery is also available:
 
 ```ts
-import { discoverMarkdownFiles } from '@narconations/canonkit';
+import { discoverMarkdownFiles } from '@vibelabz/canonkit';
 
 const result = await discoverMarkdownFiles('./docs');
 ```
@@ -95,7 +98,7 @@ See the [discovery contract](./docs/DISCOVERY-CONTRACT.md) for exclusions, limit
 Discovery and parsing can be composed into a stable collection:
 
 ```ts
-import { scanRepository } from '@narconations/canonkit';
+import { scanRepository } from '@vibelabz/canonkit';
 
 const collection = await scanRepository('./docs');
 ```
@@ -115,7 +118,7 @@ The command reports schema, parsing, discovery, read, document-policy, and super
 Validated documents can be projected into a deterministic in-memory graph:
 
 ```ts
-import { buildTrustGraphIndex } from '@narconations/canonkit';
+import { buildTrustGraphIndex } from '@vibelabz/canonkit';
 
 const graph = buildTrustGraphIndex(collection.documents);
 ```
@@ -136,7 +139,7 @@ Both commands default to public-only metadata, exclude bodies, and refuse partia
 Library callers can deterministically select and explain a governing source from that graph:
 
 ```ts
-import { resolveTrustGraph } from '@narconations/canonkit';
+import { resolveTrustGraph } from '@vibelabz/canonkit';
 
 const resolution = resolveTrustGraph(graph, 'products/example');
 ```
@@ -156,7 +159,7 @@ Only a unique permitted result exits successfully. Ambiguity, ineligible-only ma
 The Stage 4 pack policy can be normalized before pack construction:
 
 ```ts
-import { normalizePackPolicy } from '@narconations/canonkit';
+import { normalizePackPolicy } from '@vibelabz/canonkit';
 
 const policy = normalizePackPolicy({
   audience: 'public',
@@ -173,7 +176,7 @@ import {
   renderContextPackJson,
   renderContextPackMarkdown,
   scanRepository,
-} from '@narconations/canonkit';
+} from '@vibelabz/canonkit';
 
 const collection = await scanRepository('./docs');
 const result = await buildContextPack(collection, {
@@ -203,7 +206,7 @@ Markdown and public-only active governing content are the defaults. Wider audien
 
 ## Status
 
-Stages 1–4 and Stage 5.2 are complete. The scoped alpha candidate is locally installable, but the package remains deliberately private and unpublished. Stage 5.3 release rehearsal is next. See [STATUS.md](./STATUS.md) for the exact current state and next task.
+Stages 1–4 and Stage 5.2 are complete. Stage 5.3 has selected `@vibelabz/canonkit` as the single-package public candidate, but authenticated scope ownership and the release rehearsal remain open. The package is deliberately private and unpublished. See [STATUS.md](./STATUS.md) for the exact current state and next task.
 
 ## Licence
 

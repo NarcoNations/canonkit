@@ -134,7 +134,7 @@ Evidence: [`docs/STAGE-4-ACCEPTANCE.md`](./docs/STAGE-4-ACCEPTANCE.md)
 
 ## Stage 5 — Public alpha
 
-**Status:** In progress — installation and safe CI usage complete
+**Status:** In progress — package identity selected; authenticated ownership and release rehearsal remain
 
 **Outcome:** CanonKit is installable, documented, and usable outside its own repository.
 
@@ -145,6 +145,7 @@ Deliverables:
 - [x] GitHub Actions integration example
 - [x] Threat model
 - [x] Public-alpha package and publishing boundary
+- [x] Public package identity review and single-package `@vibelabz/canonkit` candidate
 - [ ] Cross-platform and supported-Node test matrix
 - [ ] Tagged alpha release and changelog
 - [ ] Feedback issue templates

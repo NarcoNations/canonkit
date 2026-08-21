@@ -36,7 +36,7 @@ jobs:
           NPM_CONFIG_USERCONFIG: /dev/null
         run: >-
           npm install --prefix "$RUNNER_TEMP/canonkit-tool" --no-package-lock --no-save
-          @narconations/canonkit@0.1.0-alpha.0
+          @vibelabz/canonkit@0.1.0-alpha.0
 
       - name: Validate public canon without emitting document bodies
         run: >-

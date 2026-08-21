@@ -8,7 +8,7 @@ const root = fileURLToPath(new URL('..', import.meta.url));
 
 describe('CanonKit package foundation', () => {
   it('exposes the stable package identifier', () => {
-    expect(CANONKIT_PACKAGE_NAME).toBe('@narconations/canonkit');
+    expect(CANONKIT_PACKAGE_NAME).toBe('@vibelabz/canonkit');
   });
 
   it('keeps the exported CLI version aligned with package metadata', () => {
@@ -31,7 +31,7 @@ describe('CanonKit package foundation', () => {
 
     expect(packageJson).toMatchObject({
       license: 'MIT',
-      name: '@narconations/canonkit',
+      name: '@vibelabz/canonkit',
       private: true,
       publishConfig: { access: 'public' },
       repository: { url: 'git+https://github.com/NarcoNations/canonkit.git' },

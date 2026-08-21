@@ -5,10 +5,10 @@ This is the durable restart guide for implementation work. It records the comple
 ## Snapshot
 
 - **Snapshot date:** 2026-08-21
-- **Baseline commit:** `e06440b` — Stage 5.1 merged to `main`
-- **Completed:** Stages 0–4 plus Stage 5.1 threat model/release boundary and Stage 5.2 installation/CI usage
-- **Completed after baseline:** Build-plan task 5.2 — installation and CI usage
-- **Next:** Build-plan task 5.3 — release rehearsal
+- **Baseline commit:** `e2f9f85` — Stage 5.2 merged to `main`
+- **Completed:** Stages 0–4, Stage 5.1 threat model/release boundary, Stage 5.2 installation/CI usage, and the Stage 5.3 package-identity checkpoint
+- **Completed after baseline:** Stage 5.3 public package identity review and private candidate migration
+- **Next:** Stage 5.3 authenticated `vibelabz` organisation ownership and recovery gate
 - **Repository:** <https://github.com/NarcoNations/canonkit>
 - **Production concept site:** <https://canonkit.vercel.app>
 - **Latest release:** None; the package remains private until the public-alpha gate
@@ -82,7 +82,8 @@ The Stage 4.4 acceptance checkpoint passed locally while preserving every earlie
 - Vercel deployment check
 - dependency audit with zero reported vulnerabilities
 - package preview with 78 intended distributable files
-- clean local installation and execution of `@narconations/canonkit@0.1.0-alpha.0` from that exact 78-file tarball
+- historical clean local installation and execution of the transitional `@narconations/canonkit@0.1.0-alpha.0` Stage 5.2 tarball
+- clean local installation and execution of the selected private `@vibelabz/canonkit@0.1.0-alpha.0` candidate tarball
 - production-only packaged `canonkit resolve` run with development dependencies absent
 - production-only packaged pack-projection API import with development dependencies absent
 - production-only packaged `canonkit pack` Markdown and JSON runs with development dependencies absent
@@ -123,6 +124,7 @@ npm pack --dry-run
 | [#19](https://github.com/NarcoNations/canonkit/pull/19) | Stage 4.3 pack command |
 | [#20](https://github.com/NarcoNations/canonkit/pull/20) | Stage 4.4 acceptance and Stage 4 completion |
 | [#21](https://github.com/NarcoNations/canonkit/pull/21) | Stage 5.1 threat model and public-alpha release boundary |
+| [#22](https://github.com/NarcoNations/canonkit/pull/22) | Stage 5.2 installation, aggregate input budget, and safe CI usage |
 
 ## Completed checkpoint — Stage 3.4 and Stage 3 acceptance
 
@@ -163,15 +165,19 @@ The complete security, disclosure, identity, provenance, determinism, untrusted-
 
 ## Completed checkpoint — Stage 5.1
 
-[`../canonkit-threat-model.md`](../canonkit-threat-model.md) maps assets, actors, trust boundaries, entry points, eight abuse paths, eight prioritised threats, existing controls, gaps, mitigations, detection ideas, residual risks, and security-review focus paths. [`ALPHA-RELEASE-BOUNDARY.md`](./ALPHA-RELEASE-BOUNDARY.md) locks the scoped identity, intended alpha version, artifact allowlist, protected publishing authority, CI disclosure rules, and remaining blockers without publishing the current private package.
+[`../canonkit-threat-model.md`](../canonkit-threat-model.md) maps assets, actors, trust boundaries, entry points, eight abuse paths, eight prioritised threats, existing controls, gaps, mitigations, detection ideas, residual risks, and security-review focus paths. [`ALPHA-RELEASE-BOUNDARY.md`](./ALPHA-RELEASE-BOUNDARY.md) locks the intended alpha version, artifact allowlist, protected publishing authority, CI disclosure rules, and remaining blockers without publishing the current private package. The package choice is superseded by the Stage 5.3 identity decision below.
 
 ## Completed checkpoint — Stage 5.2
 
-RB-002, RB-003, and RB-004 are closed. The package now has its scoped alpha identity while retaining `private: true`; repository reads have an atomic aggregate byte ceiling; and the neutral example, local tarball route, public-only pull-request workflow, Git-authority model, sensitive-output rules, and AI-consumer boundary are documented and tested.
+RB-002, RB-003, and RB-004 are closed. Stage 5.2 used transitional private scoped metadata while adding the aggregate byte ceiling, neutral example, local tarball route, public-only pull-request workflow, Git-authority model, sensitive-output rules, and AI-consumer boundary.
 
-## Exact next checkpoint — Stage 5.3
+## Completed checkpoint — Stage 5.3 package identity
 
-Close RB-001, RB-005, and RB-006: verify npm scope ownership, recovery, and MFA; implement the protected least-privilege trusted-publishing and provenance workflow; and verify the exact release tarball across the supported Node and operating-system matrix. Publication and tagging remain separate actions requiring explicit maintainer approval.
+The current public registry evidence, alternatives, security implications, and lineage are recorded in [`PACKAGE-IDENTITY-REVIEW.md`](./PACKAGE-IDENTITY-REVIEW.md) and ADR-019. Unscoped `canonkit` is occupied by related-looking third-party software. An independent `@canonkit` organisation is not justified for the single package. `@vibelabz/canonkit` is selected and applied to private metadata; `@narconations/canonkit` is transitional history only. Nothing was published or tagged.
+
+## Exact next checkpoint — Stage 5.3 ownership and recovery
+
+Use Ashley's npm account to create or prove control of the `vibelabz` organisation, then record owner access, WebAuthn MFA, organisation 2FA enforcement, offline recovery readiness, and the backup-owner or accepted solo-owner decision without recording secrets. If the scope cannot be claimed, stop and revisit ADR-019 with evidence. Only after RB-001 closes should RB-005 and RB-006 proceed. Publication and tagging remain separate actions requiring explicit maintainer approval.
 
 ## Remaining route to the OSS application
 

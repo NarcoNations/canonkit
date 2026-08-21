@@ -1,8 +1,8 @@
 {
-  "name": "@narconations/canonkit",
+  "name": "@vibelabz/canonkit",
   "version": "0.1.0-alpha.0",
   "private": true,
-  "description": "A local-first trust layer for repository documentation.",
+  "description": "Open-source canonical knowledge governance toolkit.",
   "license": "MIT",
   "repository": {
     "type": "git",
