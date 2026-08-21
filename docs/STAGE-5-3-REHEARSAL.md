@@ -1,7 +1,7 @@
 # Stage 5.3 non-publishing release rehearsal
 
 - **Candidate:** `@vibelabz/canonkit@0.1.0-alpha.0`
-- **Status:** implementation complete; GitHub matrix evidence pending
+- **Status:** complete
 - **Publication:** prohibited
 - **Locked entries:** 78
 - **Locked unpacked-content manifest:** `762707170938ba80dbc4a56c8ded04f5427b6e5fcd4a90221493b16682685207`
@@ -29,8 +29,10 @@ The manual workflow in [`.github/workflows/release-rehearsal.yml`](../.github/wo
 
 | Operating system | Node 22 | Node 24 |
 | --- | --- | --- |
-| Ubuntu | Pending | Pending |
-| macOS | Pending | Pending |
+| Ubuntu | [Passed — Node 22.23.2](https://github.com/NarcoNations/canonkit/actions/runs/32510120043/job/96858997729) | [Passed — Node 24.19.0](https://github.com/NarcoNations/canonkit/actions/runs/32510120043/job/96858997294) |
+| macOS | [Passed — Node 22.23.1](https://github.com/NarcoNations/canonkit/actions/runs/32510120043/job/96858997598) | [Passed — Node 24.18.0](https://github.com/NarcoNations/canonkit/actions/runs/32510120043/job/96858997573) |
+
+The manually dispatched [Release Rehearsal run](https://github.com/NarcoNations/canonkit/actions/runs/32510120043) passed from protected `main` at merge commit `8c440bbe21f8e2fe31a14d7017e6ee2534637ed5`. All four jobs produced 78 permitted entries and the locked manifest `762707170938ba80dbc4a56c8ded04f5427b6e5fcd4a90221493b16682685207`.
 
 ## Local evidence
 
@@ -49,6 +51,6 @@ Supported-version evidence comes only from the GitHub matrix above; the local No
 
 - **RB-001 remains deferred:** authenticated npm `vibelabz` organisation ownership, MFA, recovery, and bootstrap decision.
 - **RB-005 remains open:** protected trusted-publishing configuration and real provenance evidence require package ownership.
-- **RB-006 remains open until the GitHub matrix passes:** cross-platform locked-candidate evidence is not complete merely because the workflow exists.
+- **RB-006 is closed:** the supported operating-system and Node.js matrix reproduced and exercised the exact locked candidate in all four jobs.
 
-The next safe action after this checkpoint is to run the manual workflow from protected `main`. After all four jobs pass, record the run URL and close only RB-006. Do not close RB-005 based on a non-publishing rehearsal.
+The safe, non-publishing portion of Stage 5.3 is complete. Resume the ownership and protected-publishing work only when the maintainer is ready to establish the npm organisation and recovery boundary. Do not close RB-005 based on this non-publishing rehearsal.

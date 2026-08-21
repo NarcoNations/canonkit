@@ -2,7 +2,7 @@
 
 - **Updated:** 2026-08-21
 - **Current stage:** Stage 5 in progress — Public alpha
-- **Stage state:** Stage 5.3 in progress — non-publishing rehearsal implemented; cross-platform run is next
+- **Stage state:** Stage 5.3 in progress — safe non-publishing rehearsal complete; npm ownership and provenance deferred
 - **Latest completed release:** None
 - **Production site:** <https://canonkit.vercel.app>
 - **Repository:** <https://github.com/NarcoNations/canonkit>
@@ -106,16 +106,17 @@
 - The exact tarball installs into a clean synthetic consumer and passes library import plus packaged `validate`, `resolve`, and `pack` flows.
 - A manual read-only GitHub workflow covers Ubuntu/macOS and Node.js 22/24 without npm credentials, OIDC, publication, tags, releases, or uploaded package artifacts.
 - Draft alpha release notes and the evidence contract are recorded without granting publication approval.
+- The protected-main rehearsal passed on Ubuntu and macOS with Node.js 22 and 24; all four jobs reproduced the locked 78-file candidate manifest.
+- Release blocker RB-006 is closed by [run 32510120043](https://github.com/NarcoNations/canonkit/actions/runs/32510120043).
 
 ## Next checkpoint
 
-- Stage 5.3 — run the non-publishing matrix from protected `main`, record the evidence, and close only RB-006 if all four jobs pass.
+- Stage 5.3 — pause safely until Ashley is ready to establish the npm organisation, recovery boundary, and protected trusted publishing.
 
 ## Not started
 
 - Authenticated npm `vibelabz` organisation ownership and recovery verification
 - Protected trusted-publishing and provenance workflow
-- Cross-platform execution of the implemented non-publishing rehearsal
 - npm publication
 - OSS application
 
@@ -134,18 +135,16 @@
 
 ## Current risks
 
-- Three alpha release blockers remain open; publication is explicitly prohibited until all close.
+- Two alpha release blockers remain open; publication is explicitly prohibited until both close.
 - The unscoped `canonkit` npm name belongs to a similarly positioned unrelated project and must never be used in installation guidance.
 - Public absence of `@vibelabz/canonkit` does not prove that the `vibelabz` organisation scope is claimable; authenticated ownership is still the first release blocker.
-- Protected trusted publishing has not started; the cross-platform rehearsal is implemented but not yet executed on GitHub.
+- Protected trusted publishing has not started; the non-publishing cross-platform rehearsal is complete.
 - Schema `1.0` documents remain valid but cannot participate in subject-based canon checks until explicitly migrated to `1.1`.
 - There is no external usage evidence yet.
 - The Vercel OSS application is not ready until the project demonstrates active development and a functioning tool.
 
 ## Resume here
 
-1. Confirm the non-publishing rehearsal checkpoint is merged and `main` is clean apart from known unrelated duplicate files.
-2. Manually run `.github/workflows/release-rehearsal.yml` from `main`.
-3. Record the run URL and all four Ubuntu/macOS and Node.js 22/24 results in `docs/STAGE-5-3-REHEARSAL.md`.
-4. Close only RB-006 if every job reproduces the locked candidate and passes.
-5. Leave RB-001 and RB-005 deferred. Keep `private: true`; do not authenticate npm, publish, stage, upload the tarball, tag, or create a release.
+1. Leave RB-001 and RB-005 deferred until Ashley is ready to establish the npm organisation and recovery boundary.
+2. Keep `private: true`; do not authenticate npm, publish, stage, upload the tarball, tag, or create a release.
+3. On resumption, verify authenticated `vibelabz` ownership, recovery, and MFA before creating the protected trusted-publishing workflow.
