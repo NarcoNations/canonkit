@@ -81,6 +81,9 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 - Scoped `@narconations/canonkit@0.1.0-alpha.0` package metadata while publication remains disabled.
 - Neutral end-to-end example, installation quick start, and read-only public pull-request workflow template.
 - Explicit Git-as-authority, sensitive-output, and untrusted AI-consumer guidance.
+- Public package identity review rejecting the occupied unscoped name and selecting the single-package `@vibelabz/canonkit` candidate.
+- Private package metadata migrated away from the transitional NarcoNations namespace without publishing or tagging.
+- Authenticated VibeLabz organisation ownership, MFA, recovery, trusted-publishing, and provenance gates.
 
 ## [0.0.0] — 2026-08-18
 

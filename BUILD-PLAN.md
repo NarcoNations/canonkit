@@ -248,7 +248,7 @@ Acceptance:
 **Status:** Complete
 
 - [x] Add a default and hard aggregate repository-byte budget with stable diagnostics and adversarial tests.
-- [x] Change package metadata atomically to `@narconations/canonkit@0.1.0-alpha.0` while retaining `private: true` until the release checkpoint.
+- [x] Apply transitional scoped alpha metadata atomically while retaining `private: true`; the public namespace remains subject to Stage 5.3 identity review.
 - [x] Write installation and quick-start documentation.
 - [x] Add a neutral end-to-end example repository.
 - [x] Add a public-only, read-only GitHub Actions validation example for untrusted pull requests.
@@ -256,11 +256,16 @@ Acceptance:
 
 ### 5.3 Release rehearsal
 
-**Status:** Next
+**Status:** In progress — package identity selected; authenticated ownership is next
 
-- Verify supported Node versions and target operating systems.
-- Install and exercise the exact release tarball outside this repository.
-- Confirm package contents, provenance, licences, and release notes.
+- [x] Verify the current public-registry status of `canonkit`, `@canonkit/canonkit`, and `@vibelabz/canonkit`.
+- [x] Select `@vibelabz/canonkit` without renaming CanonKit or creating a multi-package architecture.
+- [x] Apply the selected candidate atomically while retaining `private: true`.
+- [ ] Verify authenticated `vibelabz` organisation ownership, owner access, recovery, and enforced MFA.
+- [ ] Add the protected least-privilege trusted-publishing workflow with automatic provenance.
+- [ ] Verify supported Node versions and target operating systems.
+- [ ] Install and exercise the exact release tarball outside this repository.
+- [ ] Confirm package contents, provenance, licences, and release notes.
 
 ### 5.4 Public alpha release
 
@@ -272,4 +277,4 @@ Acceptance:
 
 ## Exact next task
 
-After the Stage 5.2 checkpoint is merged, start **5.3 Release rehearsal** on a dedicated branch. Close RB-001, RB-005, and RB-006 from [`docs/ALPHA-RELEASE-BOUNDARY.md`](./docs/ALPHA-RELEASE-BOUNDARY.md). Verify ownership and recovery before authenticating npm, build a protected trusted-publishing workflow, and exercise the exact tarball across the supported Node and operating-system matrix. Keep `private: true` and do not publish or tag without explicit maintainer approval.
+Continue **5.3 Release rehearsal** by completing the authenticated ownership gate in [`docs/PACKAGE-IDENTITY-REVIEW.md`](./docs/PACKAGE-IDENTITY-REVIEW.md): prove that Ashley controls the npm `vibelabz` organisation, then record MFA and recovery readiness without storing secrets. If the scope cannot be claimed, stop and revisit ADR-019 with evidence. Only after RB-001 closes should the protected trusted-publishing/provenance workflow and exact cross-platform tarball rehearsal proceed. Keep `private: true`; do not publish, tag, or silently fall back to NarcoNations without explicit maintainer approval.

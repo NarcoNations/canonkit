@@ -38,7 +38,7 @@ describe('public usage examples', () => {
     };
 
     expect(workflow.permissions).toEqual({ contents: 'read' });
-    expect(source).toContain('@narconations/canonkit@0.1.0-alpha.0');
+    expect(source).toContain('@vibelabz/canonkit@0.1.0-alpha.0');
     expect(source).toContain('NPM_CONFIG_IGNORE_SCRIPTS: "true"');
     expect(source).toContain('persist-credentials: false');
     expect(source).not.toContain('pull_request_target');

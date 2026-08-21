@@ -283,9 +283,9 @@ Why:
 
 ### ADR-018 — Public alpha uses a scoped package and protected publishing boundary
 
-The intended alpha package is `@narconations/canonkit`; the executable remains `canonkit`. The unrelated unscoped package must never appear in installation guidance. The first planned version is `0.1.0-alpha.0`. The normal release path is a protected GitHub Actions environment using npm trusted publishing with provenance; if npm requires an existing package first, the narrowly defined one-time bootstrap in the release boundary applies.
+Stage 5.1 selected a scoped package, retained the `canonkit` executable, and defined protected npm trusted publishing with provenance. `@narconations/canonkit` was used as transitional private build metadata, not published. The unrelated unscoped package must never appear in installation guidance. The first planned version remains `0.1.0-alpha.0`; if npm requires an existing package first, the narrowly defined one-time bootstrap in the release boundary applies.
 
-Stage 5.1 defined the boundary without publishing, tagging, or authenticating npm. Stage 5.2 applied the scoped alpha metadata while retaining `private: true`; every remaining blocker in [`docs/ALPHA-RELEASE-BOUNDARY.md`](./docs/ALPHA-RELEASE-BOUNDARY.md) must close before the first external release.
+Stage 5.1 defined the boundary without publishing, tagging, or authenticating npm. Stage 5.2 applied transitional scoped metadata while retaining `private: true`. ADR-019 supersedes only the package-namespace choice; the protected release boundary remains in force.
 
 Why:
 
@@ -294,6 +294,26 @@ Why:
 - one reviewed, verified tarball binds tests, provenance, and publication to the same artifact
 - protected environment approval preserves explicit human release authority
 - package preparation remains reversible until the maintainer approves publication
+
+### ADR-019 — CanonKit ships as one VibeLabz-scoped package
+
+The product remains **CanonKit** with the positioning **Govern what becomes authoritative.** It is an independently branded open-source VibeLabz product and is technically independent of FABRIC. The selected public package candidate is `@vibelabz/canonkit`; the executable remains `canonkit`, the version remains `0.1.0-alpha.0`, and the alpha remains one package.
+
+The unscoped `canonkit` package is active third-party software and is unavailable. The public registry contains neither `@canonkit/canonkit` nor `@vibelabz/canonkit`, but an unauthenticated package lookup cannot prove organisation ownership. The private metadata may use the selected candidate for exact rehearsal, but publication remains blocked until authenticated `vibelabz` organisation access, MFA, recovery, trusted publishing, and provenance are verified.
+
+`@canonkit/canonkit` is not selected because the single-package alpha has no evidence-backed need for a separate product organisation, the doubled name is less clear, and another organisation adds ownership and recovery surface. No `@canonkit/core` architecture is introduced. `@narconations/canonkit` is transitional build history only and is prohibited as the public package identity.
+
+The current `NarcoNations/canonkit` repository URL remains in package metadata because provenance requires an exact match to the actual public source repository. Repository hosting and npm namespace are separate; changing the source host requires its own explicit migration decision.
+
+Why:
+
+- the package expresses **CanonKit — from VibeLabz** without renaming the product
+- one package preserves the existing simple architecture and install surface
+- a VibeLabz organisation provides a durable security and recovery boundary for this and only genuinely needed future products
+- separating source hosting from registry namespace preserves truthful provenance during the transition
+- scope ownership remains evidence-gated rather than inferred from a public `404`
+
+Evidence and the exact ownership gate are recorded in [`docs/PACKAGE-IDENTITY-REVIEW.md`](./docs/PACKAGE-IDENTITY-REVIEW.md).
 
 ## Core modules
 

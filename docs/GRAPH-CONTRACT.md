@@ -8,7 +8,7 @@ import {
   scanRepository,
   validateDocumentPolicies,
   validateRelationshipPolicies,
-} from '@narconations/canonkit';
+} from '@vibelabz/canonkit';
 
 const collection = await scanRepository('./docs');
 const documentPolicy = validateDocumentPolicies(collection.documents);

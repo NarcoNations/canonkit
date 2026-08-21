@@ -1,5 +1,5 @@
 /** The package identifier exposed by the Stage 1.1 foundation build. */
-export const CANONKIT_PACKAGE_NAME = '@narconations/canonkit' as const;
+export const CANONKIT_PACKAGE_NAME = '@vibelabz/canonkit' as const;
 
 export { CANONKIT_VERSION } from './version.js';
 

@@ -3,7 +3,7 @@
 Stage 1.5 exposes `scanRepository(startPath, options)` from the package root. It composes bounded repository discovery, UTF-8 file reading, frontmatter parsing, schema validation, and normalisation into one deterministic result.
 
 ```ts
-import { scanRepository } from '@narconations/canonkit';
+import { scanRepository } from '@vibelabz/canonkit';
 
 const collection = await scanRepository('./docs', {
   excludePaths: ['docs/archive'],

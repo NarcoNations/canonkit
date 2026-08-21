@@ -2,7 +2,7 @@
 
 - **Updated:** 2026-08-21
 - **Current stage:** Stage 5 in progress — Public alpha
-- **Stage state:** Stage 5.2 installation and CI usage complete; Stage 5.3 is next
+- **Stage state:** Stage 5.3 in progress — public package candidate selected; authenticated scope ownership is next
 - **Latest completed release:** None
 - **Production site:** <https://canonkit.vercel.app>
 - **Repository:** <https://github.com/NarcoNations/canonkit>
@@ -89,23 +89,27 @@
 - Security, determinism, provenance, untrusted-body, package, documentation, clean-room, Node-support, and resumability gates are consolidated in `docs/STAGE-4-ACCEPTANCE.md`.
 - Stage 4 implementation and acceptance gate completed.
 - Repository-grounded threat model completed across runtime, filesystem, governance, disclosure, consumer, CI, package, registry, and static-site boundaries.
-- Public-alpha release boundary locks `@narconations/canonkit@0.1.0-alpha.0`; Stage 5.2 applied that metadata without publishing the package.
-- Six explicit release blockers preserve package ownership, aggregate input safety, safe CI usage, protected publishing, and cross-platform evidence.
+- Public-alpha release boundary preserves package ownership, aggregate input safety, safe CI usage, protected publishing, and cross-platform evidence.
 - Stage 5.1 implementation and acceptance gate completed.
-- Scoped package identity and alpha version applied atomically while `private: true` continues to block publication.
+- Transitional scoped alpha metadata was applied atomically in Stage 5.2 while `private: true` continued to block publication.
 - Scanner enforces a default 32 MiB and hard 256 MiB aggregate Markdown budget through bounded reads and atomic diagnostics.
 - Neutral end-to-end source, tarball-install, validation, and resolution flows are documented and verified.
 - Public-only GitHub Actions example uses read-only permissions, no persisted checkout credentials, exact package version, disabled install scripts, and no secrets.
 - Git-as-authority, sensitive-output, and untrusted AI-consumer boundaries are documented in the quick start.
 - Release blockers RB-002, RB-003, and RB-004 are closed; Stage 5.2 implementation and acceptance gate completed.
+- Public-registry evidence confirms that unscoped `canonkit` is active unrelated third-party software and cannot be this project's package.
+- `@canonkit/canonkit` and `@vibelabz/canonkit` have no caller-visible public package, while organisation ownership remains intentionally unproven without authentication.
+- `@vibelabz/canonkit@0.1.0-alpha.0` is selected as the single-package public candidate and applied to private metadata without publishing.
+- `@narconations/canonkit` is recorded as transitional build history, not the public identity.
+- The package identity, alternatives, security implications, recovery requirements, and exact ownership gate are recorded in `docs/PACKAGE-IDENTITY-REVIEW.md` and ADR-019.
 
 ## Next checkpoint
 
-- Stage 5.3 — release rehearsal: close RB-001, RB-005, and RB-006 without publishing or tagging.
+- Stage 5.3 — verify authenticated ownership and recovery for the npm `vibelabz` organisation; then close RB-005 and RB-006 through protected publishing and exact-artifact rehearsal.
 
 ## Not started
 
-- npm scope ownership and recovery verification
+- Authenticated npm `vibelabz` organisation ownership and recovery verification
 - Protected trusted-publishing and provenance workflow
 - Cross-platform exact-release-tarball rehearsal
 - npm publication
@@ -114,6 +118,9 @@
 ## Key decisions
 
 - CanonKit is an independent clean-room project.
+- CanonKit is an independently branded open-source VibeLabz product, technically independent of FABRIC.
+- The selected public-package candidate is the single package `@vibelabz/canonkit`; the CLI remains `canonkit`.
+- No `@canonkit/core` or speculative multi-package architecture is planned.
 - The core is local-first, deterministic, read-only by default, and network-disabled.
 - v0.1 is a single TypeScript package, not a monorepo.
 - Markdown with YAML frontmatter is the input format.
@@ -124,16 +131,17 @@
 ## Current risks
 
 - Three alpha release blockers remain open; publication is explicitly prohibited until all close.
-- The unscoped `canonkit` npm name belongs to an unrelated project; all installation guidance must use the scoped identity.
-- Npm scope ownership, protected trusted publishing, and cross-platform release rehearsal have not started.
+- The unscoped `canonkit` npm name belongs to a similarly positioned unrelated project and must never be used in installation guidance.
+- Public absence of `@vibelabz/canonkit` does not prove that the `vibelabz` organisation scope is claimable; authenticated ownership is still the first release blocker.
+- Protected trusted publishing and cross-platform release rehearsal have not started.
 - Schema `1.0` documents remain valid but cannot participate in subject-based canon checks until explicitly migrated to `1.1`.
 - There is no external usage evidence yet.
 - The Vercel OSS application is not ready until the project demonstrates active development and a functioning tool.
 
 ## Resume here
 
-1. Confirm the Stage 5.2 checkpoint is merged and `main` is clean apart from known unrelated duplicate files.
-2. Read `canonkit-threat-model.md`, `docs/ALPHA-RELEASE-BOUNDARY.md`, `docs/DEVELOPMENT-HANDOVER.md`, `STATUS.md`, and `BUILD-PLAN.md`.
-3. Create a branch for **BUILD-PLAN task 5.3 — release rehearsal**.
-4. Close RB-001, RB-005, and RB-006 with scope-authority, protected-workflow, provenance, exact-tarball, Node, and operating-system evidence.
-5. Keep `private: true`; do not publish or tag without a separate explicit maintainer approval.
+1. Confirm the Stage 5.3 package-identity checkpoint is merged and `main` is clean apart from known unrelated duplicate files.
+2. Read `docs/PACKAGE-IDENTITY-REVIEW.md`, `canonkit-threat-model.md`, `docs/ALPHA-RELEASE-BOUNDARY.md`, `docs/DEVELOPMENT-HANDOVER.md`, `STATUS.md`, and `BUILD-PLAN.md`.
+3. Use Ashley's npm account to create or prove control of the `vibelabz` organisation; do not expose credentials or recovery material to Codex, Git, logs, or screenshots.
+4. Close RB-001 with dated pass/fail evidence for owner access, MFA enforcement, recovery, and the bootstrap decision.
+5. Only then implement RB-005 and RB-006. Keep `private: true`; do not publish or tag without separate explicit maintainer approval.

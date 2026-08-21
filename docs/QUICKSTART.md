@@ -1,6 +1,6 @@
 # CanonKit quick start
 
-CanonKit is currently an unreleased alpha candidate. The repository uses the intended identity `@narconations/canonkit@0.1.0-alpha.0`, but `private: true` deliberately prevents publication during Stage 5.2. Do not install the unrelated unscoped `canonkit` package.
+CanonKit is currently an unreleased alpha candidate. The selected public-package candidate is `@vibelabz/canonkit@0.1.0-alpha.0`, but authenticated ownership verification is still open and `private: true` deliberately prevents publication. Do not install the unrelated unscoped `canonkit` package. See the [package identity review](./PACKAGE-IDENTITY-REVIEW.md).
 
 ## Try the source safely
 
@@ -30,7 +30,7 @@ mkdir ../canonkit-quickstart
 cd ../canonkit-quickstart
 git init
 npm init -y
-npm install --save-dev ../canonkit/narconations-canonkit-0.1.0-alpha.0.tgz
+npm install --save-dev ../canonkit/vibelabz-canonkit-0.1.0-alpha.0.tgz
 npx canonkit validate .
 ```
 
@@ -39,7 +39,7 @@ Copy [`examples/basic/docs/example-service.md`](../examples/basic/docs/example-s
 After an explicitly approved public release, the intended install command will be:
 
 ```sh
-npm install --save-dev @narconations/canonkit@0.1.0-alpha.0
+npm install --save-dev @vibelabz/canonkit@0.1.0-alpha.0
 ```
 
 That registry command is not expected to work before Stage 5.4.
