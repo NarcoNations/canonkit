@@ -7,7 +7,8 @@ This is the durable restart guide for implementation work. It records the comple
 - **Snapshot date:** 2026-08-18
 - **Baseline commit:** `d603b16` — Stage 1 normalised collection merged to `main`
 - **Completed:** Stage 0 public foundation and Stage 1 schema/repository scanner
-- **Next:** Build-plan task 2.1 — minimal CLI shell
+- **Completed after baseline:** Build-plan task 2.1 — minimal CLI shell
+- **Next:** Build-plan task 2.2 — document model checkpoint and policy rules
 - **Repository:** <https://github.com/NarcoNations/canonkit>
 - **Production concept site:** <https://canonkit.vercel.app>
 - **Latest release:** None; the package remains private until the public-alpha gate
@@ -35,6 +36,8 @@ Public package APIs:
 | `parseMarkdownFrontmatter()` | Parse and validate one bounded Markdown string | [`PARSER-CONTRACT.md`](./PARSER-CONTRACT.md) |
 | `discoverMarkdownFiles()` | Find eligible Markdown inside one Git boundary | [`DISCOVERY-CONTRACT.md`](./DISCOVERY-CONTRACT.md) |
 | `scanRepository()` | Compose discovery, reading, parsing, and normalisation | [`COLLECTION-CONTRACT.md`](./COLLECTION-CONTRACT.md) |
+
+The package also exposes the read-only `canonkit validate [path]` executable. Its formats and stable exit behaviour are defined in [`CLI-CONTRACT.md`](./CLI-CONTRACT.md).
 
 The public metadata contract is [`schema/canonkit-document.schema.json`](../schema/canonkit-document.schema.json). Its supported `schema_version` is exactly `1.0`.
 
@@ -87,9 +90,9 @@ npm pack --dry-run
 | [#6](https://github.com/NarcoNations/canonkit/pull/6) | Repository-bounded discovery |
 | [#7](https://github.com/NarcoNations/canonkit/pull/7) | Normalised collection and diagnostics |
 
-## Exact next checkpoint — Stage 2.1
+## Completed checkpoint — Stage 2.1
 
-Create a dedicated `agent/stage-2-1-cli-shell` branch from current `main` and implement only the minimal executable boundary described in `BUILD-PLAN.md`:
+The dedicated `agent/stage-2-1-cli-shell` checkpoint adds the minimal executable boundary described in `BUILD-PLAN.md`:
 
 - add the `canonkit` executable and package `bin` entry
 - use Node's native argument parsing unless a tested limitation appears
@@ -100,13 +103,17 @@ Create a dedicated `agent/stage-2-1-cli-shell` branch from current `main` and im
 
 Do not add Stage 2.2 document-policy rules, relationship rules, resolution, context packs, a dashboard, hosted services, or AI inference in this checkpoint.
 
-Before closing Stage 2.1:
+Stage 2.1 closes only after:
 
 1. Add CLI unit and process-level tests.
 2. Test help, version, valid path, invalid path, format selection, and bad arguments.
 3. Run the standard quality and package gates.
 4. Confirm the installed package exposes an executable.
 5. Update `STATUS.md`, `BUILD-PLAN.md`, and `CHANGELOG.md` to point to Stage 2.2.
+
+## Exact next checkpoint — Stage 2.2
+
+Run the generic document-model checkpoint before locking policy semantics. Use neutral fixtures to determine the smallest versioned representation needed for governed subjects, document kinds, aliases, decision references, and typed lineage. Then add document-level rules for identity uniqueness, active ownership, review deadlines, visibility consistency, and competing active authority. Keep relationship graph validation in Stage 2.3.
 
 ## Remaining route to the OSS application
 

@@ -58,13 +58,14 @@ Acceptance gate:
 
 ## Stage 2 — `canonkit validate`
 
-**Status:** Not started
+**Status:** In progress — CLI shell complete
 
 **Outcome:** A user can run one command and detect meaningful governance failures.
 
 Deliverables:
 
 - `canonkit validate [path]`
+- Versioned document-model checkpoint before entity and decision lineage rules are locked
 - Required-field and allowed-value checks
 - Duplicate identity and competing-active-authority checks
 - Missing owner and overdue review checks

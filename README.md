@@ -36,6 +36,7 @@ See the [concept site](./public/index.html) for the product explanation, extract
 - [Frontmatter parser contract](./docs/PARSER-CONTRACT.md)
 - [Repository discovery contract](./docs/DISCOVERY-CONTRACT.md)
 - [Normalised collection contract](./docs/COLLECTION-CONTRACT.md)
+- [CLI shell contract](./docs/CLI-CONTRACT.md)
 - [Development handover and exact restart point](./docs/DEVELOPMENT-HANDOVER.md)
 
 ## Clean-room boundary
@@ -48,7 +49,7 @@ See [docs/EXTRACTION-BOUNDARY.md](./docs/EXTRACTION-BOUNDARY.md).
 
 The concept site has no build step. Open `public/index.html` directly or serve `public/` with any static file server.
 
-The Stage 1 TypeScript foundation requires Node.js 22 or newer:
+The TypeScript package requires Node.js 22 or newer:
 
 ```sh
 npm ci
@@ -89,9 +90,18 @@ const collection = await scanRepository('./docs');
 
 See the [collection contract](./docs/COLLECTION-CONTRACT.md) for normalised documents, unified diagnostics, and summary counts.
 
+The Stage 2 CLI shell exposes that collection through a read-only command:
+
+```sh
+canonkit validate [path]
+canonkit validate [path] --format json
+```
+
+The shell currently reports schema, parsing, discovery, and read failures. Stage 2.2 adds document-policy rules. See the [CLI contract](./docs/CLI-CONTRACT.md) for formats and exit codes.
+
 ## Status
 
-Stage 1 is complete. The schema, bounded parser, repository discovery, and normalised collection are implemented; the CLI and document policy rules are not. See [STATUS.md](./STATUS.md) for the exact current state and next task.
+Stage 1 and the Stage 2.1 CLI shell are complete. The schema, bounded parser, repository discovery, normalised collection, and executable boundary are implemented; document policy rules are next. See [STATUS.md](./STATUS.md) for the exact current state and next task.
 
 ## Licence
 
