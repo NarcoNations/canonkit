@@ -249,6 +249,22 @@ Why:
 - conservative hard caps bound downstream tool context and memory use
 - stable, timestamp-free envelopes permit reproducible outputs
 
+### ADR-016 — Pack projection revalidates selected source bytes
+
+Stage 4.2 exposes `buildContextPack()` over a complete normalized collection. It first requires clean collection, document-policy, relationship-policy, and graph construction results. It then removes disallowed authority, lifecycle, visibility, and exact-scope documents before calculating any caller-visible count or path.
+
+Each permitted source path is checked lexically and canonically against the repository root, re-read without mutation, decoded as strict UTF-8, reparsed, and compared with the validated normalized body and metadata. Only then is the exact source byte stream hashed and projected. Changed, missing, escaped, or inconsistent sources fail the complete pack.
+
+JSON serialization uses the versioned envelope directly. Markdown serialization keeps metadata separate and chooses a code-fence length longer than every backtick run in the untrusted body, preventing body content from closing its own boundary.
+
+Why:
+
+- collection validation and source reads are separate moments that can otherwise drift
+- filtering before disclosure prevents hidden document paths or counts from leaking
+- exact byte hashing binds the pack to the source actually verified
+- dynamic Markdown fences preserve the data-versus-instruction boundary
+- one projection object keeps JSON and Markdown policy consistent
+
 ## Core modules
 
 ### Discovery

@@ -2,7 +2,7 @@
 
 - **Updated:** 2026-08-21
 - **Current stage:** Stage 4 in progress — Safe context packs
-- **Stage state:** Stage 4.1 pack contract and budgets complete; Stage 4.2 projection library is next
+- **Stage state:** Stage 4.2 projection library complete; Stage 4.3 pack command is next
 - **Latest completed release:** None
 - **Production site:** <https://canonkit.vercel.app>
 - **Repository:** <https://github.com/NarcoNations/canonkit>
@@ -75,14 +75,19 @@
 - Public-only, active-only, governing-authority pack defaults are normalized through a frozen public policy API.
 - Audience disclosure ceilings, exact scope, explicit non-active opt-in, and stable status ordering are locked.
 - Default and hard document and UTF-8 body-byte budgets reject unsafe inputs and require whole-pack failure on overflow.
+- Public `buildContextPack()` validates the complete collection and policy graph before selecting any material.
+- Disclosure filters run before permitted paths, counts, or failures can be exposed.
+- Selected source files are repository-bounded, re-read, reparsed, compared with the validated model, and SHA-256 hashed.
+- Stable JSON and injection-safe Markdown renderers preserve explicit untrusted-body boundaries.
+- Empty selection, validation, budget, path, source-change, and integrity failures return no partial pack.
 
 ## Next checkpoint
 
-- Stage 4.2 — implement deterministic safe context-pack construction from fully validated collections.
+- Stage 4.3 — expose the tested projection library through the bounded `canonkit pack` command.
 
 ## Not started
 
-- Context-pack export
+- Context-pack CLI export
 - npm publication
 - OSS application
 
@@ -98,15 +103,15 @@
 
 ## Current risks
 
-- Pack projection, provenance verification, and Markdown/JSON rendering are not yet implemented.
+- Pack CLI syntax, process output, and exit behaviour are not yet implemented.
 - Schema `1.0` documents remain valid but cannot participate in subject-based canon checks until explicitly migrated to `1.1`.
 - There is no external usage evidence yet.
 - The Vercel OSS application is not ready until the project demonstrates active development and a functioning tool.
 
 ## Resume here
 
-1. Confirm the Stage 4.1 checkpoint is merged and `main` is clean apart from known unrelated duplicate files.
+1. Confirm the Stage 4.2 checkpoint is merged and `main` is clean apart from known unrelated duplicate files.
 2. Read `docs/DEVELOPMENT-HANDOVER.md`, `docs/PACK-CONTRACT.md`, `ROADMAP.md`, and `BUILD-PLAN.md`.
-3. Create a branch for **BUILD-PLAN task 4.2 — pack projection library**.
-4. Implement the locked envelope, provenance verification, disclosure filtering, budgets, and whole-pack failures.
+3. Create a branch for **BUILD-PLAN task 4.3 — pack command**.
+4. Wire the existing projection and renderer APIs into bounded Markdown and JSON process output.
 5. Keep adapters, hosted services, and private content outside Stage 4.

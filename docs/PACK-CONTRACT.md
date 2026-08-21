@@ -1,6 +1,6 @@
 # Safe context-pack contract
 
-Stage 4.1 defines the public envelope and safety policy before pack generation is implemented. `normalizePackPolicy()` is available now; pack construction and rendering begin in Stage 4.2.
+Stage 4.1 defined the public envelope and safety policy. Stage 4.2 implements that contract through `buildContextPack()`, `renderContextPackJson()`, and `renderContextPackMarkdown()`. Stage 4.3 will expose the same library through the CLI.
 
 ## Contract versions
 
@@ -108,4 +108,18 @@ Validation failure remains generic and must not expose partial repository paths.
 - Keep generation local, read-only, deterministic, and network-disabled.
 - Render explicit item boundaries so one document cannot masquerade as pack structure.
 
-Stage 4.2 must implement this contract without widening it. Stage 4.3 owns CLI syntax and renderer-specific output limits.
+## Projection sequence
+
+`buildContextPack()` performs one fail-closed sequence:
+
+1. Normalize the requested policy.
+2. Require a clean collection, document policy, relationship policy, and graph index.
+3. Remove non-governing authority, unrequested lifecycle, disallowed visibility, and mismatched exact scope.
+4. Calculate complete permitted document and UTF-8 body-byte counts.
+5. Enforce both budgets without truncation.
+6. Revalidate each permitted repository-relative source path and exact source content.
+7. Hash the verified source bytes and project stable path-ordered items.
+
+JSON is the deterministic pretty-printed envelope plus one trailing newline. Markdown contains the same envelope metadata and uses a per-body backtick fence longer than any backtick run in that body. The body remains byte-counted as its original text; renderer separators are not part of `content.bytes`.
+
+Stage 4.3 owns CLI syntax, file/process output behavior, and renderer-specific process limits.

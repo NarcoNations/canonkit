@@ -65,6 +65,10 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 - Versioned safe context-pack, provenance, result, and failure contracts.
 - Frozen pack-policy normalization with public and active defaults, cumulative audience disclosure, exact scope, and explicit non-active opt-in.
 - Default and hard document and UTF-8 content-byte budgets with atomic fail-closed overflow semantics.
+- Deterministic `buildContextPack()` projection over completely validated collections and policy graphs.
+- Repository-bounded source revalidation with strict UTF-8 parsing, normalized-model comparison, and exact SHA-256 provenance.
+- Stable JSON and injection-safe Markdown library renderers with explicit untrusted-content boundaries.
+- Atomic empty, validation, budget, and source-integrity failures without hidden-document disclosure.
 
 ## [0.0.0] — 2026-08-18
 

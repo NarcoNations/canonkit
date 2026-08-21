@@ -194,12 +194,16 @@ Stage 2 is complete only when `canonkit validate fixtures/relationships/valid` s
 
 ### 4.2 Pack projection library
 
-**Status:** Next
+**Status:** Complete
 
-- Build deterministic Markdown and JSON pack projections over validated graph results.
-- Preserve provenance and exclusion explanations for every included document.
+- [x] Build deterministic Markdown and JSON pack projections over fully validated collections.
+- [x] Preserve exact provenance and the normalized selection policy for every included document.
+- [x] Remove visibility- and scope-excluded material before paths, counts, or failures are exposed.
+- [x] Reject stale, escaped, or changed sources without returning a partial pack.
 
 ### 4.3 Pack command
+
+**Status:** Next
 
 - Add bounded `canonkit pack` terminal/Markdown/JSON process output.
 - Prove public-only defaults and explicit non-active opt-in.
@@ -212,4 +216,4 @@ Do not begin adapters, a dashboard, hosted services, or private content migratio
 
 ## Exact next task
 
-After the Stage 4.1 checkpoint is merged, start **4.2 pack projection library** on a dedicated branch. Implement deterministic pack construction over fully validated collections using the locked envelope, disclosure filters, provenance checks, exact UTF-8 content budgets, and whole-pack failures in [`docs/PACK-CONTRACT.md`](./docs/PACK-CONTRACT.md). Do not add CLI syntax, adapters, hosted services, or private project content.
+After the Stage 4.2 checkpoint is merged, start **4.3 pack command** on a dedicated branch. Wire the tested projection library into bounded `canonkit pack` Markdown and JSON process output, preserving the locked policy options, failure codes, stable exits, and untrusted-body boundaries in [`docs/PACK-CONTRACT.md`](./docs/PACK-CONTRACT.md). Do not add adapters, hosted services, or private project content.

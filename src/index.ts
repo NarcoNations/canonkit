@@ -120,3 +120,9 @@ export {
   type PackPolicy,
   type PackPolicyOptions,
 } from './pack/contract.js';
+
+export {
+  buildContextPack,
+  renderContextPackJson,
+  renderContextPackMarkdown,
+} from './pack/projection.js';
